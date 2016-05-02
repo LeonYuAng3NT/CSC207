@@ -1,0 +1,63 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+
+package operator;
+
+import java.util.regex.Matcher;
+
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The TotalPaperCitationCollectors takes an URL from htmlExtractor and collects
+ * the total number of paper citations
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public class TotalPaperCitationCollector extends ContentInfoCollector {
+
+  /**
+   * Call the super class constructor and store the HTMLExtractor within it
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+
+  public TotalPaperCitationCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+  }
+
+  /**
+   * Collect the total number of paper citations
+   * 
+   * @param url String representation of a given URL
+   * @exception Throw Exception if the given live URL is invalid
+   */
+  @Override
+  public void collectInfo(String url) throws Exception {
+
+    String rawHTMLString = super.gethtmlExtractor().getHTML(url);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String totalNumber = "<td id=\"col-citedby\"><a class=\"cit-dark-link\" "
+        + "href=\"(.*?)>(.*?)</a></td>";
+    Pattern patternObject = Pattern.compile(totalNumber);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+    while (matcherObject.find()) {
+      String number = matcherObject.group(2);
+      super.getContentInfo().add(number);
+
+    }
+
+  }
+}

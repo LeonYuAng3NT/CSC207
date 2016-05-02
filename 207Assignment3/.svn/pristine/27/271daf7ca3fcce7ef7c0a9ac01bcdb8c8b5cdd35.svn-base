@@ -1,0 +1,68 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The TotalCoAuthorsCollect takes an URL from htmlExtractor and collect the
+ * total number of co-authors
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public class TotalCoAuthorsCollector extends ContentInfoCollector {
+
+  /**
+   * Call the super class constructor and store the HTMLExtractor within it
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+
+  public TotalCoAuthorsCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+  }
+
+  /**
+   * Collect the total number of co-authors
+   * 
+   * @param url String representation of a given URL
+   * @exception Throw Exception if the given live URL is invalid
+   */
+  @Override
+  public void collectInfo(String url) throws Exception {
+    String name = null;
+    String title = null;
+    String rawHTMLString = super.gethtmlExtractor().getHTML(url);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String totalCoAuthors = "<a class=\"cit-dark-link\" "
+        + "href=\"http://scholar.google.ca/citations(.*?)\" "
+        + "title=\"(.*?)\">(.*?)</a><br>";
+    Pattern patternObject = Pattern.compile(totalCoAuthors);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      title = matcherObject.group(3);
+      name = matcherObject.group(2);
+      // check the similarity  of the second and last string
+      // add to ContentInfo if they are the same
+      if (name.equals(title)) {
+        super.getContentInfo().add(name);
+      }
+    }
+  }
+
+}

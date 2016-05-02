@@ -1,0 +1,30 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CitationNumberExtractor extends ContentExtractor{
+  
+  
+  public CitationNumberExtractor(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+  public String extract(String URL) throws Exception {
+
+    String number = null;
+    String rawHTMLString = super.getHTMLExtractor().getHTML(URL);
+
+    String reForCitationExtraction =
+        "Citations</a></td><td class=\"cit-borderleft cit-data\">(.*?)</td>";
+    Pattern patternObject = Pattern.compile(reForCitationExtraction);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+
+    while (matcherObject.find()) {
+      number = matcherObject.group(1);
+    }
+    return number;
+  }
+
+}

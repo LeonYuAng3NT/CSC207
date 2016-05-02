@@ -1,0 +1,59 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The FirstThreePublicationCollector takes an URL from htmlExtractor and
+ * collects the title of first three publications
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public class FirstThreePublicationCollector extends ContentInfoCollector {
+
+  /**
+   * Call the super class constructor and store the HTMLExtractor within it
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+  public FirstThreePublicationCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+  }
+
+  /**
+   * Collect the title of first three publications from given URL
+   * 
+   * @param url String representation of a given URL
+   * @exception Exception Throw Exception if the given live URL is invalid
+   */
+  @Override
+  public void collectInfo(String url) throws Exception {
+    String number = null;
+
+    String rawHTMLString = super.gethtmlExtractor().getHTML(url);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String publications = "<td id=\"col-title\"><a href=\"(.*?)\" "
+        + "class=\"cit-dark-large-link\">(.*?)</a><br>";
+    Pattern patternObject = Pattern.compile(publications);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+    while (matcherObject.find()) {
+      number = matcherObject.group(2);
+      super.getContentInfo().add(number);
+    }
+  }
+
+}

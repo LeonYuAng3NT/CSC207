@@ -1,0 +1,31 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class FirstThreePublicationCollector extends ContentInfoCollector{
+
+  public FirstThreePublicationCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+  @Override
+  public void collectInfo(String URL) throws Exception {
+    // TODO Auto-generated method stub
+    String number = null;
+
+    String rawHTMLString = super.gethtmlExtractor().getHTML(URL);
+
+    String reForAuthorExtraction = "<td id=\"col-title\"><a href=\"(.*?)\" "
+        + "class=\"cit-dark-large-link\">(.*?)</a><br>";
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+      while(matcherObject.find()){
+         number = matcherObject.group(2);
+        super.getContentInfo().add(number);
+        System.out.println(number);
+      }
+  }
+
+}

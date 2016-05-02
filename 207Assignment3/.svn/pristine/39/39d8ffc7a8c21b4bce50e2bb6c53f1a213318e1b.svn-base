@@ -1,0 +1,56 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import operator.GoogleScholarHTMLExtractor;
+import operator.HTMLExtractor;
+import operator.Indexi10Extractor;
+
+public class Indexi10ExtractorTest {
+  private Indexi10Extractor extractor;
+
+  /**
+   * Initially set up the test
+   * 
+   */
+  @Before
+  public void setUp() throws Exception {
+    GoogleScholarHTMLExtractor googleExtractor =
+        new GoogleScholarHTMLExtractor();
+     extractor = new Indexi10Extractor(googleExtractor);
+  }
+
+  /**
+   * Test whether the extract method works as expected
+   * 
+   */
+  @Test
+  public void testExtract() {
+    try {
+      String result = extractor.extract("sample1.html");
+      assertTrue(result.equals("12"));
+      String newresult = extractor.extract("rs.html");
+
+      assertTrue(newresult.equals("1"));
+    } catch (Exception e) {
+      fail("not a valid URL");
+    }
+  }
+  
+  /**  Test whether the constructor is functioning 
+   *  
+   */
+  @Test
+  public void testIndexi10Extractor() {
+    try {
+      HTMLExtractor htmlExtractor =
+          new MockGoogleScholarHTMLExtractor();
+      extractor = new Indexi10Extractor(htmlExtractor);
+    } catch (Exception e) {
+      fail("failed to Construt an object");
+    }
+  }
+
+}

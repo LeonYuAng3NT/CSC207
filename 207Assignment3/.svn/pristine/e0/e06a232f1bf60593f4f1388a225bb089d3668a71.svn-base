@@ -1,0 +1,11 @@
+package operator;
+
+public class FirstThreePublicationCollector extends ContentInfoCollector{
+
+  @Override
+  public void collectInfo(String URL) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+}

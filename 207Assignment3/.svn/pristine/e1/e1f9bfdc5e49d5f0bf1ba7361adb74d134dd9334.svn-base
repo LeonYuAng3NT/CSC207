@@ -1,0 +1,102 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The ContentInfoCollector is an abstract class; It takes an URL from
+ * HTMLExtractor and collects specified information
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public abstract class ContentInfoCollector {
+  private HTMLExtractor htmlExtractor;
+  // String representation of given URL
+  private String htmlString;
+  private String regex;
+  private List<String> ContentInfo;
+
+  /**
+   * Construct the ContentInfoCollector with a htmlExtractor
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   * @param url a live URL
+   */
+  public ContentInfoCollector(HTMLExtractor htmlExtractor, String url) {
+
+    try {
+      this.htmlExtractor = htmlExtractor;
+      ContentInfo = new ArrayList<String>();
+      htmlString = this.htmlExtractor.getHTML(url);
+      htmlString = StringEscapeUtils.unescapeHtml3(this.htmlString);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      System.out.println("invalid URL");
+    }
+  }
+
+  /**
+   * Collect specified info into ContentInfo
+   * 
+   */
+  public abstract void collectInfo();
+
+  /**
+   * Get the List of information for ContentInfoCollector
+   * 
+   * @return the List collection stored in ContentInfoCollector
+   */
+  public List<String> getContentInfo() {
+    return ContentInfo;
+  }
+
+  /**
+   * Get the HTMLExtractor from ContentInfoCollector
+   * 
+   * @return the HTMLExtrator from ContentInfoCollector
+   */
+  public HTMLExtractor gethtmlExtractor() {
+    return htmlExtractor;
+  }
+
+  /**
+   * Get the htmlString for further use
+   * 
+   * @return HTMLString within the ContentExtractor
+   */
+  public String getHTMLString() {
+    return htmlString;
+  }
+
+  /**
+   * Set the regular expression for further use
+   * 
+   */
+  public void setRegex(String regex) {
+    this.regex = regex;
+  }
+
+  /**
+   * Get the regular expression for further use
+   * 
+   * @return regular expression within the ContentExtractor
+   */
+  public String getRegex() {
+    return regex;
+  }
+
+}

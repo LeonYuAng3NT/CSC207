@@ -1,0 +1,33 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TotalPaperCitationCollector extends ContentInfoCollector{
+
+  public TotalPaperCitationCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+  @Override
+  public void collectInfo(String URL) throws Exception {
+    String name = null;
+    String rawHTMLString = super.gethtmlExtractor().getHTML(URL);
+
+    String reForTotalAurthorsExtraction = "<a class=\"cit-dark-link\" "
+        + "href=\"(.*?)\" " + "title=\"(.*?)\">(.*?)</a><br>";
+    Pattern patternObject = Pattern.compile(reForTotalAurthorsExtraction);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+
+    while (matcherObject.find()) {
+      name = matcherObject.group(3);
+      super.getContentInfo().add(name);
+      System.out.println(name);
+    }
+    
+    super.getContentInfo().remove(super.getContentInfo().size()-1);
+    
+  }
+
+}

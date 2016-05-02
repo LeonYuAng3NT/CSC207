@@ -1,0 +1,31 @@
+package outputproducer;
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import operator.OutputFormatGenerator;
+
+public class FileOutput {
+  
+    private String finalOutput;
+    private PrintWriter writer;
+    
+    public FileOutput(OutputFormatGenerator format, String fileName){
+    try{  
+      finalOutput = format.generate();
+      writer = new PrintWriter(fileName);
+    }catch(IOException e){
+      System.out.println("file Name is invalid");
+    }
+    
+    }
+    /** Write the content on specified file
+     * 
+     */
+    public void produceOutput(){
+      writer.write(finalOutput);
+    }
+
+
+}

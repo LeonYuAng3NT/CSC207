@@ -1,0 +1,66 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The ContentInfoCollector is an abstract class; It takes an URL from
+ * HTMLExtractor and collects specified information
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public abstract class ContentInfoCollector {
+  private HTMLExtractor htmlExtractor;
+  private List<String> ContentInfo;
+
+  /**
+   * Construct the ContentInfoCollector with a htmlExtractor
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+  public ContentInfoCollector(HTMLExtractor htmlExtractor) {
+    ContentInfo = new ArrayList<String>();
+    this.htmlExtractor = htmlExtractor;
+
+
+  }
+
+  /**
+   * Collect specified info into ContentInfo
+   * 
+   * @param url String representation of a given URL
+   * @exception Throw Exception if the given live URL is invalid
+   */
+  public abstract void collectInfo(String url) throws Exception;
+
+  /**
+   * Get the List of information for ContentInfoCollector
+   * 
+   * @return the List object stored in ContentInfoCollector
+   */
+  public List<String> getContentInfo() {
+    return ContentInfo;
+  }
+
+  /**
+   * Get the HTMLExtractor for ContentInfoCollector
+   * 
+   * @return the HTMLExtrator for ContentInfoCollector
+   */
+  public HTMLExtractor gethtmlExtractor() {
+    return htmlExtractor;
+  }
+
+}

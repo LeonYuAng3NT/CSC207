@@ -1,0 +1,37 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class AuthorNameExtractor extends ContentExtractor {
+  
+  public AuthorNameExtractor(GoogleScholarHTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+
+  @Override  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+  public String extract(String URL) throws Exception {
+
+
+    String authorName = null;
+    String rawHTMLString = super.getHTMLExtractor().getHTML(URL);
+
+    String reForAuthorExtraction = "<span id=\"cit-name-display\" "
+        + "class=\"cit-in-place-nohover\">(.*?)</span>";
+  //  System.out.println(rawHTMLString);
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+    while (matcherObject.find()) {
+      authorName = matcherObject.group(1);
+    }
+    return authorName;
+
+  }
+}

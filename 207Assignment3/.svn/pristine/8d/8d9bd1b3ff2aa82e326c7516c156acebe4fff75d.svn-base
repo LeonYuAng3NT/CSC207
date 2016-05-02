@@ -1,0 +1,12 @@
+package operator;
+
+import java.util.List;
+
+public abstract class ContentInfoCollector {
+  private HTMLExtractor htmlExtractor;
+  private List<String> ContentInfo;
+  
+  
+  public abstract void collectInfo(String URL) throws Exception;
+
+}

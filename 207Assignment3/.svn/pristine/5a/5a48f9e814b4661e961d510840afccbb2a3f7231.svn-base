@@ -1,0 +1,69 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim  
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import operator.GoogleScholarHTMLExtractor;
+import operator.HTMLExtractor;
+import operator.MockGoogleScholarHTMLExtractor;
+import operator.TotalPaperCitationCollector;
+
+public class TotalPaperCitationCollectorTest {
+  private TotalPaperCitationCollector collector;
+  /**
+   * Initially set up the test
+   */
+  @Before
+  public void setUp() {
+    try{
+    GoogleScholarHTMLExtractor googleExtractor =
+        new GoogleScholarHTMLExtractor();
+     collector = new TotalPaperCitationCollector(googleExtractor);
+    }catch(Exception e){
+      fail("failed to set up");
+    }
+  }
+  /** Test whether the method works as expected or not
+   *  
+   */
+  @Test
+  public void testCollectInfo() {
+    try {
+      collector.collectInfo("sample1.html");
+      String result = collector.getContentInfo().get(0);
+      assertEquals(result,"88");
+      collector.getContentInfo().clear();
+      collector.collectInfo("rs.html");
+      String secondResult = collector.getContentInfo().get(0);
+      assertEquals(secondResult,"16");
+    } catch (Exception e) {
+      fail("not a valid URL");
+    }
+  }
+  /** Test the constructor with Mock object
+   * 
+   */
+  @Test
+  public void testTotalPaperCitationCollector() {
+    try {
+      HTMLExtractor htmlExtractor = new MockGoogleScholarHTMLExtractor();
+      collector = new TotalPaperCitationCollector(htmlExtractor);
+    } catch (Exception e) {
+      fail("failed to Construt an object");
+    }
+  }
+
+}

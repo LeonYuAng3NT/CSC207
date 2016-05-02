@@ -1,0 +1,72 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim  
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import operator.AuthorNameExtractor;
+import operator.GoogleScholarHTMLExtractor;
+import operator.HTMLExtractor;
+import operator.MockGoogleScholarHTMLExtractor;
+
+public class AuthorNameExtractorTest {
+  private AuthorNameExtractor extractor;
+
+  /**
+   * Initially set up the test
+   * 
+   */
+  @Before
+  public void setUp() {
+    GoogleScholarHTMLExtractor googleExtractor =
+        new GoogleScholarHTMLExtractor();
+    extractor = new AuthorNameExtractor(googleExtractor);
+
+  }
+  
+  /**
+   * Test whether the extract method works as expected
+   * 
+   */
+  @Test
+  public void testExtract(){
+    try {
+      String result = extractor.extract("sample1.html");
+
+      assertTrue(result.equals("Ola Spjuth"));
+      String newresult = extractor.extract("rs.html");
+
+      assertTrue(newresult.equals("rahul sawhney"));
+    } catch (Exception e) {
+      fail("not a valid URL");
+    }
+  }
+/**  Test the constructor
+ *  
+ */
+  @Test
+  public void testAuthorNameExtractor() {
+    try {
+      //Use mock object to test the constructor
+      //No exception should be thrown
+      HTMLExtractor htmlExtractor =
+          new MockGoogleScholarHTMLExtractor();
+      extractor = new AuthorNameExtractor(htmlExtractor);
+    } catch (Exception e) {
+      fail("failed to Construt an object");
+    }
+  }
+
+}

@@ -1,0 +1,54 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+// *********************************************************
+package operator;
+
+/**
+ * The ContentExtractor is an abstract class that takes an URL extracted from
+ * HTMLExtractor and extracts info from it
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+
+public abstract class ContentExtractor {
+
+  private HTMLExtractor htmlExtractor;
+
+
+  /**
+   * Construct the ContentExtractor object
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+  public ContentExtractor(HTMLExtractor htmlExtractor) {
+    this.htmlExtractor = htmlExtractor;
+  }
+
+  /**
+   * Extract specified info from given URL
+   * 
+   * @param url String representation of a given URL
+   * @exception Exception Throw Exception if the given live URL is invalid
+   */
+  abstract public String extract(String url) throws Exception;
+
+  /**
+   * Obtain the HTMLExtractor for further use
+   * 
+   * @return HTMLExtractor within the ContentExtractor
+   */
+  public HTMLExtractor getHTMLExtractor() {
+    return htmlExtractor;
+  }
+
+}

@@ -1,0 +1,58 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package outputproducer;
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import operator.OutputFormatGenerator;
+
+/**
+ * The FileOuput writes the formatted content on given file
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public class FileOutput {
+
+  private String finalOutput;
+  private PrintWriter writer;
+
+  /**
+   * Construct the FileOutput object with a OutputFormatGenerator
+   * 
+   * @param format OutputFormatGenerator object to generate String output
+   * @param fileName Name of the specified file
+   */
+
+  public FileOutput(OutputFormatGenerator format, String fileName) {
+    try {
+      finalOutput = format.generate();
+      writer = new PrintWriter(fileName);
+    } catch (IOException e) {
+      System.out.println("file Name is invalid");
+    }
+
+  }
+
+  /**
+   * Write the content on specified file
+   * 
+   */
+  public void produceOutput() {
+    writer.println(finalOutput);
+    writer.close();
+  }
+
+
+}

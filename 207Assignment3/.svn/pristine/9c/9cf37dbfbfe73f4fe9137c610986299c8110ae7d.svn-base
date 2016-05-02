@@ -1,0 +1,62 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The Indexi10Extractor takes an URL from htmlExtractor and extract the number
+ * i10-index after 2009
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+public class Indexi10Extractor extends ContentExtractor {
+
+  /**
+   * Call the super class constructor and store the HTMLExtractor within it
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+  public Indexi10Extractor(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+  }
+
+
+  /**
+   * Extract the index i-10 number since 2009 from the given URL
+   * 
+   * @param url String representation of a given URL
+   * @throw Exception Throw Exception if the given live URL is invalid
+   * @return the string representation of author's name
+   */
+  @Override
+  public String extract(String url) throws Exception {
+    String number = null;
+    String rawHTMLString = super.getHTMLExtractor().getHTML(url);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String index = "i10-index</a></td><td class=\"cit-borderleft cit-data\">"
+        + "(.*?)</td>";
+    Pattern patternObject = Pattern.compile(index);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      number = matcherObject.group(1);
+    }
+    return number;
+  }
+
+}

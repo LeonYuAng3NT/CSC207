@@ -1,0 +1,25 @@
+package operator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class ContentInfoCollector {
+  private HTMLExtractor htmlExtractor;
+  private List<String> ContentInfo;
+  
+  public ContentInfoCollector(HTMLExtractor htmlExtractor){
+    ContentInfo = new ArrayList<String>();
+    this.htmlExtractor = htmlExtractor;
+    
+  }
+  public abstract void collectInfo(String URL) throws Exception;
+  
+  public List<String> getContentInfo(){
+    return ContentInfo;
+  }
+  
+  public HTMLExtractor gethtmlExtractor(){
+    return htmlExtractor;
+  }
+
+}

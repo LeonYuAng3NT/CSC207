@@ -1,0 +1,30 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Indexi10Extractor extends ContentExtractor{
+
+  public Indexi10Extractor(GoogleScholarHTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+  }
+
+
+  @Override
+  public String extract(String URL) throws Exception {
+    String number = null;
+    String rawHTMLString = super.getHTMLExtractor().getHTML(URL);
+
+    String reForAuthorExtraction =
+        "i10-index</a></td><td class=\"cit-borderleft cit-data\">"
+            + "(.*?)</td>";
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+
+    while (matcherObject.find()) {
+      number = matcherObject.group(1);
+    }
+    return number;
+  }
+
+}

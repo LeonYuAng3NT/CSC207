@@ -1,0 +1,39 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class GoogleScholarHTMLExtractorTest {
+  private MockGoogleScholarHTMLExtractor extractor;
+
+  /**
+   * Initially set up the test
+   */
+  @Before
+  public void setUp() {
+    try{
+      extractor = new MockGoogleScholarHTMLExtractor();
+    }catch(Exception e){
+      fail("Failed to construct an object");
+    }
+  }
+  /** 
+   * Test whether the method works as expected
+   */
+  @Test
+  public void testGetHTML() {
+    try{
+      String first = extractor.getHTML("sample1.html");
+      assertEquals("sample1.html", first);
+      String second = extractor.getHTML("sample2.html");
+      assertEquals("sample2.html", second);
+      
+    }catch(Exception e){
+      fail("Failed to obtain info");
+    }
+  }
+
+}

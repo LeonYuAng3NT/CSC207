@@ -1,0 +1,35 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+public class TotalCoAuthorsCollector extends ContentInfoCollector{
+
+  public TotalCoAuthorsCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+  @Override
+  public void collectInfo(String URL) throws Exception {
+    String name = null;
+    String rawHTMLString = super.gethtmlExtractor().getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForTotalAurthorsExtraction = "<a class=\"cit-dark-link\" "
+        + "href=\"(.*?)\" " + "title=\"(.*?)\">(.*?)</a>";
+    Pattern patternObject = Pattern.compile(reForTotalAurthorsExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      name = matcherObject.group(3);
+      super.getContentInfo().add(name);
+
+    }
+    super.getContentInfo().remove(super.getContentInfo().size()-1);
+
+  }
+
+}

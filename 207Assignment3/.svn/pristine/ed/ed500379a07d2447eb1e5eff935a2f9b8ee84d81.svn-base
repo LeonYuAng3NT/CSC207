@@ -1,0 +1,65 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name: c5zhanim
+//
+// Author: Yu Ang Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package operator;
+
+import java.util.regex.Matcher;
+
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * The AuthorNameExtractor takes an URL from htmlExtractor and extract author's
+ * name from it
+ *
+ * @author Yu Ang Zhang
+ * 
+ */
+
+public class AuthorNameExtractor extends ContentExtractor {
+
+  /**
+   * Call the super class constructor and store the HTMLExtractor within it
+   * 
+   * @param htmlExtractor a HTMLExtractor object for extracting a HTML string
+   */
+
+  public AuthorNameExtractor(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+
+  }
+
+  /**
+   * Extract the author's name from the given URL
+   * 
+   * @param url String representation of a given URL
+   * @throw Exception Throw Exception if the given live URL is invalid
+   * @return the string representation of author's name
+   */
+  @Override
+  public String extract(String URL) throws Exception {
+
+    String authorName = null;
+    String rawHTMLString = super.getHTMLExtractor().getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForAuthorExtraction = "<span id=\"cit-name-display\" "
+        + "class=\"cit-in-place-nohover\">(.*?)</span>";
+
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+    while (matcherObject.find()) {
+      authorName = matcherObject.group(1);
+    }
+    return authorName;
+
+  }
+}

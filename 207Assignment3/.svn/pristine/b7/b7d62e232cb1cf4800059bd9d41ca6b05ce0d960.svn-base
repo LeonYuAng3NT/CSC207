@@ -1,0 +1,27 @@
+package operator;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TotalCoAuthorsCollector extends ContentInfoCollector{
+
+  public TotalCoAuthorsCollector(HTMLExtractor htmlExtractor) {
+    super(htmlExtractor);
+    // TODO Auto-generated constructor stub
+  }
+
+  @Override
+  public void collectInfo(String URL) throws Exception {
+    String rawHTMLString = super.gethtmlExtractor().getHTML(URL);
+
+    String totalNumber = "<td id=\"col-citedby\"><a class=\"cit-dark-link\" href=\"(.*?)>(.*?)</a></td>";
+    Pattern patternObject = Pattern.compile(totalNumber);
+    Matcher matcherObject = patternObject.matcher(rawHTMLString);
+      while(matcherObject.find()){
+        String number = matcherObject.group(2);
+        super.getContentInfo().add(number);
+
+      }
+  }
+
+}

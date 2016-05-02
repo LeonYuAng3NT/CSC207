@@ -1,0 +1,17 @@
+package outputproducer;
+
+import operator.OutputFormatGenerator;
+
+public class ConsoleOutput {
+  private String finalOutput;
+  
+  public ConsoleOutput(OutputFormatGenerator format){
+    finalOutput = format.generate();
+  }
+  
+  public void produceOutput(){
+    
+    System.out.println(finalOutput);
+  }
+
+}

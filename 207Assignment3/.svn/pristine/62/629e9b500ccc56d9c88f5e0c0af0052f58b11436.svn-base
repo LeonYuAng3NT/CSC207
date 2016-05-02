@@ -1,0 +1,292 @@
+// **********************************************************
+// Assignment3:
+// CDF user_name:
+//
+// Author:
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// *********************************************************
+package driver;
+
+import java.util.ArrayList;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import OutputProducer.ConsoleOutput;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import operator.GoogleScholarHTMLExtractor;
+import operator.HTMLExtractor;
+import operator.OutputFormatGenerator;
+
+public class MyParser {
+
+  /**
+   * @param args
+   */
+  private HTMLExtractor htmlExtractor;
+  private List<String> allAuthors;
+  private List<String> paperCitation;
+  private List<String> publication;
+  private List<String> totalAuthors;
+
+  public MyParser(HTMLExtractor he) {
+    htmlExtractor = he;
+    allAuthors = new ArrayList<String>();
+    paperCitation = new ArrayList<String>();
+    publication = new ArrayList<String>();
+    totalAuthors = new ArrayList<String>();
+  }
+
+  public static void main(String[] args) {
+    try {
+      OutputFormatGenerator format = new OutputFormatGenerator(args);
+      ConsoleOutput output = new ConsoleOutput(format);
+      output.produceOutput();
+      MyParser googleScholarParser =
+          new MyParser(new GoogleScholarHTMLExtractor());
+      String URLS[] = args[0].split(",");
+      for (String url : URLS) {
+        String authorsName = googleScholarParser.extractAuthorsName(url);
+        String numberOfCitation = googleScholarParser.extractCitations(url);
+        String i10Index = googleScholarParser.extractIndexSince2009(url);
+        googleScholarParser.extractTotalCoAuthors(url);
+        googleScholarParser.extractTitleofFirstThreePublications(url);
+        googleScholarParser.extractTotalPaperCitation(url);
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("1. Name of Author: ");
+        System.out.println("        " + authorsName);
+        System.out.println("2. Name of All Citaions: ");
+        System.out.println("        " + numberOfCitation);
+        System.out.println("3. Number of i10-index after 2009: ");
+        System.out.println("        " + i10Index);
+        System.out.println("4. Title of the first 3 publications: ");
+        for(int i= 0; i < 3; i++){
+        System.out.println("        " + (i+1) + "-  "+ googleScholarParser.publication.get(i));
+        }
+        googleScholarParser.publication.clear();
+        
+        
+        System.out.println("5. Total paper Citation ( first 5 papers): ");
+        int result = 0;
+        for(int i= 0; i < 5; i++){
+          int number = Integer.parseInt(googleScholarParser.paperCitation.get(i));
+          result += number;
+        }
+        System.out.println("        " + result);
+        System.out.println("6. Number of total author: ");
+        System.out.println("        " + googleScholarParser.getTotalAuthorNumber());
+       
+        googleScholarParser.publication.clear();
+        googleScholarParser.paperCitation.clear();
+        googleScholarParser.allAuthors.clear();
+      } 
+      System.out.println("-----------------------------------------------------------------------");
+      System.out.println("7. Co-Author list sorted (Total "
+      + googleScholarParser.totalAuthors.size() + "):");
+      googleScholarParser.printAllCoAuthors();
+      
+    } catch (Exception e) {
+      System.out.println("Did you change the run configuration in"
+          + "Eclipse for argument0 and argument 1?");
+    }
+
+  }
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+  public String extractAuthorsName(String URL) throws Exception {
+
+    String authorName = null;
+    String rawHTMLString = this.htmlExtractor.getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+    // System.out.println(rawHTMLString);
+    String reForAuthorExtraction = "<span id=\"cit-name-display\" "
+        + "class=\"cit-in-place-nohover\">(.*?)</span>";
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+    while (matcherObject.find()) {
+      authorName = matcherObject.group(1);
+    }
+    return authorName;
+
+  }
+
+  /**
+   * Extract the number of citations from a specified URL
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+
+
+  public String extractCitations(String URL) throws Exception {
+
+    String number = null;
+    String rawHTMLString = htmlExtractor.getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForCitationExtraction =
+        "Citations</a></td><td class=\"cit-borderleft cit-data\">(.*?)</td>";
+    Pattern patternObject = Pattern.compile(reForCitationExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      number = matcherObject.group(1);
+    }
+    return number;
+  }
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+
+  public String extractIndexSince2009(String googleScholarURL)
+      throws Exception {
+    String number = null;
+    String rawHTMLString = htmlExtractor.getHTML(googleScholarURL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForAuthorExtraction =
+        "i10-index</a></td><td class=\"cit-borderleft cit-data\">"
+            + "(.*?)</td>";
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      number = matcherObject.group(1);
+    }
+    return number;
+  }
+
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+  public void printAllCoAuthors() throws Exception {
+      this.totalAuthors.sort(alphabeticalOrder);
+      for(int i =0 ; i< totalAuthors.size(); i++){
+        System.out.println(totalAuthors.get(i));
+      }
+      
+  }
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+
+  public void extractTotalCoAuthors(String URL)
+      throws Exception {
+    String name = null;
+    String rawHTMLString = htmlExtractor.getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForTotalAurthorsExtraction = "<a class=\"cit-dark-link\" "
+        + "href=\"(.*?)\" " + "title=\"(.*?)\">(.*?)</a>";
+    Pattern patternObject = Pattern.compile(reForTotalAurthorsExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+
+    while (matcherObject.find()) {
+      name = matcherObject.group(3);
+      this.allAuthors.add(name);
+      this.totalAuthors.add(name);
+    }
+    this.allAuthors.remove(allAuthors.size()-1);
+    this.totalAuthors.remove(totalAuthors.size()-1);
+  }
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+
+  public void extractTotalPaperCitation(String URL)
+      throws Exception {
+
+    String rawHTMLString = htmlExtractor.getHTML(URL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String totalNumber = "<td id=\"col-citedby\"><a class=\"cit-dark-link\" href=\"(.*?)>(.*?)</a></td>";
+    Pattern patternObject = Pattern.compile(totalNumber);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+      while(matcherObject.find()){
+        String number = matcherObject.group(2);
+        this.paperCitation.add(number);
+
+      }
+  }
+
+  /**
+   * 
+   * @param googleScholarURL
+   * @return
+   * @throws Exception
+   */
+
+  public void extractTitleofFirstThreePublications(String googleScholarURL)
+      throws Exception {
+    String number = null;
+
+    String rawHTMLString = htmlExtractor.getHTML(googleScholarURL);
+    String withCharacters = StringEscapeUtils.unescapeHtml3(rawHTMLString);
+
+    String reForAuthorExtraction = "<td id=\"col-title\"><a href=\"(.*?)\" "
+        + "class=\"cit-dark-large-link\">(.*?)</a><br>";
+    Pattern patternObject = Pattern.compile(reForAuthorExtraction);
+    Matcher matcherObject = patternObject.matcher(withCharacters);
+      while(matcherObject.find()){
+         number = matcherObject.group(2);
+        this.publication.add(number);
+      }
+  }
+
+  public int getTotalAuthorNumber(){
+    return allAuthors.size();
+  }
+  
+  public int getPublicationNumber(){
+    return this.publication.size();
+  }
+  
+  public int getTotalPaperCitation(){
+    return this.paperCitation.size();
+  }
+
+  /**
+  * 
+  */
+
+  private static Comparator<String> alphabeticalOrder =
+      new Comparator<String>() {
+        public int compare(String str1, String str2) {
+          int res =  str1.compareTo(str2);
+
+          return res;
+        }
+      };
+
+
+}
+

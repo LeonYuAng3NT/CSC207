@@ -1,0 +1,32 @@
+package test;
+
+import static org.junit.Assert.*;
+
+
+import org.junit.Before;
+import org.junit.Test;
+
+import operator.CoAuthorListGenerator;
+
+public class CoAuthorListGeneratorTest {
+  private CoAuthorListGenerator generator;
+
+  @Before
+  public void setUp() throws Exception {
+    
+    generator = new CoAuthorListGenerator();
+
+  }
+
+  @Test
+  public void testProduceAllCoAuthors() {
+    try{
+    String result = generator.produceAllCoAuthors();
+    assertTrue(result.equals("7. Co-Author list sorted (Total: " 
+        + "0" + "):\n"));
+    }catch( Exception e){
+      fail("generator failed to construct");
+    }
+  }
+
+}

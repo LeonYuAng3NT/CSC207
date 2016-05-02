@@ -1,0 +1,100 @@
+package operator;
+
+
+public class OutputFormatGenerator {
+  private String[] args;
+  private ContentExtractor extractor;
+  private ContentInfoCollector infoCollector;
+  private CoAuthorListGenerator listGenerator;
+  
+  public OutputFormatGenerator(String[] args){
+      this.args = args; 
+      listGenerator = new CoAuthorListGenerator();
+  }
+
+  public String generate(){
+    String result = 
+    "-----------------------------------------------------------------------\n";
+    try {
+      GoogleScholarHTMLExtractor googleExtractor = 
+          new GoogleScholarHTMLExtractor();
+      
+      String URLS[] = args[0].split(",");
+      for (String url : URLS) {
+        
+        // extract Author's name
+        extractor = new AuthorNameExtractor(googleExtractor);
+        String authorsName = "1. Name of Author: \n"+ "        " 
+        +extractor.extract(url) + "\n";
+        
+        // extract number of Citation
+        extractor = new CitationNumberExtractor(googleExtractor);
+        String numberOfCitation ="2. Name of All Citaions:\n" 
+        + "        "+ extractor.extract(url) +"\n";
+        
+        // extract number of i10-index after 2009;
+        extractor = new Indexi10Extractor(googleExtractor);
+        String i10Index = "3. Number of i10-index after 2009: \n"
+            +"        " + extractor.extract(url) +"\n";
+        
+        // final format per page
+        result += authorsName + numberOfCitation + i10Index 
+            + deepGenerate(googleExtractor, url) +
+    "-----------------------------------------------------------------------\n"; 
+      }
+      result += "\n"+ listGenerator.produceAllCoAuthors();
+    } catch (Exception e) {
+      System.out.println("Did you change the run configuration in"
+          + "Eclipse for argument0 and argument 1?");
+    }
+    return result;
+
+  }
+  
+  /**
+   * 
+   * @param googleExtractor 
+   * @param url
+   * @return
+   * @throws Exception
+   */
+  
+  private String deepGenerate(GoogleScholarHTMLExtractor googleExtractor
+      , String url) throws Exception{
+   String result = "";
+   // Collect title for first 3 publications
+   infoCollector = new FirstThreePublicationCollector(googleExtractor);
+   infoCollector.collectInfo(url);
+   String publications ="4. Title of the first 3 publications:  \n";
+   for(int i= 0; i < 3; i++){
+     publications += "        " + (i+1) + "-  "
+   + infoCollector.getContentInfo().get(i) +"\n";
+     }
+
+   // collect  first 5 paper citations
+   infoCollector = new TotalPaperCitationCollector(googleExtractor);
+   infoCollector.collectInfo(url);
+   int PaperCitationNumber = 0;
+   String totalPaperCitation = "5. Total paper citation ( first 5 papers): \n"; 
+   for(int i= 0; i < 5; i++){
+     int number = Integer.parseInt(infoCollector.getContentInfo().get(i));
+     PaperCitationNumber+= number;
+   }
+   totalPaperCitation += "        " + PaperCitationNumber +"\n";
+
+   // collect number of total coauthor 
+
+   infoCollector = new TotalCoAuthorsCollector(googleExtractor);
+   infoCollector.collectInfo(url);
+   for(int i= 0; i < infoCollector.getContentInfo().size(); i++){
+     listGenerator.getCoAuthorList().add(infoCollector.getContentInfo().get(i));
+
+     
+   }
+   String totalCoAuthors = "6. Total Co-Authors: \n" 
+       + "        "+ infoCollector.getContentInfo().size() + "\n";
+   result = publications + totalPaperCitation + totalCoAuthors;
+   return result;
+ }
+  }
+

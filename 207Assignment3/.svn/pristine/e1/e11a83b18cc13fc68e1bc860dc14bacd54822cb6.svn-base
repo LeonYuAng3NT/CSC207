@@ -1,0 +1,43 @@
+package operator;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class CoAuthorListGenerator {
+  
+  private List<String> coAuthorList;
+  
+  public CoAuthorListGenerator(){
+    coAuthorList = new ArrayList<String>();
+  }
+  
+  /** A generic Comparator that is used for sorting the coAuthorList
+   * 
+   */
+   private static Comparator<String> alphabeticalOrder =
+      new Comparator<String>() {
+        public int compare(String str1, String str2) {
+          int res =  str1.compareTo(str2);
+          return res;
+        }
+      };
+
+      
+   /**
+    * 
+    */
+    public String produceAllCoAuthors() throws Exception {
+        String result = "7. Co-Author list sorted (Total: "
+            + coAuthorList.size() + "):\n";
+        this.coAuthorList.sort(alphabeticalOrder);
+        for(int i =0 ; i< coAuthorList.size(); i++){
+          result += coAuthorList.get(i) +"\n";
+        }
+        return result;
+        
+    }
+    public List<String> getCoAuthorList(){
+      return coAuthorList;
+    }
+}

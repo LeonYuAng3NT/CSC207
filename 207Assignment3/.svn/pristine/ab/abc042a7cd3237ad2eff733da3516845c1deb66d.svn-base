@@ -1,0 +1,31 @@
+package operator;
+
+public abstract class ContentExtractor {
+  
+  private GoogleScholarHTMLExtractor htmlExtractor;
+  
+  
+  /**
+   * 
+   * @param htmlExtractor
+   */
+  public ContentExtractor(GoogleScholarHTMLExtractor htmlExtractor){
+    this.htmlExtractor = htmlExtractor;
+  }
+  /**
+   * 
+   * @param URL
+   * @return
+   * @throws Exception
+   */
+  abstract public String extract(String URL) throws Exception;
+  
+  /** Obtain the HTMLExtractor for further use 
+   * 
+   * @return
+   */
+  public HTMLExtractor getHTMLExtractor(){
+    return htmlExtractor;
+  }
+
+}
