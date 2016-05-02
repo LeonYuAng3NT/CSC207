@@ -1,0 +1,10 @@
+class name: QueriedCommandNotExistException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the queried command is invalid
+
+Collaborators:
+None

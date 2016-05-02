@@ -1,0 +1,27 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+
+/**
+ * Use to navigate from current directory to target directory
+ */
+public class DirectoryNavigator {
+
+  /**
+   * Construct a DirectoryNavigator
+   */
+  public DirectoryNavigator() {
+
+  }
+
+  /**
+   * Go to specified directory from current directory
+   *
+   * @param currentDirectory The current directory
+   */
+  public void goTo(Directory currentDirectory) {
+
+    
+  }
+}
+

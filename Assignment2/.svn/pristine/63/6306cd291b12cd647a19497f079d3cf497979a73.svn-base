@@ -1,0 +1,17 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Modifications on DirectoryCreator  classes
+   -Added OutputProducer interface
+   -Modification on setUp() and execute() methods in several classes
+   -Base code for ContentViewer and its method on finding sub-directories
+   
+b) What do I plan to work on now?  
+   -Write base code for ContentViewer for searching the sub-directories
+   -Methods within RegexFinder class
+   -Modification on every Command classes redirection 
+   -Implement the OutputProducer interface in specific Command class
+   -JUnit tests on every Command class
+   
+c) Am I blocked on anything?  
+   -JUnit tests

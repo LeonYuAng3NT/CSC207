@@ -1,0 +1,15 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Implement base code within RegexFinder class
+   -Implement OutputProducer interface in specific Command class
+   -Wrote Recursive methods in ContentViwer for searching the sub-directories
+   -JunitTest for Path Navigator class.
+   
+b) What do I plan to work on now?  
+   -Debugging on ItemDuplicator and PathNavigator
+   -Implement producer() method within RegexFinder class
+   -JUnit tests on every Command class
+   
+c) Am I blocked on anything?  
+   -Algorithm in RegexFinder

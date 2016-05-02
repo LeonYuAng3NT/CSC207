@@ -1,0 +1,86 @@
+package a2a.operator;
+
+import java.util.ArrayList;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+public class PathNavigator implements Command {
+
+  private FileSystem fileSystem;
+  private ArrayList<Directory> targetLocation;
+  private ArrayList<String> targetNames;
+  @Override
+  /**
+   * @param command
+   * @param fileSystem
+   * @throws ArgumentDeclareException        if command have incorrect argument
+   * @throws PathDoesNotExistException       if path is invalid
+   * @throws NameConflictException           if name has been occupied
+   * @throws InvalidTargetNameException      if name contain invalid character
+   */
+  public void setUp(String[] command, FileSystem fileSystem) throws 
+                ArgumentDeclareException, InvalidTargetNameException, 
+                PathDoesNotExistException,  NameConflictException {
+    // TODO Auto-generated method stub
+      this.fileSystem = fileSystem;
+      if (command.length > 1 && command.length == 3) {
+          Searcher searcher = new Searcher(command,this.fileSystem);
+          // Parse the parent directory of the string at final index
+          // to data stored in FileSystem
+          Directory currTarget = searcher.searchLocation();
+
+          String currName = command[command.length - 1];
+          targetNames.add(currName);
+          targetLocation.add(currTarget);
+        }
+      }
+ @Override
+ /**
+  *  Execute the command, then allow user to move 
+  *  directory with specific path to certain path that is different from the 
+  *  original one
+  */
+  public void execute() {
+    
+      Directory target = new Directory();
+      Directory oldLocation = targetLocation.get(0);
+      Directory newLocation = targetLocation.get(1);
+
+      for (int i = 0; i < oldLocation.getContent().size(); i++) {
+        String targetName = targetNames.get(i);
+
+        if (oldLocation.getContent().get(i) instanceof Directory) {
+          Directory curr = (Directory) oldLocation.getContent().get(i);
+          if (curr.getName().equals(targetName)) {
+            // Get the target and remove it from original location
+            target = (Directory) oldLocation.getContent().get(i);
+            oldLocation.getContent().remove(i);
+          }
+        } else if (oldLocation.getContent().get(i) instanceof File) {
+          File curr = (File) oldLocation.getContent().get(i);
+          if (curr.getName().equals(targetName)) {
+            // Get the target and remove it from original location
+            target = (Directory) oldLocation.getContent().get(i);
+            oldLocation.getContent().remove(i);
+          }
+        }
+      }
+      for (int j = 0; j < newLocation.getContent().size(); j++) {
+        if (oldLocation.getContent().get(j) instanceof Directory) {
+          if (((Directory) ((Directory) targetLocation.get(1)).getContent()
+              .get(j)).getName().equals(targetNames.get(j))) {
+            ((Directory) ((Directory) targetLocation.get(1)).getContent().get(j))
+                .getContent().add(target);
+          }
+        }
+      }
+    }
+
+
+}

@@ -1,0 +1,170 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+import a2a.operator.CommandManual;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+/**
+ * A command manual test, uses to test if the methods are working as they
+ * describe.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class CommandManualTest {
+
+  private FileSystem fileSystem;
+
+  // The cases that should be passed
+  private String[][] passed;
+
+  // The cases that should be failed
+  private String[][] failed;
+
+  /**
+   * Set up the Command Manual Test.
+   */
+  @Before public void setUp() {
+
+    fileSystem = new FileSystem();
+    fileSystem.getCurrDir().getContent()
+        .add(new Directory("dirName", "/dirName", fileSystem.getRoot()));
+    fileSystem.getCurrDir().getContent().add(new File("first.txt", "c"));
+    fileSystem.getCurrDir().getContent().add(new File("second.txt", "c"));
+
+    passed = new String[][] {{"man", "exit"}, {"man", "mkdir"}, {"man", "cd"},
+        {"man", "ls"}, {"man", "pwd"}, {"man", "cat"}, {"man", "echo"},
+        {"man", "man"}, {"man", "mv"}, {"man", "cp"}, {"man", "!"},
+        {"man", "grep"}, {"man", "pushd"}, {"man", "popd"}, {"man", "history"},
+        {"man", "cd", ">", "first.txt"}, {"man", "cd", ">>", "second.txt"},
+        {"man", "cd", ">", "new.txt"}, {"man", "cd", ">>", "new.txt"}};
+
+    failed = new String[][] {{"man"}, {"man", "notExistCommand"},
+        {"man", "cd", "noOperator.txt"},
+        {"man", "cd", ">", "/NotExist/file.txt"},
+        {"man", "cd", ">", "/NotExist/file.txt"},
+        {"man", "cd", ">", "dirName"}};
+  }
+
+  /**
+   * Test if the instance can be successfully create.
+   */
+  @Test public void testCommandManual() {
+
+    try {
+      new CommandManual();
+    } catch (Exception e) {
+      fail("Failed to created the instance of command manual.");
+    }
+  }
+
+  /**
+   * Test if the method successfully set up or throw
+   * exception in suitable cases.
+   */
+  @Test public void testSetUp() {
+
+    // Test cases that should be passed
+    try {
+      for (String[] command : passed) {
+        CommandManual cmd = new CommandManual();
+        cmd.setUp(command, fileSystem);
+      }
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+
+    // Test cases that should be failed
+    try {
+      CommandManual cmd = new CommandManual();
+      for (String[] command : failed) {
+        cmd.setUp(command, fileSystem);
+      }
+      fail("Exception should be thrown.");
+    } catch (Exception e) {
+      // Empty catch statement
+    }
+  }
+
+  /**
+   * Test if the execute method in Command Manual works as it describes.
+   */
+  @Test public void testExecute() {
+
+    ByteArrayOutputStream actual = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(actual));
+    try {
+      for (String[] command : passed) {
+        CommandManual cmd = new CommandManual();
+        cmd.setUp(command, fileSystem);
+        cmd.execute();
+      }
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+    String expected = "Usage: exit\nQuit the program\nUsage: mkdir DIR\nCreate "
+        + "directories in the current directory or in a full path.\nUsage:"
+        + " cd DIR\nChange directory to DIR or a full path\n.. means a parent d"
+        + "irectory and . means the current directory.\nUsage: ls [-R][PATH …]"
+        + "\nList out the content of directory\n-R will recursively list out al"
+        + "l subdirectories\nUsage: pwd\nPrint out the full path of current dir"
+        + "ectory\nUsage: cat FILE1[FILE2]\nDisplay the contents of FILE1\nUsag"
+        + "e: echo STRING [MODE OUTFILE]\nPrint out the STRING\nUsage: man CMD"
+        + "\nPrint documentation of CMD\nUsage: mv OLDPATH NEWPATH\n" + "Move "
+        + "item from old to new path\nUsage: cp OLDPATH NEWPATH\n" + "Copy item"
+        + " from old to new path\nUsage: !number\n" + "Re-execute the command "
+        + "from input history\nUsage: grep [-R] REGEX PATH …\n"
+        + " print any lines containing REGEX in PATH\n"
+        + " or print contents of all files in path if -Ris presented.\n"
+        + "Usage: pushd DIR\n"
+        + "Saves the current working directory onto the directory stack and"
+        + " then change directory to DIR.\nUsage: popd Remove the top entry"
+        + " from the directory stack, and change current working directory into"
+        + " it.\nUsage: history [number]\n" + "Print out input history\n";
+    assertEquals(expected, actual.toString());
+  }
+}
+
+

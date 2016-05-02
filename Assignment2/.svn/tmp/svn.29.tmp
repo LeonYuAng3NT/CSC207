@@ -1,0 +1,87 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+import java.util.*;
+
+public class FileSystem {
+
+  private Directory root;
+  private Directory currDirectory = root;
+  private Stack<Directory> dirStack;
+
+  /**
+   * Construct a file system.
+   */
+  public FileSystem() {
+    this.root = new Directory();
+    currDirectory = root;
+    dirStack = new Stack<Directory>();
+  }
+
+  /**
+   * Get the top level root directory
+   *
+   * @return The root directory
+   */
+  public Directory getRoot() {
+
+    return root;
+  }
+
+  /**
+   * Get the current directory
+   *
+   * @return The current directory
+   */
+  public Directory getCurrDir() {
+
+    return currDirectory;
+  }
+
+  /**
+   * Get the directory stack.
+   */
+  public Stack<Directory> getDirStack() {
+
+    return dirStack;
+  }
+
+  /**
+   * Set the directory stack.
+   */
+  public void setDirStack(Stack<Directory> dirStack) {
+
+    this.dirStack = dirStack;
+  }
+
+}

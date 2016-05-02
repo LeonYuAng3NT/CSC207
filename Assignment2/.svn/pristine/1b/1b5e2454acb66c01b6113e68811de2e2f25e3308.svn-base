@@ -1,0 +1,83 @@
+package a2a;
+
+import java.util.ArrayList;
+
+public class Directory {
+
+  private String name;
+  private String address;
+  private ArrayList<Object> content = new ArrayList<>();
+
+  /**
+   * Construct a directory.
+   *
+   * @param name    The name of this directory
+   * @param address The address of current path
+   */
+  public Directory(String name, String address) {
+
+    this.name = name;
+    this.address = address;
+  }
+
+  /**
+   * The getter of name.
+   *
+   * @return The name of this directory.
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * The getter of content.
+   *
+   * @return The content of this directory.
+   */
+  public ArrayList<Object> getContent() {
+
+    return content;
+  }
+
+  /**
+   * The getter of address.
+   *
+   * @return The address of current path.
+   */
+  public String getAddress() {
+
+    return address;
+  }
+
+  /**
+   * The setter of name.
+   *
+   * @param name The new name of this directory.
+   */
+  public void setName(String name) {
+
+    this.name = name;
+  }
+
+  /**
+   * The setter of content.
+   *
+   * @param content The new content of this directory.
+   */
+  public void setContent(ArrayList<Object> content) {
+
+    this.content = content;
+  }
+
+  /**
+   * The setter of address.
+   *
+   * @param address The new address of this directory.
+   */
+  public void setAddress(String address) {
+
+    this.address = address;
+  }
+
+}

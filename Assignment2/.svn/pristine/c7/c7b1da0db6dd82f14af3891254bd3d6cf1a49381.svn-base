@@ -1,0 +1,98 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+
+/**
+ * A Searcher, it provides several ways to search a target in file system.
+ */
+public class Searcher {
+
+
+  /**
+   * Construct a Searcher
+   */
+  public Searcher() {
+
+  }
+
+
+  /**
+   * Find a file from current working directory, if the target does not exist,
+   * return null.
+   *
+   * @param name The name of the target file
+   * @return The target file or null if it does not exist
+   */
+  public File findFileFromCurr(Directory curr, String name) {
+
+    for (Object item : curr.getContent()) {
+      if (item instanceof File && ((File) item).getName().equals(name)) {
+        return (File) item;
+      } else if (item instanceof File
+          && !((File) item).getName().equals(name)) {
+        findFileFromCurr(curr.getParent(), name);
+      }
+
+      else {
+        System.out.println("Invalid argument");
+      }
+
+    }
+    return null;
+  }
+
+  /**
+   * Find a directory from current working directory, if the target does not
+   * exist, return null.
+   *
+   * @param name The name of the target directory
+   * @return The target directory or null if the target does not exist
+   */
+  public Directory findDirFromCurr(Directory curr, String name) {
+
+    for (Object item : curr.getContent()) {
+      if (item instanceof Directory
+          && ((Directory) item).getName().equals(name)) {
+        return (Directory) item;
+      } else if (item instanceof File
+          && !((File) item).getName().equals(name)) {
+        findDirFromCurr(curr.getParent(), name);
+      } else {
+        System.out.println("Invalid argument");
+      }
+    }
+    return null;
+  }
+}

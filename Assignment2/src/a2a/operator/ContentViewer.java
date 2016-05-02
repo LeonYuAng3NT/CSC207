@@ -1,0 +1,213 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The Content Viewer uses to view the content of a path.
+ *
+ * @author Yu Ang Zhang
+ * @author Yi Jian Wang
+ */
+public class ContentViewer implements Command, OutputProducer {
+
+  private String[] command;
+  private FileSystem fileSystem;
+
+  // Store the target object of the path
+  private List<Object> targets;
+
+  private boolean isRedirectMode;
+
+  // Recursively list all sub directories
+  private boolean isRecursiveMode;
+
+  // Work on current location only
+  private boolean isDirectMode;
+
+  /**
+   * Construct a ContentViewer.
+   */
+  public ContentViewer() {
+
+    this.targets = new ArrayList<>();
+  }
+
+  /**
+   * Inspect the validity of the action which indicated by user input,
+   * and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws PathDoesNotExistException  if path is invalid
+   * @throws NameConflictException      if name has been occupied
+   * @throws InvalidTargetNameException if name contain invalid character
+   * 
+   * @author Yu Ang Zhang
+   * @author Yi Jian Wang
+   */
+  public void setUp(String userInput, FileSystem fileSystem)
+      throws PathDoesNotExistException, NameConflictException,
+      InvalidTargetNameException {
+    this.command = userInput.trim().split("\\s+");
+    this.fileSystem = fileSystem;
+    this.isRecursiveMode = (command.length >= 2 && command[1].equals("-R"));
+    this.isRedirectMode =
+        (command.length > 2 && (command[command.length - 2].equals(">")
+            || command[command.length - 2].equals(">>")));
+    this.isDirectMode =
+        (command.length == 1 || (command.length == 2 && isRecursiveMode) || (
+            command.length == 4 && isRedirectMode && isRecursiveMode) || (
+            command.length == 3 && isRedirectMode));
+
+    // Ternary operator to set up the start and ending index
+    int startIndex = (isRecursiveMode) ? 2 : 1;
+    int endIndex = (isRedirectMode) ? command.length - 2 : command.length;
+
+    // Find all target in multiple paths
+    for (int i = startIndex; i < endIndex; i++) {
+      PathAnalyzer analyzer = new PathAnalyzer(command[i]);
+      this.deepSetUp(new Searcher(analyzer.convert(), fileSystem));
+    }
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+  }
+
+  /**
+   * This is a helper uses to continue set up the command.
+   *
+   * @param searcher The searcher of current searching process
+   * @throws PathDoesNotExistException if a path does not exist
+   * 
+   * 
+   * @author Yu Ang Zhang
+   * @author Yi Jian Wang
+   */
+  private void deepSetUp(Searcher searcher) throws PathDoesNotExistException {
+
+    // Searcher cannot find anything
+    boolean fileIsFound = searcher.searchTarget(true) != null;
+    boolean dirIsFound = (searcher.searchTarget(false) != null);
+
+    if (!fileIsFound && !dirIsFound) {
+      throw new PathDoesNotExistException();
+
+    } else if (fileIsFound) {
+      // Path is a file
+      this.targets.add(searcher.searchTarget(true));
+
+    } else {
+      // Path is a directory
+      this.targets.add(searcher.searchTarget(false));
+    }
+  }
+
+  /**
+   * This is a helper uses to recursively generate the
+   * list of all sub directories in a full path.
+   *
+   * @param item The object of file or directory
+   * @return The content of the path
+   */
+  private String listAllSubDirectories(Object item) {
+
+    if (item instanceof File) {
+      return ((File) item).getName() + "\n";
+
+    } else {
+      // Item is Directory
+      String result = ((Directory) item).getName() + ":\n" + item.toString();
+      for (Object stuff : ((Directory) item).getContent()) {
+        result += listAllSubDirectories(stuff);
+      }
+      return result;
+    }
+  }
+
+  /**
+   * Produce the output of the content.
+   *
+   * @return The standard output of this command.
+   */
+  @Override public String produce() {
+
+    // Work on current directory
+    if (isDirectMode && isRecursiveMode) {
+      return listAllSubDirectories(fileSystem.getCurrDir());
+    } else if (isDirectMode) {
+      return fileSystem.getCurrDir().toString();
+    }
+
+    // User give multiple path
+    String result = "";
+    for (Object item : targets) {
+      if (isRecursiveMode) {
+        result += listAllSubDirectories(item);
+      } else if (item instanceof File) {
+        result += ((File) item).getName() + "\n";
+      } else if (item instanceof Directory) {
+        result += ((Directory) item).getName() + ":\n" + item.toString();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Execute the command, then print out the output or redirect
+   * the output to a specified file.
+   */
+  public void execute() {
+
+    String result = this.produce();
+
+    if (isRedirectMode) {
+      FileEditor editor = new FileEditor(command, fileSystem);
+      editor.write(command[command.length - 1], result);
+
+    } else {
+      System.out.println(result);
+    }
+  }
+
+}
+

@@ -1,0 +1,44 @@
+package a2a.operator;
+
+<<<<<<< .mine
+import a2a.operator.*;
+import a2a.foundation.*;
+
+/**
+ * Use to navigate from current directory to target directory
+ */
+public class DirectoryNavigator {
+=======
+import a2a.foundation.Directory;
+
+/**
+ * Use to navigate from current directory to target directory
+ */
+public class DirectoryNavigator {
+>>>>>>> .r148
+
+  /**
+   * Construct a DirectoryNavigator
+   */
+<<<<<<< .mine
+  private FileSystem filesystem;
+  
+  public DirectoryNavigator(FileSystem filesystem) {
+
+=======
+  public DirectoryNavigator() {
+
+>>>>>>> .r148
+  }
+
+  /**
+   * Go to specified directory from current directory
+   *
+   * @param currentDirectory The current directory
+   */
+  public void goTo(Directory currentDirectory) {
+
+
+  }
+}
+

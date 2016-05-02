@@ -1,0 +1,140 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+
+/**
+ * The Searcher uses to search the directory location of
+ * target from path, and the directory location of target
+ * is the directory which is uses to stored the target.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class Searcher {
+
+  // The string array of path after analyzed from a string path
+  private String[] path;
+
+  // The file system which uses to search a target
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a Searcher.
+   *
+   * @param path       The analyzed string array of path
+   * @param fileSystem The file system which uses to search a target
+   */
+  public Searcher(String[] path, FileSystem fileSystem) {
+
+    this.path = path;
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * The purpose of this method is to find the directory location
+   * of the target but not the target itself. If the path contain
+   * invalid part, then it will return null.
+   *
+   * @return The directory location or null if it does not exist
+   */
+  public Directory find() {
+
+    // This is an invalid path
+    if (path.length == 0) {
+      return null;
+    }
+
+    Directory curr = fileSystem.getCurrDir();
+    for (int i = 0; i < path.length && curr != null; i++) {
+      // The path contain invalid name
+      if (path[i].equals("/") && i != 0) {
+        curr = null;
+      } else if (path[i].equals("/") && i == 0) {
+        curr = fileSystem.getRoot();
+      } else if (path[i].equals(".")) {
+        curr = fileSystem.getCurrDir();
+      } else if (path[i].equals("..")) {
+        curr = curr.getParent();
+      } else if (i == path.length - 1){
+        curr = deepSearch(true, path[i], curr);
+      } else {
+        curr = deepSearch(false, path[i], curr);
+      }
+    }
+    return curr;
+  }
+
+  /**
+   * This is a helper uses to make a deep search.
+   *
+   * @param isLast True if the searching name is the last in path
+   * @param curr The start searching position of current process
+   * @return The directory location or null if it does not exist
+   */
+  private Directory deepSearch(boolean isLast, String name, Directory curr) {
+
+    boolean isFound;
+    ArrayList<Object> content = curr.getContent();
+
+    for (int i = 0; i < content.size(); i++) {
+      try{
+        isFound = ((File) content.get(i)).getName().equals(name);
+        // The last item in the path is found and return its location
+        if (isFound && isLast) {
+          return curr;
+        } else if (isFound) {
+          // The middle of the path cannot contain a file name
+          return null;
+        }
+
+      } catch (Exception e) {
+        isFound = ((Directory) content.get(i)).getName().equals(name);
+        // The last item in the path is found and return its location
+        if (isFound && isLast) {
+          return curr;
+        } else if (isFound) {
+          return (Directory) content.get(i);
+        }
+      }
+    }
+    return null;
+  }
+
+}

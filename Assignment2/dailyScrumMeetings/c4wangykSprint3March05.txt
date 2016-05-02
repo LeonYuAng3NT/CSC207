@@ -1,0 +1,11 @@
+What did I do last time?
+    - Modified the original design to adapt the new structure
+    - Completed the ContentViewer since searcher is completed by teammate
+    - Completed the DirectoryNavigator
+    - Completed the Directory
+
+What do I plan to do now?
+    - Debug all the completed part
+
+Am I blocked on anything?
+    - None

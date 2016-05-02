@@ -1,0 +1,66 @@
+Backlog Item
+
+e) As a user, I am able to see whether my command input is correct 2 days
+   or not 
+f) As a user, I am able to inspect the contents of a file          2 days
+g) As a user, I am able to navigate an address and print
+                users' input history                               1 day
+h) As a user, I am able to modify the content of a                 2 days
+   file or directory
+   
+e-1. (Command) Write the base code for isValid() method for each Command type
+               object.
+e-2. (Command) Have the isValid() method ready in check the validity
+               of users' inputs.
+e-3. (ArgumentAnalyzer) Establish the ArgumentAnalyzer class to split user's
+                    input and then parse them.
+e-4  (FileSystem) Generate the methods inside FileSystem class that store 
+                  current directory's and root directory's address.
+e-5  (FileSystem) Build connection between FileSystem class and JShell class.
+e-6  (Searcher)   Establish a searcher class to search file or directory from
+                  the system.
+e-7  (Searcher)   Build connection between FileSystem and Searcher for one case.
+f-1. (FileReader) Create a parse that can point to the specific file.
+f-2. (FileReader) Create method for the class that is able to display the 
+                  content.
+f-3. (FileReader) Create the isValid() method for Checking  whether the 
+				  parsed-file exists or not.
+f-4  (FileReader) Write the methods for class to build connection with 
+                  the target file.
+g-1. (DirectoryNavigator) Construct the base code for DirectoryNavigator.
+g-2. (DirectoryNavigator) Create methods that can search the file in the system
+                           by collaborating with FileSystem, ArguentAnalyzer 
+                           and Searcher.
+g-3. (DirectoryNavigator) Implement the algorithm in isValid() method for class 
+                   to build connection with  the target directory.
+g-4  (HistoryViewer) Establish the class methods so that it is able to print the
+                    history of users' input.
+g-5  (HistoryViewer) Build the connection between the InputHistory and 
+                   HistoryViewer.
+h-1. (FileEditor) Establish the class base code and parse to the content of 
+                  specific file.
+h-2. (FileEditor) Create a method that is able to modify the content of a file
+                  under Shell platform.
+h-3. (FileEditor) Create a method that collaborate with FileSystem and 
+                  FileCreator  .               
+h-4. (FileEditor) Generate a method that is able to navigate the a string to
+                  a simultaneously initialized file. 
+h-5. (FileCreator) Establish the constructor of FileCreator and implement the
+                   specific method to initialize a file.
+h-6  (FileCreator) Build the connection between FileEditor and FileCreator.
+              
+
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: e-1, e-2, e-3, e-4, e-5, e-6, e-7
+
+User: Yiming Huang
+Tasks: f-1, f-2, f-3, f-4
+
+User: Yi Jian Wang
+Tasks: h-1, h-2, h-3, h-4, h-5, h-6
+
+User: Yu Wang
+Tasks: g-1, g-2, g-3, g-4, g-5

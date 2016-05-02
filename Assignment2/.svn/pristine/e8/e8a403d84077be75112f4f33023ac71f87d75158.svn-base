@@ -1,0 +1,68 @@
+package test;
+
+import a2a.foundation.FileSystem;
+import a2a.foundation.InputHistory;
+import a2a.operator.HistoryViewer;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+/**
+ * A HistoryViewer test.
+ */
+public class HistoryViewerTest {
+
+  private FileSystem fileSystem;
+
+  @Before public void setUp() throws Exception {
+
+    fileSystem = new FileSystem();
+    InputHistory inputHistory = new InputHistory();
+
+    inputHistory.record("cd root");
+    inputHistory.record("man cd");
+    inputHistory.record("mkdir abc");
+    inputHistory.record("wrong");
+    inputHistory.record("ls");
+
+    fileSystem.setHistory(inputHistory);
+  }
+
+  @Test public void testHistoryViewer() {
+
+    HistoryViewer historyViewer = new HistoryViewer(fileSystem);
+  }
+
+  @Test public void testIsValid() {
+
+    HistoryViewer historyViewer = new HistoryViewer(fileSystem);
+    assertTrue(historyViewer.isValid("history"));
+    assertTrue(historyViewer.isValid("history 2"));
+    assertTrue(historyViewer.isValid("history 5"));
+
+    assertFalse(historyViewer.isValid("history 6"));
+    assertFalse(historyViewer.isValid("history -1"));
+    assertFalse(historyViewer.isValid("history f"));
+  }
+
+  @Test public void testExecute() {
+
+    HistoryViewer historyViewer = new HistoryViewer(fileSystem);
+    historyViewer.isValid("history");
+
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(output));
+
+    historyViewer.execute();
+
+    String expected = "1. cd root\n2. man cd\n3. mkdir abc\n4. wrong\n5. ls\n";
+
+    assertEquals(expected, output);
+  }
+}

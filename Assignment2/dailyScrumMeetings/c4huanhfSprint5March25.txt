@@ -1,0 +1,8 @@
+What did I do last time?
+	- Continue working on the rest of the test.
+
+What do I plan to do now?
+	- Continue working on writing the tests.
+
+Am I blocked on anything?
+	- None

@@ -1,0 +1,62 @@
+package a2a.operator;
+
+
+import a2a.foundation.InputHistory;
+
+import java.util.ArrayList;
+
+/**
+ * The HistoryViewer use to print out the history record.
+ */
+public class HistoryViewer {
+
+  InputHistory inputHistory;
+
+  /**
+   * Construct a HistoryViewer
+   */
+  public HistoryViewer(InputHistory inputHistory) {
+
+    this.inputHistory = inputHistory;
+  }
+
+  /**
+   * Print out all of the user input history.
+   */
+  public void viewAll() {
+
+    ArrayList<String> history = inputHistory.getUserInputHistory();
+
+    // print out the every user input
+    for (int curr = 0; curr < history.size(); curr++) {
+      System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+    }
+  }
+
+  /**
+   * Print out the number of most recent user input history.
+   *
+   * @param number The number of most recent history
+   */
+  public void view(String number) {
+
+    ArrayList<String> history = inputHistory.getUserInputHistory();
+
+    // The index of start history
+    int startIndex = history.size() - Integer.parseInt(number);
+
+    // Print error message if there is not enough history recorded
+    if (startIndex < 0) {
+      System.out.println("There is not enough history recorded, try again.");
+
+    } else {
+      for (int curr = 0; curr < history.size(); curr++) {
+        // start printing now
+        if (curr >= startIndex) {
+          System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+        }
+      }
+    }
+  }
+
+}

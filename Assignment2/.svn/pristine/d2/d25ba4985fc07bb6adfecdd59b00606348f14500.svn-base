@@ -1,0 +1,8 @@
+Class name: CommandManual
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Display a list of command key words
+Collaborators:
+*Collection

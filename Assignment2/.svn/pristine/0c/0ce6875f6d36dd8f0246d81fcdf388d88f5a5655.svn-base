@@ -1,0 +1,19 @@
+Class name:DirectoryCreator 
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Create a Directory 
+*Check if the input is a valid command for DirectoryCreator.
+Collaborators:
+*Directory
+*FileSystem
+*File
+*ArgumentDeclareException
+*DirectoryStackEmptyException
+*InvalidCommandException
+*InvalidTargetNameException
+*NameConflictException
+*NoEnoughHistoryException
+*PathDoesNotExistException
+*QueriedCommandNotExistException

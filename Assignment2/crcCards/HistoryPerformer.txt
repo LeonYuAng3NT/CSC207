@@ -1,0 +1,18 @@
+Class name: HistoryPerformer
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Allow user re-execute a command from history record
+
+Collaborators:
+*ArgumentDeclareException
+*InvalidTargetNameException
+*NameConflictException
+*PathDoesNotExistException
+*InfiniteExecutionException
+*NoEnoughHistoryException
+*PathChecker
+*FileSystem
+

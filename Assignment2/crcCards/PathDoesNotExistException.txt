@@ -1,0 +1,10 @@
+class name: PathDoesNotExistException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the path does not exist or it is invalid
+
+Collaborators:
+None

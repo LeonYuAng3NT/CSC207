@@ -1,0 +1,18 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Worked on JShell implementation and FormatChecker
+   -Several CRC Cards
+   -Elaborated with all the others and discussed on design structure as a team
+   -Constructed the Sprint backlog and product backlog
+   
+b) What do I plan to work on now?  
+   - Edit JShell and add more implementation
+   - Discuss with others on the design of JShell and how it will collaborate 
+     with other class
+   - Pre-determine the task for second sprint and manage to set up another 
+    meeting
+
+c) Am I blocked on anything?  
+   -Need to decide whether we need FileSystem object
+   - Still need to confirm whether we need the ADT of Command

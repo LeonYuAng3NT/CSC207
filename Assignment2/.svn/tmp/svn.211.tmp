@@ -1,0 +1,217 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.*;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+/**
+ * The ItemDuplicator uses to copy the item from original location to the new
+ * location.
+ *
+ * @author Yi Jian Wang
+ * @author Yu Ang Zhang
+ */
+public class ItemDuplicator implements Command {
+
+  private boolean firstIsFile;
+  private boolean secondExist;
+  private boolean secondIsDir;
+  private FileSystem fileSystem;
+
+  private Searcher firstSearcher;
+  private Searcher secondSearcher;
+  private PathAnalyzer firstAnalyzer;
+  private PathAnalyzer secondAnalyzer;
+
+  /**
+   * Construct an ItemDuplicator.
+   */
+  public ItemDuplicator() {
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated by user input, and set
+   * up the command before execute.
+   *
+   * @param fileSystem The file system use to execute this command
+   * @throws PathDoesNotExistException if path is invalid
+   * @throws NameConflictException if name has been occupied
+   * @throws InvalidTargetNameException if name contain invalid character
+   * @throws TypeNotMatchException if the target's type is invalid
+   * @throws ConflictPathException if two paths conflict with each other
+   * @throws ArgumentDeclareException if the argument is wrongly declared
+   */
+  @Override
+  public void setUp(String userInput, FileSystem fileSystem)
+      throws InvalidTargetNameException, PathDoesNotExistException,
+      NameConflictException, TypeNotMatchException, ConflictPathException,
+      ArgumentDeclareException {
+    this.fileSystem = fileSystem;
+    String[] command = userInput.trim().split("\\s+");
+
+    boolean isRedirectMode = (command.length == 5
+        && (command[3].equals(">>") || command[3].equals(">")));
+    if ((command.length != 3 && command.length != 5)
+        || (command.length == 5 && !isRedirectMode)) {
+      throw new ArgumentDeclareException();
+    }
+    PathChecker checker = new PathChecker(fileSystem);
+
+    boolean[] result = checker.inspectDoublePath(command[1], command[2]);
+    this.firstIsFile = result[0];
+    this.secondExist = result[1];
+    this.secondIsDir = result[2];
+
+    this.firstAnalyzer = new PathAnalyzer(command[1]);
+    this.secondAnalyzer = new PathAnalyzer(command[2]);
+    this.firstSearcher = new Searcher(firstAnalyzer.convert(), fileSystem);
+    this.secondSearcher = new Searcher(secondAnalyzer.convert(), fileSystem);
+
+    if (isRedirectMode)
+      checker.inspectSinglePath(command[command.length - 1]);
+  }
+
+  /**
+   * Execute the command, then allow user to copy directory with specific path
+   * to certain path that is different from the original one.
+   */
+  @Override
+  public void execute() {
+
+    if (firstIsFile) {
+      // The original path is a file
+      File origin = (File) firstSearcher.searchTarget(true);
+      FileCreator creator = new FileCreator();
+
+      if (secondExist && secondIsDir) {
+        // New path is directory, copy original file to the new directory
+        Directory newLocation = (Directory) secondSearcher.searchTarget(false);
+        creator.create(origin.getName(), origin.getContents(), newLocation);
+
+      } else if (secondExist) {
+        // New path is file, then override the contents
+        File newFile = (File) secondSearcher.searchTarget(true);
+        newFile.setContents(origin.getContents());
+
+      } else {
+        // Rename the file at the location of the new path
+        Directory newLocation = secondSearcher.searchLocation();
+        creator.create(origin.getName(), origin.getContents(), newLocation);
+      }
+
+    } else {
+      // First is Directory
+      this.helpExecute();
+    }
+  }
+
+  /**
+   * This is helper uses to execute the command.
+   * @throws NameConflictException 
+   * @throws PathDoesNotExistException 
+   * @throws InvalidTargetNameException 
+   * @throws ArgumentDeclareException 
+   */
+  private void helpExecute() throws ArgumentDeclareException, InvalidTargetNameException, PathDoesNotExistException, NameConflictException {
+
+    // Select the new location
+    Directory newLocation;
+    if (secondExist && secondIsDir) {
+      newLocation = (Directory) secondSearcher.searchTarget(false);
+    } else {
+      newLocation = secondSearcher.searchLocation();
+    }
+
+    Directory origin = (Directory) firstSearcher.searchTarget(false);
+    DirectoryCreator newDir = new DirectoryCreator();
+    newDir.setUp("mkdir " + 
+    newLocation.getAddress()+origin.getName(), this.fileSystem);
+    newDir.execute();
+ //   String newName = origin.getName();
+ //   String newAddress = newLocation.getAddress() + newName + "/";
+ //   Directory newDirectory = new Directory(newName, newAddress, newLocation);
+  for( Object i: newLocation.getContent()){
+    if(i instanceof Directory && ((Directory) i).getName() == origin.getName()){
+      this.deepCopy(origin, ((Directory)i));
+    }
+  }
+
+    // After copy everything from the original content, add the new directory
+    // into the new location.
+   // newLocation.getContent().add(newDirectory);
+  }
+
+  /**
+   * This is a helper use to recursively copy everything from the original
+   * directory to the new directory.
+   *
+   * @param origin The original directory
+   * @param newPath The new directory location
+   */
+  private void deepCopy(Directory origin, Directory newPath) {
+    for (Object i : origin.getContent()) {
+      // If i is a Directory
+      if (i instanceof Directory) {
+        Directory originalDir = (Directory) i;
+        Directory newDir = new Directory(originalDir.getName(),
+            newPath.getAddress() + originalDir.getName(), newPath);
+        newDir.setContent(origin.getContent());
+        newPath.getContent().add(newDir);
+        for (Object item : newDir.getContent()) { // content within the content
+          if (item instanceof Directory) {
+            deepCopy((Directory) item, newDir);// recursive case
+          } else if (item instanceof File) {
+            File originalFile = (File) item;
+            File newFile =
+                new File(originalFile.getName(), 
+                    originalFile.getContents(),
+                    newDir.getAddress() + originalFile.getName());;
+            newPath.getContent().add(newFile);
+          }
+        }
+      // If i is a File
+      } else if (i instanceof File) {
+        File originalFile = (File) i;
+        File newFile =
+            new File(originalFile.getName(), originalFile.getContents(),
+                newPath.getAddress() + originalFile.getName());;
+        newPath.getContent().add(newFile);
+      }
+    }
+
+  }
+
+}

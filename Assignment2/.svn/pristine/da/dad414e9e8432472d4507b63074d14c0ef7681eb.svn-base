@@ -1,0 +1,11 @@
+class name: ArgumentAnalyzer
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Analyze an argument of path
+*Convert the path into a string array
+
+Collaborators:
+None

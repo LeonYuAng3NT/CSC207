@@ -1,0 +1,83 @@
+package test;
+
+import static org.junit.Assert.*;
+import java.util.ArrayList;
+import org.junit.Before;
+import org.junit.Test;
+import a2a.foundation.File;
+import a2a.foundation.*;
+import java.io.*;
+import a2a.operator.FileReader;
+
+public class FileReaderTest {
+  private FileSystem fileSystem;
+  private FileReader reader;
+
+  @Before
+  public void setUp() {
+    fileSystem = new FileSystem();
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", fileSystem.getRoot());
+    File file1 = new File("GameofThrones", "Clash of Kings");
+    File file2 = new File("ToKillAMockingBird", "Very good literature");
+    contentOfRoot.add(directoryAbc);
+    contentOfRoot.add(file1);
+    contentOfRoot.add(file2);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+
+  }
+
+  @Test
+  public void testFileReader() {
+    try {
+      reader = new FileReader(fileSystem);
+
+    } catch (Exception e) {
+      fail("Failed to create an instance of FileReader");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    
+    reader = new FileReader(fileSystem);
+    assertFalse(reader.isValid("cat abc"));
+    assertFalse(reader.isValid("  cat GameofThro"));
+    assertTrue(reader.isValid("cat ToKillAMockingBird"));
+    assertTrue(reader.isValid("cat GameofThrones ToKillAMockingBird"));
+    assertTrue(reader.isValid("cat"));
+    assertTrue(reader.isValid("cat ToKillAMockingBird"));
+  }
+
+  @Test
+  public void testExecute()  {
+    reader= new FileReader(fileSystem);
+    reader.isValid("cat GameofThrones ToKillAMockingBird");
+    reader.isValid("  cat GameofThrones       ToKillAMockingBird");
+    reader.isValid("cat ToKillAMockingBird");
+    // Don't have to test cases when user executes 
+    // invalid input command because testIsValid covers it 
+    
+    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outContent));
+    this.fileSystem = reader.execute();
+ 
+    String expectedOutput =
+      "Clash of Kings\n\n\n\n" + "Very good literature\n\n\n\n"
+    + "Clash of Kings\n\n\n\n" + "Very good literature\n\n\n\n"
+    + "Very good literature\n";
+    assertEquals( outContent.toString(), expectedOutput);
+
+  }
+
+
+}

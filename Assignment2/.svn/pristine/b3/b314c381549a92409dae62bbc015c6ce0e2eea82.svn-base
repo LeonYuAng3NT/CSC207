@@ -1,0 +1,52 @@
+Backlog Item
+
+i) As a user, I can inquiry the usage of commands                  1 days
+j) As a user, I can store address into the database                2 days
+   or remove the address from the database
+k) As a user, I am able to store commands                          1 day
+   and print out the commands
+                 
+l) As a user, I am able to interact with computer through Shell    3 days
+   and input any commands 
+    
+
+Specific tasks to be accomplished:
+i-1. (CommandManual) Write the general script for CommandManual.
+i-2. (CommandManual) Write the description of each command's functionality.
+j-1. (DirectoryStack) Write the base code for DirectoryStack
+j-2. (DirectoryStack) Develop the functionality of  DirectoryStack 
+j-3. (DirectoryStack) Run basic tests to ensure the functionality in normal and
+                      special cases
+j-4  (DirectoryStack) Have the structure of DirectoryStack be ready for further 
+      implementation.
+k-1. (InputHistory) Write the base code for InputHistory
+k-2. (InputHistory) Develop the method that stores users' command as a stack
+k-3. (InputHistory) Build the connection between HistoryViewer and InputHistory
+
+l-1. (ArugumentAnalyzer) Develop the split method and allow JShell to interpret
+                          users' command and argument.
+l-2. (InputCommandChecker) Improve the design aspect of InputCommandChecker and
+                            have discussion on this with the other team members
+l-3  (InputCommandChecker) Implement test cases for InputCommandChecker
+l-4  (InputHistory)   Implement test methods for InputHistory
+l-5. (DirectoryStack) Implement test methods for DirectoryStack
+l-6  (JShell) Generate parsers to link every class object together
+l-7. (JShell) Implement common test methods for JShell
+l-8. (JShell) Set the parser within JShell directly to each associated 
+                       command object.
+l-9  (JShell) Improve the design of JShell's implementation with more 
+              discussions
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: l-6, l-7, l-8, l-9
+
+User: Yiming Huang
+Tasks: j-1, j-2, j-3, k-1, k-2, k-3
+
+User: YI JIAN Wang
+Tasks: l-1, l-3, l-4, l-5
+
+User: Yu Wang
+Tasks: i-1, i-2

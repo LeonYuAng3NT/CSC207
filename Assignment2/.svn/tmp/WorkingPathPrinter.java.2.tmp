@@ -1,0 +1,87 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+/**
+ * A working path printer, it uses to print of the full path
+ * of current working directory.
+ */
+<<<<<<< .mine
+public class WorkingPathPrinter implements Command {
+
+  private FileSystem fileSystem;
+=======
+public class WorkingPathPrinter implements Command {
+>>>>>>> .r170
+
+  /**
+   * Construct a WorkingPathPrinter
+   */
+  public WorkingPathPrinter() {
+
+  }
+
+  /**
+   * Check the validity of the user input, and prepared to be execute.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the userInput indicate an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    return userInput.trim().equals("pwd");
+  }
+
+  /**
+   * Print out the address of current working directory.
+   *
+   * @param fileSystem The file system which used to execute the command
+   */
+<<<<<<< .mine
+  public void printfunction() {
+=======
+  @Override
+  public void execute(FileSystem fileSystem) {
+>>>>>>> .r170
+
+    System.out.println(fileSystem.getCurrDir().getAddress());
+  }
+
+  @Override
+  public boolean isvalid() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+}

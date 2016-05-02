@@ -1,0 +1,100 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+import a2a.foundation.InputHistory;
+
+public class FileSystemTest {
+
+  @Test
+  public void testFileSystem() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+
+  }
+
+  @Test
+  public void testGetRoot() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    String output = root.getName();
+    String filesystemoutput = fileSystem.getRoot().getName();
+    assertEquals(output, filesystemoutput);
+  }
+
+  @Test
+  public void testSetRoot() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    fileSystem.setRoot(root);
+    Directory output = fileSystem.getRoot();
+    assertEquals(root, output);
+  }
+
+  @Test
+  public void testGetCurrDir() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    Directory currDirectory = root;
+    String output = currDirectory.getName();
+    String filesystemoutput = fileSystem.getRoot().getName();
+    assertEquals(output, filesystemoutput);
+  }
+
+  @Test
+  public void testSetCurrDir() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    Directory currDirectory = root;
+    fileSystem.setCurrDir(currDirectory);
+    Directory output = fileSystem.getCurrDir();
+    assertEquals(currDirectory, output);
+  }
+
+  @Test
+  public void testGetDirStack() {
+    FileSystem fileSystem = new FileSystem();
+    Stack dirStack = new Stack<Directory>();
+    Stack output = fileSystem.getDirStack();
+    assertEquals(dirStack, output);
+  }
+
+  @Test
+  public void testSetDirStack() {
+    FileSystem fileSystem = new FileSystem();
+    Stack dirStack = new Stack<Directory>();
+    fileSystem.setDirStack(dirStack);
+    Stack output = fileSystem.getDirStack();
+    assertEquals(dirStack, output);
+  }
+
+  @Test
+  public void testGetHistory() {
+    FileSystem fileSystem = new FileSystem();
+    ArrayList<String> output = fileSystem.getHistory().getUserInputHistory();
+    assertEquals(Arrays.asList(), output);
+  }
+
+  @Test
+  public void testSetHistory() {
+    FileSystem fileSystem = new FileSystem();
+    InputHistory inputHistory = new InputHistory();
+    fileSystem.setHistory(inputHistory);
+    InputHistory output = fileSystem.getHistory();
+    assertEquals(inputHistory, output);
+  }
+}
+
+

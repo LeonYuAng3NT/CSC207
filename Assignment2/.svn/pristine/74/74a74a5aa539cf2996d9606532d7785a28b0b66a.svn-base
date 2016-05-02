@@ -1,0 +1,25 @@
+package test;
+
+import driver.JShell;
+import org.junit.Test;
+
+import static org.junit.Assert.fail;
+
+
+/**
+ * The JShell test uses to test if the methods are working as described.
+ */
+public class JShellTest {
+
+  /**
+   * Test to create an instance of JShell.
+   */
+  @Test public void testJShell() {
+
+    try {
+      new JShell();
+    } catch (Exception e) {
+      fail("Failed to create an instance of JShell.");
+    }
+  }
+}

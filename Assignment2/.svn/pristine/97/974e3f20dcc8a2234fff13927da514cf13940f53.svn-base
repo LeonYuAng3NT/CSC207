@@ -1,0 +1,77 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+import java.util.Stack;
+
+/**
+ * A directory stack operator, it uses to push a directory or pop out a
+ * directory in the file system.
+ */
+public class DirectoryStackOperator implements Command {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a DirectoryStackOperator
+   *
+   * @param fileSystem The file system which uses to execute this command
+   */
+  public DirectoryStackOperator(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   */
+  @Override public boolean isValid(String userInput) {
+
+    Stack<Directory> dirStack = fileSystem.getDirStack();
+    String[] action = userInput.trim().split("\\s+");
+
+    switch (action.length) {
+      // User want to pop directory
+      case 1:
+        if (action[0].equals("popd")) {
+          try {
+            Directory targetDirectory = dirStack.pop();
+            fileSystem.setCurrDir(targetDirectory);
+            return true;
+          } catch (Exception e) {
+            System.out.println("There is not previous directory in stack");
+            return false;
+          }
+        }
+        return false;
+      case 2:
+        if (action[0].equals("pushd")) {
+          dirStack.push(fileSystem.getCurrDir());
+          fileSystem.setDirStack(dirStack);
+          DirectoryNavigator navigator = new DirectoryNavigator(fileSystem);
+
+          // Call directory navigator to change current working directory
+          if (navigator.isValid("cd " + action[1])) {
+            fileSystem = navigator.execute();
+            return true;
+          } else {
+            return false;
+          }
+        }
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Push or pop out the directory stack in the file system.
+   */
+  @Override public FileSystem execute() {
+
+    return fileSystem;
+  }
+}

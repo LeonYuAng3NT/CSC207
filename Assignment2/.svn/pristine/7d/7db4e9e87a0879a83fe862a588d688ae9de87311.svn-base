@@ -1,0 +1,8 @@
+Class name: Directory
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Initialize a Directory object
+Collaborators:
+*None

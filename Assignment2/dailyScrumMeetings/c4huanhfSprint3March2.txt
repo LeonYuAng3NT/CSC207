@@ -1,0 +1,10 @@
+What did I do last time?
+    - Start and finish DirectoryStack class.
+
+What do I plan to do now?
+	- Start and finish InputHistory class.
+	
+
+Am I blocked on anything?
+    - Confused about the structure design for the commands.
+    (need further discussion with group members.)

@@ -1,0 +1,54 @@
+Backlog Item                                                      Estimate
+ 
+a) As a user, I am able to interact with computer through Shell    1 day
+b) As a user, I am able to see whether my command input is correct 1 day
+   or not 
+c) As a user, I am able to save data                               1 day
+d) As a user, I am able to create directory                        2 days
+e) As a user, I am able print the current address or               2 days
+   print the contents of current address           
+                    
+Specific tasks to be accomplished:
+a-1. (JShell) Begin coding the structure of the command line interpreter
+a-2. (JShell) Have the shell continually prompt the user for input
+a-3. (JShell) Parse the user input for proper keywords
+a-4. (JShell) Make the shell be able to exit
+b-1. (FormatChecker) Construct a FormatChecker class for JShell to check 
+      users' command input
+b-2. (FormatChecker) Implement common test method for this command
+c-1. (File,Directory) Write the base code for the File and Directory class
+c-2. (File,Directory) Parse the keywords to specific objects such as directories 
+      or files
+c-3. (File,Directory) Construct the contents for directories and files
+c-4  (File,Directory) Have the structure of Commands be ready for further 
+      implementation.
+d-1. (MakeDirectory) Write the base code for MakeDirectory class
+d-2. (MakeDirectory) Implement common test method for this command
+d-3. (MakeDirectory) Have the instantiation of directory object ready
+d-4  (MakeDirectory) Implement a unit test method for this command
+e-1. (PrintWorkingDirectory) Write the base code for the PrintWorkingDirectory 
+    class
+e-2. (PrintWorkingDirectory) Make the PrintWorkingDirectory class to function
+e-3. (PrintWorkingDirectory) Implement common test method for this command
+e-4. (PrintContent) Write the base code for the PrintContent 
+    class
+e-5. (PrintContent) Make the PrintContent class to function
+e-6. (PrintContent) Implement common test method for this command
+
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: a-1, a-2, a-3, a-4, b-1
+
+User: Yiming Huang
+Tasks: d-1, d-2, d-3, e-6, b-2
+
+User: YI JIAN Wang
+Tasks: c-1, c-2, c-3, c-4, d-4
+
+User: Yu Wang
+Tasks: e-1, e-2, e-3, e-4, e-5
+
+
+                    

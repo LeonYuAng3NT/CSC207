@@ -1,0 +1,11 @@
+What did I do last time?
+	- Meet with team and assigned tasks for sprint 2.
+	- Wrote the base code for DirectoryNavigator class.
+	
+What do I plan to do now?
+    - Implement unit test for the DirectoryNavigator class and make this class to function.
+    - Improve and finish the DirectoryNavigator class
+
+Am I blocked on anything?
+    - The design might not be ideal, huge changes might be made. Need further discussion with the team. 
+    

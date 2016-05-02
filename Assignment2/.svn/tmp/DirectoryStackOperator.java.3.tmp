@@ -1,0 +1,116 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.*;
+import a2a.foundation.FileSystem;
+
+/**
+ * The directory stack operator uses to push or
+ * pop out a directory in the directory stack.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryStackOperator implements Command {
+
+  // The file system uses to get the directory stack
+  private FileSystem fileSystem;
+
+  // Uses to navigate to target directory after push directory onto stack
+  private boolean isPushMode;
+  private DirectoryNavigator navigator;
+  /**
+   * Construct a DirectoryStackOperator.
+   */
+  public DirectoryStackOperator() {
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param command    The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException     if command have incorrect argument
+   * @throws PathDoesNotExistException    if path is invalid
+   * @throws NameConflictException        if name has been occupied
+   * @throws InvalidTargetNameException   if name contain invalid character
+   * @throws DirectoryStackEmptyException if directory stack is empty
+   */
+  @Override public void setUp(String[] command, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException,
+      DirectoryStackEmptyException {
+    if (command.length > 4) {
+      throw new ArgumentDeclareException();
+    }
+
+    this.fileSystem = fileSystem;
+    boolean isRedirectMode = (command.length == 3 || command.length == 4);
+    isPushMode = (command.length == 2 || command.length == 4);
+
+    // Exception maybe pass from PathChecker to this method
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+
+    if (isPushMode) {
+      navigator = new DirectoryNavigator();
+      navigator.setUp(new String[] {"cd", command[1]}, fileSystem);
+    } else if (fileSystem.getDirStack().isEmpty()) {
+      // User attempt to remove a directory from an empty stack
+      throw new DirectoryStackEmptyException();
+    }
+  }
+
+  /**
+   * Execute the command , then push or pop out
+   * a directory stack in the directory stack.
+   */
+  @Override public void execute() {
+
+    if (isPushMode) {
+      // Save current director onto stack, then start change directory
+      fileSystem.getDirStack().push(fileSystem.getCurrDir());
+      navigator.execute();
+
+    } else {
+      // Navigate to the directory which is pop out from directory stack
+      fileSystem.setCurrDir(fileSystem.getDirStack().pop());
+    }
+  }
+}

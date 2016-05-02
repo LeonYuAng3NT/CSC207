@@ -1,0 +1,8 @@
+Class name: MakeDirectory
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma. 
+Responsibilities:
+*Initialize a working directory within the current address
+Collaborators:
+*FileSystem

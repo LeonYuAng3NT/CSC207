@@ -1,0 +1,94 @@
+package a2a.operator;
+
+import java.util.List;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+public class RegexFinder implements Command, OutputProducer{
+
+  private FileSystem fileSystem;
+  private File targetFile;
+  private Directory targetLocation;
+  /**
+   * Produce the output.
+   *
+   * @return The actual output of a specified command.
+   */
+  public String produce() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param command    The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, InvalidTargetNameException,
+      PathDoesNotExistException, NameConflictException {
+    
+    String[] command = userInput.trim().split("\\s+");
+    // Check the Argument
+    if (command.length != 2 && command.length != 4 || (command.length == 4
+        && !command[command.length - 2].equals(">") && !command[command.length
+        - 2].equals(">>"))) {
+      throw new ArgumentDeclareException();
+    }
+
+    // Call Path Analyzer to split the path and initialize searcher
+    PathAnalyzer split = new PathAnalyzer(command[1]);
+    Searcher searcher = new Searcher(split.convert(), fileSystem);
+
+    // Check the path and the redirection output file path
+    if (searcher.searchTarget(false) == null) {
+      throw new PathDoesNotExistException(command[1]);
+    } else if (command.length == 4) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    this.fileSystem = fileSystem;
+    targetFile= (File) searcher.searchTarget(true);
+    targetLocation = (Directory) searcher.searchTarget(false);
+
+  }
+  @Override
+  public void execute() {
+    // TODO Auto-generated method stub
+    
+  
+  
+  
+  
+  }
+  
+
+  private String TravelAllSubDirectories(Directory directory, String regex){
+    String result ="";
+    if (directory.getParent().equals(fileSystem.getRoot())){
+      return result;
+    }
+    for(Object item : directory.getContent()){  
+      if (item instanceof File){
+        if (((File) item).getContents().contains(regex)){
+          result += ((File)item).getAddress();
+        };
+      }else{
+         result += TravelAllSubDirectories(directory.getParent(), regex);
+       }
+    }
+    return result;
+ }
+}

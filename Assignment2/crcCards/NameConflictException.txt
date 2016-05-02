@@ -1,0 +1,10 @@
+class name: NameConflictException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the name of the target object is conflict with others
+
+Collaborators:
+None

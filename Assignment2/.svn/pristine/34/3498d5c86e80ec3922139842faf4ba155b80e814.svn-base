@@ -1,0 +1,190 @@
+//// **********************************************************
+//// Assignment2:
+//
+//// Student1:
+//// CDF user_name: c5zhanim
+//// UT Student #: 1001322847
+//// Author: Yu Ang Zhang
+////
+//// Student2:
+//// CDF user_name: c4huanhf
+//// UT Student #: 1000076927
+//// Author: Yiming Huang
+////
+//
+//// Student3:
+//// CDF user_name: c4wangyk
+//// UT Student #: 999980579
+//// Author: Yi Jian Wang
+////
+//// Student4:
+//// CDF user_name: c4wangzd
+//// UT Student #: 1001282319
+//// Author: Yu Wang
+////
+////
+//// Honor Code: I pledge that this program represents my own
+//// program code and that I have coded on my own. I received
+//// help from no one in designing and debugging my program.
+//// I have also read the plagiarism section in the course info
+//// sheet of CSC 207 and understand the consequences.
+//// *********************************************************
+//package a2a.operator;
+//
+//import a2a.foundation.Directory;
+//import a2a.foundation.File;
+//import a2a.foundation.FileSystem;
+//
+///**
+// * A file editor, it uses to edit the contents of a file. It provides
+// * override mode. append mode, and print mode to deal with a string
+// * contents.
+// *
+// * @author Yu Ang Zhang
+// * @author Yiming Huang
+// * @author Yi Jian Wang
+// * @author Yu Wang
+// */
+//public class StringTransponder implements Command {
+//
+//  private boolean hasFile;
+//  private boolean isOverrideMode;
+//  private boolean isPrintMode;
+//  private String newContents;
+//  private String targetFileName;
+//  private Directory targetFileLocation;
+//  private FileSystem fileSystem;
+//
+//  /**
+//   * Construct a StringTransponder.
+//   *
+//   * @param fileSystem The file system uses to execute this command
+//   */
+//  public StringTransponder(FileSystem fileSystem) {
+//
+//    // Initially assert the file does not exist
+//    hasFile = false;
+//    isPrintMode = false;
+//    isOverrideMode = false;
+//    newContents = "";
+//    this.fileSystem = fileSystem;
+//  }
+//
+//  /**
+//   * Check the validity of the user input.
+//   *
+//   * @param userInput The user input which indicate an user action
+//   * @return True if the user input indicate to an valid action
+//   */
+//  public boolean isValid(String userInput) {
+//
+//    String[] action = userInput.trim().split("\\s+");
+//
+//    if (action.length <= 1) {
+//      return false;
+//    } else {
+//      if (action.length >= 4 && (action[action.length - 2].equals(">")
+//          || action[action.length - 2].equals(">>"))) {
+//        isOverrideMode = action[action.length - 2].equals(">");
+//
+//        // String contents to be write
+//        for (int i = 1; i < action.length - 2; i++) {
+//          if (i == action.length - 3) {
+//            newContents += action[i].replaceAll("\"", "");
+//          } else {
+//            newContents += action[i].replaceAll("\"", "") + " ";
+//          }
+//        }
+//        // Call helper to check the validity
+//        return updateStatus(action[action.length - 1]);
+//
+//      } else {
+//        for (int i = 1; i < action.length; i++) {
+//          if (i == action.length - 1) {
+//            newContents += action[i].replaceAll("\"", "");
+//          } else {
+//            newContents += action[i].replaceAll("\"", "") + " ";
+//          }
+//        }
+//        isPrintMode = true;
+//      }
+//    }
+//    return true;
+//  }
+//
+//  /**
+//   * This is a helper for method isValid.
+//   * Check the validity of an user input.
+//   *
+//   * @param filePath The full path of the file location
+//   * @return True if the path represents an valid path
+//   */
+//  private boolean updateStatus(String filePath) {
+//
+//    ArgumentAnalyzer analyzer = new ArgumentAnalyzer(filePath);
+//    Searcher searcher = new Searcher(fileSystem);
+//    String[] path = analyzer.convert();
+//
+//    // The target location which store the file
+//    targetFileLocation = searcher.find(path);
+//    targetFileName = path[path.length - 1];
+//
+//    if (targetFileLocation == null) {
+//      System.out.println("Directories contain in path does not exist.");
+//      return false;
+//
+//    } else {
+//      for (Object item : targetFileLocation.getContent()) {
+//        if (item instanceof File) {
+//          if (((File) item).getName().equals(targetFileName)) {
+//            hasFile = true;
+//            return true;
+//          }
+//        } else if (item instanceof Directory) {
+//          if (((Directory) item).getName().equals(targetFileName)) {
+//            return false;
+//          }
+//        }
+//      }
+//      return true;
+//    }
+//  }
+//
+//  /**
+//   * Execute the command, start edit the file based on user input.
+//   *
+//   * @return The update version of file system after execution
+//   */
+//  public FileSystem execute() {
+//
+//    // User have print out the string
+//    if (isPrintMode) {
+//      System.out.println(newContents.replaceAll("\"", ""));
+//      return fileSystem;
+//    }
+//
+//    // Edit the file based on operating mode is override or append
+//    if (hasFile) {
+//      targetFileLocation.getContent().stream()
+//          .filter(item -> item instanceof File)
+//          .filter(item -> ((File) item).getName().equals(targetFileName))
+//          .forEach(item -> {
+//            File targetFile = (File) item;
+//            if (isOverrideMode) {
+//              targetFile.setContents(newContents);
+//            } else {
+//              targetFile
+//                  .setContents(targetFile.getContents() + "\n" + newContents);
+//            }
+//          });
+//
+//    } else {
+//      // Create a new file since filename does not exist
+//      FileCreator fileCreator = new FileCreator();
+//      fileCreator.create(targetFileName, newContents, targetFileLocation);
+//    }
+//    return fileSystem;
+//  }
+//
+//
+//}

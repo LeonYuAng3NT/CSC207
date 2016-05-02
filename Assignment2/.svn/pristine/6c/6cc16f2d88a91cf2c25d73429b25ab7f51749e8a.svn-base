@@ -1,0 +1,16 @@
+package a2a.exceptions;
+
+/**
+ * An Argument Missing Exception happened when user
+ * forget to include an argument for specified command.
+ */
+public class ArgumentDeclareException extends Exception {
+
+  /**
+   * Construct an ArgumentMissingException.
+   */
+  public ArgumentDeclareException() {
+
+    super("Argument is not valid, please type man CMD to inquiry the usage");
+  }
+}

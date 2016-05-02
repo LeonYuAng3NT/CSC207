@@ -1,0 +1,17 @@
+What did I do last time?
+    - Finish debug and re-design the PathChecker
+    - Finish a bunch of refactor task
+    - Finish debug and re-design the ContentViewer
+    - Solve the bug in FileEditor
+    - Solve the bug in Searcher
+    - Completed the PathChecker
+    - Completed the StringTransponder
+    - Completed and finalize the Javadoc in for almost all class
+    - Fix some problem in FileTest, FileSystemTest, DirectoryTest,
+      CommandManual Test
+
+What do I plan to do now?
+	- Debug the ItemDuplicator, Regex Finder, HistoryPerformer, FileReader
+
+Am I blocked on anything?
+    - Refactor the old design to adapt the new design

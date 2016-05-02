@@ -1,0 +1,11 @@
+Class name: FileCreator	
+		
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Create a file
+
+Collaborators:
+*File
+*Directory

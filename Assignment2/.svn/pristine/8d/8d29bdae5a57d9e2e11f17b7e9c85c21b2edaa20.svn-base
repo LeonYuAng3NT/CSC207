@@ -1,0 +1,72 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import a2a.foundation.*;
+import a2a.operator.*;
+import org.junit.Before;
+import org.junit.Test;
+
+public class FileEditorTest {
+  private FileSystem database;
+  private FileEditor editor;
+
+  @Before
+  public void setUp() throws Exception {
+    this.database = new FileSystem();
+    File targetFile = new File("movielist", "Avatar");
+    Directory targetDir = new Directory("books", "/books", database.getRoot());
+    database.getCurrDir().getContent().add(targetFile);
+    database.getCurrDir().getContent().add(targetDir);
+    editor = new FileEditor(database);
+  }
+
+  @Test
+  public void testFileEditor() throws Exception {
+    this.editor = new FileEditor(database);
+  }
+
+  @Test
+  public void testIsValid() {
+ 
+    editor = new FileEditor(database);
+    assertTrue(editor.isValid("echo 300       >>    movielist"));
+    assertTrue(editor.isValid("echo Incetpion >> movielist"));
+    assertTrue(editor.isValid("echo hahahaha"));
+    assertTrue(editor.isValid("echo lalalalala hahahahha"));
+    assertFalse(editor.isValid("echo "));
+    assertFalse(editor.isValid("echo  Giver >> books"));
+    assertTrue(editor.isValid("echo Agent 47 >> movielist "));
+  }
+
+  @Test
+  public void testExecute() {
+    
+    editor = new FileEditor(database);
+    editor.isValid("echo 300       >>    movielist");
+    database = editor.execute();
+ //   assertTrue(((File) database.getCurrDir().getContent().get(0)).getContents().
+ //      equals("300\n"));
+    editor.isValid("echo Incetpion >> movielist");
+    database = editor.execute();
+    editor.isValid("echo  Giver >> books ");
+    database = editor.execute();
+    editor.isValid("echo Agent 47 >> movielist ");
+    database = editor.execute();
+ //   assertTrue(((File) database.getCurrDir().getContent().get(0)).getContents().
+ //       equals("300\nInception\nAgent 47\n"));
+    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outContent));
+     editor.isValid("echo hahahaha");
+    editor.isValid("echo lalalalala hahahahha");
+    database = editor.execute();
+    String expectedOutput =
+      "300IncetpionGiverAgent 47hahahahalalalalala hahahahha\n";
+    assertEquals( expectedOutput, outContent.toString());
+
+  }
+
+}

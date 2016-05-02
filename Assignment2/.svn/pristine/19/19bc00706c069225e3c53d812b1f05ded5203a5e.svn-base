@@ -1,0 +1,196 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.Arrays;
+import java.util.List;
+
+
+/**
+ * An input command checker, uses to check the format of a command.
+ */
+public class InputCommandChecker {
+
+  private String[] command;
+
+  /**
+   * Construct an InputCommandChecker.
+   */
+  public InputCommandChecker(String userInput) {
+
+    this.command = userInput.split("\\s+");
+  }
+
+  /**
+   * Check the format of user input command
+   *
+   * @return True if it is a valid command, false otherwise
+   */
+  public Boolean isValid() {
+
+    // Call different helper depends on the number of arguments of command
+    switch (command.length) {
+      case 1:
+        return typeOneCommandIsValid(command);
+      case 2:
+        return typeTwoCommandIsValid(command);
+      default:
+        return otherTypeCommandIsValid(command);
+    }
+  }
+
+  /**
+   * Check the format of a full path.
+   *
+   * @param argument The argument is the full path
+   * @return True if the argument is valid
+   */
+  private Boolean directoryNameIsValid(String argument) {
+
+    List<String> specDirectoryName = Arrays.asList("..", ".");
+    ArgumentAnalyzer analyzer = new ArgumentAnalyzer(argument);
+    String[] dirNames = analyzer.convert();
+
+    // The dir name start from root or not
+    int startIndex = 0;
+    if (dirNames[0].equals("/")) {
+      startIndex = 1;
+    }
+
+    while (startIndex < dirNames.length) {
+      String name = dirNames[startIndex];
+
+      /*
+        Return false if the name is not allowed in specDirectory name and
+        it is not alphabetic and digit.
+      */
+      if (!specDirectoryName.contains(name)) {
+        for (int j = 0; j < name.length(); j++) {
+          if (!Character.isAlphabetic(name.charAt(j))
+              && !Character.isDigit(name.charAt(j))) {
+            return false;
+          }
+        }
+      }
+
+    }
+    return true;
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with no argument.
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private Boolean typeOneCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "ls":
+      case "pwd":
+      case "history":
+      case "popd":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with one argument
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private Boolean typeTwoCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "mkdir":
+      case "cd":
+      case "ls":
+      case "pushd":
+      case "cat":
+        return directoryNameIsValid(command[1]);
+      case "echo":
+        return (command[1].startsWith("\"") && command[1].endsWith("\""));
+      case "history":
+        for (int i = 0; i < command[1].length(); i++) {
+          if (!Character.isDigit(command[1].charAt(i))) {
+            return false;
+          }
+        }
+        return true;
+      case "man":
+        return Arrays
+            .asList("ls", "pwd", "history", "popd", "mkdir", "cd", "pushd",
+                "cat", "echo", "man").contains(command[1]);
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with two or more argument
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private Boolean otherTypeCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "mkdir":
+      case "cat":
+        for (int i = 1; i < command.length; i++) {
+          if (!directoryNameIsValid(command[i])) {
+            return false;
+          }
+        }
+        return true;
+      case "echo":
+        // check the third operator
+        if (command.length != 4 &&
+            (!command[2].equals(">") || !command[2].equals(">>"))) {
+          return false;
+        } else {
+          return directoryNameIsValid(command[3]);
+        }
+      default:
+        return false;
+    }
+
+
+  }
+
+}

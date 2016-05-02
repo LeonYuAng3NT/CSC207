@@ -1,0 +1,91 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.PathNavigator;
+
+/**
+ * A path navigator test, uses to test if the methods are working as
+ * expected.
+ * 
+ * @author Yiming Huang
+ */
+public class PathNavigatorTest {
+  
+  private FileSystem fileSystem;
+  private String[][] passed;
+  private String[][] failed;
+
+  /**
+   * Set up PathNavigator test.
+   */
+  @Before
+  public void setUp() {
+    fileSystem = new FileSystem();
+    fileSystem.getCurrDir().getContent().add(new Directory())
+    passed = new String[][]{"mv", {"",""}};
+    failed = new String[][]{};
+
+}
+ 
+
+    
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test
+  public void testPathNavigator() {
+    try {
+      new PathNavigator();
+    } catch (Exception e) {
+      fail("Failed to create an instance of path navigator.");
+    }
+  }
+
+  /**
+   * Test if the method successfully set up or throw
+   * exception in suitable cases.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testSetUp() throws Exception {
+
+    try {
+      PathNavigator pathNavigator = new PathNavigator();
+      for (String[] command : passed) {
+        pathNavigator.setUp(command, fileSystem);
+      }
+
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+
+    // Test cases that should be failed
+    try {
+      PathNavigator pathNavigator = new PathNavigator();
+      for (String[] command : failed) {
+        pathNavigator.setUp(command, fileSystem);
+      }
+      fail("Exception should be thrown.");
+    } catch (Exception e) {
+      // Empty catch statement
+    }
+  }
+
+  /**
+   * Test if the execute method for NetworkProtocol is working as expected.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testExecute() throws Exception {
+
+}
+}

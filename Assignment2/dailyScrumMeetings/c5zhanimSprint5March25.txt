@@ -1,0 +1,12 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -All methods within ItemDuplicator and PathNavigator
+   -Wrote Recursive methods in PathNavigator and ItemDuplicator
+   -RegexFinder's implementation
+   
+b) What do I plan to work on now?  
+   -JUnit Test
+   
+c) Am I blocked on anything?  
+   -None

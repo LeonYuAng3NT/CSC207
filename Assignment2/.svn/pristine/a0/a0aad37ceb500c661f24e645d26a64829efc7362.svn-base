@@ -1,0 +1,25 @@
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+/**
+ * A command interface, it uses to execute a command
+ * which is assigned by user.
+ */
+public interface Command {
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the command is executable
+   */
+  boolean isValid(String userInput);
+
+  /**
+   * Execute a command based on user action.
+   *
+   * @return The updated version of file system after the execution a command
+   */
+  FileSystem execute();
+}

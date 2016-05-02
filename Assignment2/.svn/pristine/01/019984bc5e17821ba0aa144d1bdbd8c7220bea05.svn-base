@@ -1,0 +1,8 @@
+Class name: WorkingPath
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Print out the address of a directory.
+Collaborators:
+*Directory

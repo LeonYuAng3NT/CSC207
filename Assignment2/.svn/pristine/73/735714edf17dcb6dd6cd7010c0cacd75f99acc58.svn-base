@@ -1,0 +1,8 @@
+Class name: DirectoryNavigator  
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Be able to move a directory to another address
+Collaborators:
+*Directory

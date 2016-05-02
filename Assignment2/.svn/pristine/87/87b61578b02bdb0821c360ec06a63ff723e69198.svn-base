@@ -1,0 +1,11 @@
+Class name: InfiniteExecutionException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user whenever an user attempt to re-execute an command which will
+ execute itself for infinite time
+
+Collaborators:
+None

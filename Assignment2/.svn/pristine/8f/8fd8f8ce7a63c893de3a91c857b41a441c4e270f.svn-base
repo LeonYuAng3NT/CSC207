@@ -1,0 +1,17 @@
+Class name:DirectoryCreator 
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Create directory.
+
+Collaborators:
+*Directory
+*FileSystem
+*File
+*PathAnalyzer
+*ArgumentDeclareException
+*InvalidTargetNameException
+*PathDoesNotExistException 
+*NameConflictException

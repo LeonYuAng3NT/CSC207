@@ -1,0 +1,137 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+public class DirectoryCreator implements Command {
+
+  private String[] command;
+  private FileSystem fileSystem;
+  private ArrayList<Directory> targetDir;
+  private ArrayList<String> targetNames;
+  private FileSystem filesystem;
+  private Directory dir;
+
+  /**
+   * Construct a DirectoryCreator
+   */
+  public DirectoryCreator(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+    targetNames = new ArrayList<>();
+    targetDir = new ArrayList<>();
+  }
+
+  /**
+   * Check the validity of an user command.
+   *
+   * @param userInput An userInput which indicate to an action
+   * @return True if userInput indicates to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+    command = userInput.trim().split("\\s+");
+
+    if (command.length > 1) {
+      for (int i = 1; i < command.length; i++) {
+        
+        Searcher searcher = new Searcher(this.fileSystem);
+        ArgumentAnalyzer analyzer = new ArgumentAnalyzer(command[i]);
+        String[] path = analyzer.convert();
+
+        if (Arrays.asList(path).contains("")) {
+          return false;
+        } else if (path.length < 1) {
+          return true;
+        }
+        Directory currTarget = searcher.find(path);
+        targetDir.add(currTarget);
+        String currName = path[path.length - 1];
+        
+ //       Pattern pattern = Pattern.compile("!@$&*()?:[]<>`'|={}/\\");
+//        System.out.println(pattern.matcher(currName));
+        System.out.println(currName);
+        targetNames.add(currName);
+
+        boolean isFound = false;
+        if (currTarget != null) {
+          switch (currName) {
+            case ".":
+            case "..":
+            case "/":
+              return false;
+            default:
+              for (Object item : currTarget.getContent()) {
+                if (item instanceof Directory) {
+                  String name = ((Directory) item).getName();
+                  if (name.equals(path[path.length - 1])) {
+                    isFound = true;
+                  }
+                }
+              }
+          }
+        }
+        if (isFound) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  /**
+   * Make a new directory into the content of the target directory.
+   *
+   * @param name The name of the new directory
+   * @return targetDirectory The directory use to store the new directory
+   */
+  @Override
+  public FileSystem execute() {
+   
+    Directory systemCurrent = fileSystem.getCurrDir();
+    for (int j = 0; j< targetDir.size(); j++) {
+      Directory newdir = new Directory(targetNames.get(j),
+          targetDir.get(j).getAddress() + targetNames.get(j)+ "/",
+          targetDir.get(j).getParent());
+      fileSystem.setCurrDir(targetDir.get(j));
+      fileSystem.getCurrDir().getContent().add(newdir);
+      } 
+    fileSystem.setCurrDir(systemCurrent);
+    return fileSystem;
+  }
+
+}

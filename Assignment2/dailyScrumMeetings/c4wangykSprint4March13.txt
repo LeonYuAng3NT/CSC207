@@ -1,0 +1,13 @@
+What did I do last time?
+    - Recommend the team to use the exception to handle the error
+    - Completed few exceptions class
+    - Refactor CommandManual to new design
+    - Improve the durability of Searcher
+    - Plan to merge the Argument Analyzer and Searcher
+
+What do I plan to do now?
+    - Refactor more methods as soon as possible
+
+Am I blocked on anything?
+    - Re-construct the original design to adapt the new design pattern
+    - Improve bunch of methods with more logical statement

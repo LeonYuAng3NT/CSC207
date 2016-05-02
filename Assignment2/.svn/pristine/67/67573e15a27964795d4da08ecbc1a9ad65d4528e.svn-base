@@ -1,0 +1,181 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.*;
+import a2a.foundation.FileSystem;
+
+import java.util.Hashtable;
+import java.util.regex.Pattern;
+
+/**
+ * The History Performer uses to get the specified number
+ * of history, then re-execute the command from the history
+ * record.
+ *
+ * @author Yi Jian Wang
+ */
+public class HistoryPerformer implements Command {
+
+  private String[] command;
+  private FileSystem fileSystem;
+  private boolean isRedirectMode;
+
+  // The previous command involved in this command
+  private String record;
+
+  /**
+   * Construct a HistoryPerformer
+   */
+  public HistoryPerformer() {
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   * @throws NoEnoughHistoryException   if the history record is not enough
+   * @throws InfiniteExecutionException if user re-execute this command itself
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException,
+      NoEnoughHistoryException, InfiniteExecutionException {
+
+    this.command = userInput.trim().split("\\s+");
+    this.fileSystem = fileSystem;
+    this.isRedirectMode = command.length == 3 && (command[command.length - 2].
+        equals(">") || command[command.length - 2].equals(">>"));
+
+    // Call helper to continue set up the command
+    int index = this.deepSetUp(userInput);
+
+    // Check if there is no enough history record
+    int numHistory = fileSystem.getHistory().getUserInputHistory().size();
+    if (index > numHistory || index < 0)
+      throw new NoEnoughHistoryException();
+
+    // The history input
+    this.record = fileSystem.getHistory().getUserInputHistory().get(index);
+    if (record.equals(userInput)) {
+      throw new InfiniteExecutionException();
+    }
+
+    // Check the redirect output file path
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+  }
+
+  /**
+   * This is a helper uses to set up the HistoryPerformer.
+   *
+   * @param userInput The text entered by user
+   * @return The number of index analyzed from userInput
+   * @throws ArgumentDeclareException if the command have incorrect argument
+   */
+  private int deepSetUp(String userInput) throws ArgumentDeclareException {
+
+    // Analyze the number that user entered in command
+    String number = "";
+    for (int i = 1; i < userInput.length() && userInput.charAt(i) != ' '; i++)
+      number += userInput.charAt(i);
+
+    boolean isNumeric = Pattern.compile("[0-9]*").matcher(number).matches();
+    boolean isValid = command.length != 1 && command.length != 3;
+
+    if (!isValid && !isRedirectMode && (!isNumeric || number.length() == 0))
+      throw new ArgumentDeclareException();
+
+    return Integer.parseInt(number) - 1;
+  }
+
+  /**
+   * Execute this command, then it will automatically recall
+   * the command that were entered by user and re-execute it.
+   */
+  @Override public void execute() {
+
+    try {
+      String className = this.getName(record);
+      Command cmd = (Command) Class.forName(className).newInstance();
+      cmd.setUp(record, fileSystem);
+      cmd.execute();
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  /**
+   * This is a helper uses to get the relative class name of a command.
+   *
+   * @param userInput The text entered by user
+   * @return The name of the relative class of the command
+   * @throws InvalidCommandException if requested command does not exist
+   */
+  private String getName(String userInput) throws InvalidCommandException {
+
+    Hashtable<String, String> cmdNames = new Hashtable<>();
+    String[] command = userInput.trim().split("\\s+");
+
+    cmdNames.put("cd", "a2a.operator.DirectoryNavigator");
+    cmdNames.put("history", "a2a.operator.HistoryViewer");
+    cmdNames.put("cat", "a2a.operator.FileReader");
+    cmdNames.put("echo", "a2a.operator.StringTransponder");
+    cmdNames.put("mkdir", "a2a.operator.DirectoryCreator");
+    cmdNames.put("ls", "a2a.operator.ContentViewer");
+    cmdNames.put("pwd", "a2a.operator.WorkingPathPrinter");
+    cmdNames.put("pushd", "a2a.operator.DirectoryStackOperator");
+    cmdNames.put("popd", "a2a.operator.DirectoryStackOperator");
+    cmdNames.put("man", "a2a.operator.CommandManual");
+    cmdNames.put("get", "a2a.operator.NetworkProtocol");
+    cmdNames.put("mv", "a2a.operator.PathNavigator");
+    cmdNames.put("cp", "a2a.operator.ItemDuplicator");
+    cmdNames.put("grep", "a2a.operator.RegexFinder");
+    cmdNames.put("!", "a2a.operator.HistoryPerformer");
+
+    if (userInput.startsWith("!")) {
+      return cmdNames.get("!");
+    } else if (cmdNames.get(command[0]) == null) {
+      throw new InvalidCommandException();
+    }
+    return cmdNames.get(command[0]);
+  }
+}

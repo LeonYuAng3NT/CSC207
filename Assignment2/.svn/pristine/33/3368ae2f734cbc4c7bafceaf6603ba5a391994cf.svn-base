@@ -1,0 +1,9 @@
+package a2a;
+
+public interface Command {
+
+  public Boolean isValid();
+  // Receive information from the JShell in order to perform different operation
+  public Boolean receiver();
+
+}

@@ -1,0 +1,73 @@
+package a2a.operator;
+
+import java.util.ArrayList;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+public class ItemDuplicator implements Command{
+    
+    private FileSystem fileSystem;
+    private ArrayList<String> targetNames;
+    private ArrayList<Directory> targetLocation;
+
+    @Override
+    public void setUp(String[] command, FileSystem fileSystem) throws Exception {
+      
+      if (command.length > 1 && command.length == 3) {
+        for (int i = 1; i < command.length; i++) {
+          // Split and convert the user command to a string list
+          Searcher searcher = new Searcher(command[i], fileSystem);
+          ArgumentAnalyzer analyzer = new ArgumentAnalyzer(command[i]);
+          String[] path = analyzer.convert();
+          if (path.length > 1) {
+            throw new ArgumentDeclareException();
+          }
+          // Parse the parent directory of the string at final index
+          // to data stored in FileSystem
+          Directory currTarget = searcher.find();
+
+          String currName = path[path.length - 1];
+          targetNames.add(currName);
+          targetLocation.add(currTarget);
+        }
+      }
+    }
+    @Override
+    public void execute(){
+      
+      Directory target = new Directory();
+      Directory oldLocation = targetLocation.get(0);
+      Directory newLocation = targetLocation.get(1);
+
+      for (int i = 0; i < oldLocation.getContent().size(); i++) {
+        String targetName = targetNames.get(i);
+
+        if (oldLocation.getContent().get(i) instanceof Directory) {
+          Directory curr = (Directory) oldLocation.getContent().get(i);
+          if (curr.getName().equals(targetName)) {
+            // Get the target and remove it from original location
+            target = (Directory) oldLocation.getContent().get(i);
+            oldLocation.getContent().remove(i);
+          }
+        } else if (oldLocation.getContent().get(i) instanceof File) {
+          File curr = (File) oldLocation.getContent().get(i);
+          if (curr.getName().equals(targetName)) {
+            // Get the target and remove it from original location
+            target = (Directory) oldLocation.getContent().get(i);
+          }
+        }
+      }
+      for (int j = 0; j < newLocation.getContent().size(); j++) {
+        if (oldLocation.getContent().get(j) instanceof Directory) {
+          if (((Directory) ((Directory) targetLocation.get(1)).getContent()
+              .get(j)).getName().equals(targetNames.get(j))) {
+            ((Directory) ((Directory) targetLocation.get(1)).getContent().get(j))
+                .getContent().add(target);
+          }
+        }
+      }
+    }
+
+}

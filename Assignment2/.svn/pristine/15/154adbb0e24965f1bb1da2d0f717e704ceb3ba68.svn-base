@@ -1,0 +1,16 @@
+package a2a.exceptions;
+
+/**
+ * An Invalid Command Exception happened whenever
+ * an user attempt to execute an invalid command.
+ */
+public class InvalidCommandException extends Exception {
+
+  /**
+   * Construct an InvalidCommandException.
+   */
+  public InvalidCommandException() {
+
+    super("Invalid command, please try again.");
+  }
+}

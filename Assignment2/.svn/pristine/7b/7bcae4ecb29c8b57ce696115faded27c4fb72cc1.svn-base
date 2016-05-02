@@ -1,0 +1,199 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.exceptions.*;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
+/**
+ * A directory creator that is used to create a directory,
+ * check if the command for the DirectoryCreator is valid or not.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryCreator implements Command {
+
+  private FileSystem fileSystem;
+  private ArrayList<Directory> targetLocations;
+  private ArrayList<String> newDirectoryNames;
+
+  /**
+   * Construct a DirectoryCreator
+   *
+   * @param filesystem The file system
+   */
+  public DirectoryCreator(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+    newDirectoryNames = new ArrayList<>();
+    targetLocations = new ArrayList<>();
+  }
+
+  /**
+   * This is a helper to check out the content of the directory.
+   *
+   * @param newDirName     The name of the new directory
+   * @param targetLocation The location which store the new directory
+   * @return True if the location already have same name object
+   */
+  private boolean hasSameObject(String newDirName, Directory targetLocation) {
+
+    for (Object item : targetLocation.getContent()) {
+      if (item instanceof File) {
+        File curr = (File) item;
+        if (curr.getName().equals(newDirName)) {
+          return true;
+        }
+      } else if (item instanceof Directory) {
+        Directory curr = (Directory) item;
+        if (curr.getName().equals(newDirName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * A helper for isValid that is used to check multiple path
+   * does not contain same path.
+   *
+   * @param paths The multiple address of path
+   * @return True if path contain same address
+   */
+  private boolean hasSamePath(String[] paths) {
+
+    // Check the path does not contain same path
+    for (int i = 1; i < paths.length; i++) {
+      int counter = 0;
+      for (int j = 1; j < paths.length; j++) {
+        if (paths[i].equals(paths[j])) {
+          counter++;
+        }
+      }
+      if (counter > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check the name of the new directory.
+   *
+   * @param path The full path of this new directory
+   * @return True if the directory name is valid
+   */
+  private boolean isValidDirName(String[] path) {
+
+    // Path contain invalid directory name
+    if (path.length < 1 || Arrays.asList(path).contains("")) {
+      return false;
+    }
+
+    String newDirectoryName = path[path.length - 1];
+
+    // New directory cannot contain these invalid character
+    Pattern format = Pattern.compile("^[^!@$&*()?:\\[\\]\"<>'`|={}/\\\\,;]+$");
+
+    return !newDirectoryName.equals(".") && !newDirectoryName.equals("..") &&
+        format.matcher(newDirectoryName).matches();
+  }
+
+  /**
+   * Check the validity of an user command.
+   *
+   * @param userInput An userInput which indicate to an action
+   * @return True if userInput indicates to an valid action
+   * @throws PathDoesNotExistException 
+   */
+  @Override public void setUp(String[] command, FileSystem fileSystem) throws
+          NoEnoughHistoryException, InvalidCommandException, 
+          InvalidTargetNameException, PathDoesNotExistException{
+    this.fileSystem = fileSystem;
+    switch (command.length) {
+      case 1:
+        throw new NoEnoughHistoryException();
+      default:
+        if (hasSamePath(command)) {
+          throw new InvalidCommandException();
+        }
+        for (int i = 1; i < command.length; i++) {
+          Searcher searcher = new Searcher(command, this.fileSystem);
+          if (!isValidDirName(command)) {
+            return;
+          }
+
+          String currNewDirName = command[command.length - 1];
+          Directory currTargetLocation = searcher.searchLocation();
+
+          if (currTargetLocation == null) {
+             throw new InvalidTargetNameException(currNewDirName);
+          } else if (hasSameObject(currNewDirName, currTargetLocation)) {
+            return;
+          } else {
+            newDirectoryNames.add(currNewDirName);
+            targetLocations.add(currTargetLocation);
+          }
+        }
+        return;
+    }
+  }
+
+  /**
+   * Make a new directory into the content of the target directory.
+   *
+   * @return The update version of file system after execution
+   */
+  @Override public void execute() {
+
+    for (int i = 0; i < newDirectoryNames.size(); i++) {
+      // The location of new directory
+      Directory location = targetLocations.get(i);
+
+      String newDirName = newDirectoryNames.get(i);
+      String newAddress = location.getAddress() + newDirName + "/";
+      Directory newDirectory = new Directory(newDirName, newAddress, location);
+      location.getContent().add(newDirectory);
+    }
+    return;
+  }
+}

@@ -1,0 +1,11 @@
+What did I do last time?
+	- Meet with team and discuss the need to refactor commands from A2a. 
+	- Confirm the modifications and improvements for the design.
+	
+What do I plan to do now?
+    - Finish the URLRetriever and implement JUnit test.
+
+Am I blocked on anything?
+    - Collaboration of FileSystem and URLRetriever.
+ 
+ 

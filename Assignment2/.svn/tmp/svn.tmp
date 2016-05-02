@@ -1,0 +1,115 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+import java.util.ArrayList;
+
+public class Directory {
+
+  private String name;
+  private String address;
+  private ArrayList<Object> content = new ArrayList<>();
+
+  /**
+   * Construct a directory.
+   *
+   * @param name    The name of this directory
+   * @param address The address of current path
+   */
+  public Directory(String name, String address) {
+
+    this.name = name;
+    this.address = address;
+  }
+
+  // -------------- setter & getters ----------------
+  /**
+   * The getter of name.
+   *
+   * @return The name of this directory.
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * The getter of content.
+   *
+   * @return The content of this directory.
+   */
+  public ArrayList<Object> getContent() {
+
+    return content;
+  }
+
+  /**
+   * The getter of address.
+   *
+   * @return The address of current path.
+   */
+  public String getAddress() {
+
+    return address;
+  }
+
+  /**
+   * The setter of name.
+   *
+   * @param name The new name of this directory.
+   */
+  public void setName(String name) {
+
+    this.name = name;
+  }
+
+  /**
+   * The setter of content.
+   *
+   * @param content The new content of this directory.
+   */
+  public void setContent(ArrayList<Object> content) {
+
+    this.content = content;
+  }
+
+  /**
+   * The setter of address.
+   *
+   * @param address The new address of this directory.
+   */
+  public void setAddress(String address) {
+
+    this.address = address;
+  }
+
+}

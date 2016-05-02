@@ -1,0 +1,131 @@
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.NameConflictException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.regex.Pattern;
+
+/**
+ * A file editor uses to edit a file.
+ *
+ * @author Yi Jian Wang
+ */
+public class FileEditor {
+
+  // The name of the target file
+  private String fileName;
+
+  // The operator represents the edit mode is override or append
+  private String editOperator;
+
+  // The existedFile is null if the file does not existed
+  private File existedFile;
+
+  // The directory which is store the target file
+  private Directory targetLocation;
+
+  /**
+   * Construct a FileEditor.
+   *
+   * @param command    The string array of command
+   * @param fileSystem The file system uses to store the edited file
+   * @throws ArgumentDeclareException   if command contain invalid argument
+   * @throws PathDoesNotExistException  if the path is invalid
+   * @throws NameConflictException      if the name has occupied by directory
+   * @throws InvalidTargetNameException if the name contain invalid character
+   */
+  public FileEditor(String[] command, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      InvalidTargetNameException, NameConflictException {
+
+    // Establish inspection before complete construct the editor
+    ArgumentAnalyzer analyzer =
+        new ArgumentAnalyzer(command[command.length - 1]);
+    Searcher searcher = new Searcher(analyzer.convert(), fileSystem);
+    fileName = analyzer.convert()[analyzer.convert().length - 1];
+    editOperator = command[command.length - 2];
+
+    // Check the path, filename, redirect operator
+    String checkResult = inspect(editOperator, fileName, searcher.find());
+    switch (checkResult) {
+      case "ArgumentInvalid":
+        throw new ArgumentDeclareException();
+      case "PathInvalid":
+        throw new PathDoesNotExistException(command[command.length - 1]);
+      case "FileNameInvalid":
+        throw new InvalidTargetNameException(fileName);
+      case "SameNameDirectory":
+        throw new NameConflictException(command[command.length - 1], fileName);
+      default:
+        targetLocation = searcher.find();
+    }
+    // Check the file is exist or not
+    existedFile = null;
+    targetLocation.getContent().stream().filter(item -> item instanceof File)
+        .filter(item -> ((File) item).getName().equals(fileName))
+        .forEach(item -> existedFile = (File) item);
+  }
+
+  /**
+   * This is a helper uses to check the command for constructor.
+   *
+   * @param operator The operator of redirection
+   * @param name     The name of the target file
+   * @param location The location which store the target file
+   * @return The string representation of the result
+   */
+  private String inspect(String operator, String name, Directory location) {
+
+    // Use regex to check the file name
+    Pattern format = Pattern.compile("^[^!@$&*()?:\\[\\]\"<>'`|={}/\\\\,;]+$");
+
+    if (!operator.equals(">") && !operator.equals(">>")) {
+      return "ArgumentInvalid";
+
+    } else if (location == null) {
+      return "PathInvalid";
+
+    } else if (!format.matcher(name).matches() || name.equals(".") || name
+        .equals("..")) {
+      return "FileNameInvalid";
+    }
+
+    for (Object item : location.getContent()) {
+      if (item instanceof Directory) {
+        Directory curr = (Directory) item;
+        if (curr.getName().equals(name)) {
+          return "SameNameDirectory";
+        }
+      }
+    }
+    return "pass";
+  }
+
+  /**
+   * Edit a existed file or create a new file with new contents.
+   *
+   * @param newContents The new contents of the file
+   */
+  public void write(String newContents) {
+
+    // File does not exist, create file
+    if (existedFile == null) {
+      FileCreator creator = new FileCreator();
+      creator.create(fileName, newContents, targetLocation);
+
+    } else {
+      // Override or append the new contents to the original contents
+      if (editOperator.equals(">")) {
+        existedFile.setContents(newContents);
+      } else {
+        existedFile.setContents(existedFile.getContents() + "\n" + newContents);
+      }
+    }
+  }
+
+}

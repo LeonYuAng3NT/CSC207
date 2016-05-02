@@ -1,0 +1,60 @@
+package a2a.foundation;
+
+public class File {
+
+  private String name;
+  private String contents;
+
+  /**
+   * Construct a file.
+   *
+   * @param name     The name of this file.
+   * @param contents The contents of this file.
+   */
+  public File(String name, String contents) {
+
+    this.name = name;
+    this.contents = contents;
+  }
+
+  /**
+   * The getter of name.
+   *
+   * @return The name of this file
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * The getter of contents.
+   *
+   * @return The contents of this file
+   */
+  public String getContents() {
+
+    return contents;
+  }
+
+  /**
+   * The setter of name.
+   *
+   * @param name The name of this file
+   */
+  public void setName(String name) {
+
+    this.name = name;
+  }
+
+  /**
+   * The setter of contents.
+   *
+   * @param contents The name of this file
+   */
+  public void setContents(String contents) {
+
+    this.contents = contents;
+  }
+
+}

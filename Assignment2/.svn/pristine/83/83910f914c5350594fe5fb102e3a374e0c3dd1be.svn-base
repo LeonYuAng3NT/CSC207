@@ -1,0 +1,13 @@
+What did I do last time?
+    - I shared ideas to design CRC cards.
+    - Updated the CRC card design, but not submitted yet.
+
+What do I plan to do now?
+	- Start and Finish MakeDirectory class.(next time)
+	- Start and Finish ListContent class.(next time)
+
+Am I blocked on anything?
+    - Not sure about if the design actually works, need following check.
+    - Not sure if FileSystem is necessary for our design.
+    	-Not able to write MakeDirectory until 
+    	 I can figure out if FileSystem is necessary

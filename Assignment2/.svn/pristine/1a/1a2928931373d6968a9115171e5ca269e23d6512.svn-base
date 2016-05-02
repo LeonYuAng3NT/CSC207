@@ -1,0 +1,60 @@
+package a2a.operator;
+
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+/**
+ * A file editor uses to edit a file.
+ *
+ * @author Yi Jian Wang
+ */
+public class FileEditor {
+
+  boolean isOverride;
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a FileEditor.
+   *
+   * @param fileSystem The file system uses to store the edited file
+   */
+  public FileEditor(String[] command, FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+    isOverride = command[command.length - 2].equals(">");
+  }
+
+  /**
+   * Edit a existed file or create a new file with new contents.
+   *
+   * @param pathString  The string of the full path
+   * @param newContents The new contents of the file
+   */
+
+  public void write(String pathString, String newContents) {
+
+    PathAnalyzer analyzer = new PathAnalyzer(pathString);
+    String[] path = analyzer.convert();
+    Searcher searcher = new Searcher(path, fileSystem);
+
+    boolean hasFile = (searcher.searchTarget(true) != null);
+
+    // Edit on existed file
+    if (hasFile) {
+      File targetFile = (File) searcher.searchTarget(true);
+      if (isOverride) {
+        targetFile.setContents(newContents);
+      } else {
+        targetFile.setContents(targetFile.getContents() + newContents);
+      }
+
+    } else {
+      // Create new file in the location
+      FileCreator creator = new FileCreator();
+      String fileName = path[path.length - 1];
+      creator.create(fileName, newContents, searcher.searchLocation());
+    }
+  }
+
+
+}

@@ -1,0 +1,10 @@
+Class name: InputHistory
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Store history record which is entered by a user.
+
+Collaborators:
+None

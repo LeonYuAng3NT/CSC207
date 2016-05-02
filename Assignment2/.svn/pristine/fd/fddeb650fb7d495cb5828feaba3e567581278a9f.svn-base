@@ -1,0 +1,42 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.Test;
+
+import a2a.foundation.InputHistory;
+
+public class InputHistoryTest {
+
+  @Test
+  public void testInputHistory() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+
+
+  }
+
+  @Test
+  public void testRecord() {
+    InputHistory userInputHistory = new InputHistory();
+    userInputHistory.record("history");
+    ArrayList<String> output = userInputHistory.getUserInputHistory();
+    assertEquals(Arrays.asList("history"), output);
+  }
+
+  @Test
+  public void testGetUserInputHistory() {
+    InputHistory userInputHistory = new InputHistory();
+    ArrayList<String> output = userInputHistory.getUserInputHistory();
+    assertEquals(Arrays.asList(), output);
+
+
+  }
+
+}

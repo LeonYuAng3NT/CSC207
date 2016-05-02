@@ -1,0 +1,40 @@
+package a2a;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+
+import java.util.ArrayList;
+
+public final class ContentViewer {
+
+  /**
+   * Default Constructor
+   */
+  private ContentViewer() {
+  }
+
+  /**
+   * List out the content of current directory
+   *
+   * @param directory The current directory
+   */
+  public static void view(Directory directory) {
+
+    ArrayList<Object> content = directory.getContent();
+
+    // Print out each item in directory
+    for (Object item : content) {
+      if (item instanceof File) {
+        System.out.println(((File) item).getName());
+      } else if (item instanceof Directory) {
+        System.out.println(((Directory) item).getName());
+      }
+    }
+  }
+
+  public static void viewSpecified(Directory directory) {
+
+    // TODO: cd /specified/folder
+  }
+
+
+}

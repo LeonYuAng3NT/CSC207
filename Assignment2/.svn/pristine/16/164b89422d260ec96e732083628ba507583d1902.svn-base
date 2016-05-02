@@ -1,0 +1,44 @@
+Backlog Item
+
+
+a) As a user, I am able to see the invalid message through Shell   2 days
+b) As a user, I am able to remove item from one path to another    1 day
+c) As a user, I am able to move item from one path to another      2 days
+d) As a user, I am able to retrieve items from URL address         2 days
+
+Specific tasks to be accomplished:
+a-1. (Exception) Write the base code for Exception.
+a-2. (Exception) Write the description of each Exception's functionality.
+a-3  (JShell) Allow JShell to catch Exceptions.
+a-4  (Command) Improve the design aspect of isValid() method 
+                 in each Command class
+
+b-1. (ItemRemover) Write the base code for ItemRemover.
+b-2. (ItemRemover) Develop the functionality of  ItemRemover.
+b-3. (ItemRemover) Run basic tests to ensure the functionality in normal and
+                  special cases.
+b-4  (ItemRemover) Write the JUnit test cases for ItemRemover.
+c-1. (PathNavigator) Write the base code for PathNavigator.
+c-2. (PathNavigator) Develop the method that allows users to navigate specific 
+                    paths.
+c-3  (PathNavigator) Write the JUnit test cases for PathNavigator.
+d-1. (URLRetriever) Build the connection between FileSystem and URLretriever as
+                    the FileSystem may change due to URLretriever's presence.
+d-2. (URLRetriever) Develop the functionality that relates to retrieving the 
+                    actual URL.
+d-3. (URLRetriever) Write the JUnit test cases for URLRetriever.
+
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: c-1, c-2, c-3 
+
+User: Yiming Huang
+Tasks: b-1, b-2, b-3, b-4
+
+User: Yi Jian Wang
+Tasks: a-1, a-2, a-3, a-4
+
+User: Yu Wang
+Tasks: d-1, d-2, d-3

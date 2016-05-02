@@ -1,0 +1,26 @@
+package a2a.exceptions;
+
+/**
+ * A Path Does Not Exist Exception happened when user attempt to
+ * execute a command with an invalid path as argument.
+ */
+public class PathDoesNotExistException extends Exception{
+
+  /**
+   * Default constructor.
+   */
+  public PathDoesNotExistException() {
+
+    super("The argument contain invalid path.");
+  }
+
+  /**
+   * Construct a PathDoesNotExistException.
+   *
+   * @param path The path which is invalid
+   */
+  public PathDoesNotExistException(String path) {
+
+    super("The following directory does not exist: " + path);
+  }
+}

@@ -1,0 +1,49 @@
+Backlog Item                                                      Estimate
+ 
+a) As a user, I am able to interact with computer through Shell   1 day  
+b) As a user, I am able to organize my data                       1 day  
+c) As a user, I am able to create directory                       2 days 
+d) As a user, I am able to print the current address or       
+   print the content of current address                           1 day  
+ 
+                    
+Specific tasks to be accomplished:
+a-1. (JShell) Begin coding the structure of the command line interpreter.
+a-2. (JShell) Have the shell continually prompt the user for input.
+a-3. (JShell) Parse the user input for proper keywords.
+a-4. (JShell) Make the shell be able to exit.
+b-1. (File,Directory) Write the base code for the File and Directory class.
+b-2. (File,Directory) Parse the keywords to specific objects such as directories 
+      or files.
+b-3. (File,Directory) Construct the contents for directories and files.
+b-4  (File,Directory) Have the structure of Commands be ready for further 
+      implementation.
+c-1. (DirectoryCreator) Write the base code for DirectoryCreator class.
+c-2. (DirectoryCreator) Implement execute() method and assume the functionality
+     of FileSystem.
+c-3. (DirectoryCreator) Have the instantiation of Directory object ready.
+d-1. (WorkingPathPrinter) Write the base code for the WorkingPathPrinter class.
+d-2. (WorkingPathPrinter) Make the execute() method in WorkingPathPrinter 
+     class to function.
+d-3. (WorkingPathPrinter) Implement common test methods for this command.
+d-4. (ContentViewer) Write the base code for ContentViewer class.
+d-5. (ContentViewer) Implement isValid() method and assume the functionality 
+     of Searcher class.
+d-6. (ContentViewer) Implement execute() method for this ContentViewer.
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: a-1, a-2, a-3, a-4
+
+User: Yiming Huang
+Tasks: c-1, c-2, c-3
+
+User: Yi Jian Wang
+Tasks: b-1, b-2, b-3, b-4, d-5, d-6
+
+User: Yu Wang
+Tasks: d-1, d-2, d-3, d-4
+
+
+                    

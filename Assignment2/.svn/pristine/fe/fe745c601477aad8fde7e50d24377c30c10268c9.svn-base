@@ -1,0 +1,127 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+
+/**
+ * A directory test, uses to test if the methods are working as describes.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryTest {
+  /**
+   * Test if the instance can be created as expected.
+   */
+  @Test
+  public void testDirectory() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+  }
+
+  /**
+   * Test if ToString method is working as expected.
+   */
+  @Test
+  public void testToString() {
+    Directory directory = new Directory();
+    String output = directory.toString();
+    assertEquals("", output);
+
+  }
+
+  /**
+   * Test if the GetName method is working as expected.
+   */
+  @Test
+  public void testGetName() {
+    Directory directory = new Directory();
+    String output = directory.getName();
+    assertEquals("/", output);
+  }
+
+  /**
+   * Test if the GetContent method is working as expected.
+   */
+  @Test
+  public void testGetContent() {
+    Directory directory = new Directory();
+    List<Object> output = directory.getContent();
+    assertEquals(new ArrayList<>(), output);
+  }
+
+  /**
+   * Test if the GetAddress can be functioned as it expected.
+   */
+  @Test
+  public void testGetAddress() {
+    Directory directory = new Directory();
+    String output = directory.getAddress();
+    assertEquals("/", output);
+  }
+
+  /**
+   * Test if GetParent can be worked as expected.
+   */
+  @Test
+  public void testGetParent() {
+    Directory directory = new Directory();
+    Directory output = directory.getParent();
+    assertEquals(output.getName(), directory.getParent().getName());
+  }
+
+  /**
+   * Test if SetContent is working as expected.
+   */
+  @Test
+  public void testSetContent() {
+    Directory directory = new Directory();
+    directory.setContent(new ArrayList<>());
+    List<Object> output = directory.getContent();
+    assertEquals(new ArrayList<>(), output);
+  }
+
+
+}

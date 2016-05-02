@@ -1,0 +1,29 @@
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+/**
+ * This class use to print out the full path of current working directory.
+ */
+public class WorkingPathPrinter {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a WorkingPathPrinter
+   *
+   * @param fileSystem The file system which is using by JShell
+   */
+  public WorkingPathPrinter(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * Print out the address of current working directory.
+   */
+  public void print() {
+
+    System.out.println(fileSystem.getCurrDir().getAddress());
+  }
+}

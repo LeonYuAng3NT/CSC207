@@ -1,0 +1,27 @@
+package a2a.exceptions;
+
+/**
+ * An Invalid Directory Name Exception happened when user attempt to
+ * execute a command which contain an invalid directory name.
+ */
+public class InvalidDirectoryNameException extends Exception {
+
+  /**
+   * Construct an InvalidDirectoryNameException with no argument.
+   */
+  public InvalidDirectoryNameException() {
+
+    super("The path contain invalid directory name.");
+  }
+
+  /**
+   * Construct an InvalidDirectoryNameException
+   * with specified directory name.
+   *
+   * @param dirName The directory name which caused this exception
+   */
+  public InvalidDirectoryNameException(String dirName) {
+
+    super("The directory name: " + dirName + " is invalid, please try again");
+  }
+}

@@ -1,0 +1,54 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.ContentViewer;
+
+public class ContentViewerTest {
+
+  @Test
+  public void testContentViewer() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    FileSystem fileSystem = new FileSystem();
+
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", fileSystem.getRoot());
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+
+    ContentViewer viewer = new ContentViewer(fileSystem);
+    assertTrue(viewer.isValid("ls .."));
+    assertTrue(viewer.isValid("     ls .."));
+    assertTrue(viewer.isValid("ls abc      "));
+
+  }
+
+  @Test
+  public void testExecute() {
+    // not yet done
+  }
+
+}

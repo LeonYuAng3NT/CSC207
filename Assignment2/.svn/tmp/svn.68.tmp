@@ -1,0 +1,82 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.WorkingPathPrinter;
+
+public class WorkingPathPrinterTest {
+  private FileSystem database;
+  private WorkingPathPrinter printer;
+  
+  @Test
+  public void testWorkingPathPrinter() throws Exception{
+     
+     printer = new WorkingPathPrinter(database);
+  }
+
+  @Test
+  public void testIsValid() {
+    FileSystem fileSystem = new FileSystem();
+
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", fileSystem.getRoot());
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+
+    WorkingPathPrinter printer = new WorkingPathPrinter(fileSystem);
+
+    assertTrue(printer.isValid("pwd"));
+    assertTrue(printer.isValid("     pwd"));
+    assertTrue(printer.isValid("pwd       "));
+    assertFalse(printer.isValid("pwd abc"));
+
+  }
+
+  @Test
+  public void testExecute() { 
+    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outContent));
+    database = new FileSystem();
+    printer = new  WorkingPathPrinter(database);
+    printer.isValid("pwd");
+    printer.execute();
+    Directory directoryAbc = new Directory("abc", "/abc", database.getRoot());
+    database.getCurrDir().getContent().add(directoryAbc);
+    database.setCurrDir(directoryAbc);
+    printer = new  WorkingPathPrinter(database);
+    printer.isValid(" pwd");
+    printer.execute();
+    Directory directoryAdc = new Directory("adc", "/abc/adc", 
+          database.getRoot());
+    database.getCurrDir().getContent().add(directoryAdc);
+    database.setCurrDir(directoryAdc);
+    printer = new WorkingPathPrinter(database);
+    printer.isValid("pwd");
+    printer.execute();
+    
+   
+ 
+    String expectedOutput = "/\n"+"/abc\n"+ "/abc/adc\n";
+    assertEquals( expectedOutput, outContent.toString());
+
+    
+  }
+
+}

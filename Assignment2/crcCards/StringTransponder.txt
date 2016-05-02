@@ -1,0 +1,17 @@
+Class name: StringTransponder
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Receive and collect the string entered by a user
+*Print out the string or redirect it to a file
+
+Collaborators:
+*ArgumentDeclareException
+*InvalidTargetNameException
+*NameConflictException
+*PathDoesNotExistException
+*FileSystem
+*FileEditor
+*PathChecker

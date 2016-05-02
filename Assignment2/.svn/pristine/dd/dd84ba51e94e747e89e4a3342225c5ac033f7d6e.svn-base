@@ -1,0 +1,155 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+import java.util.ArrayList;
+
+public class Directory {
+
+  private String name;
+  private String address;
+  private ArrayList<Object> content;
+  private Directory parent;
+
+  /**
+   * Construct a root directory
+   */
+  public Directory() {
+
+    name = "/";
+    address = "/";
+    parent = this;
+    content = new ArrayList<>();
+  }
+
+  /**
+   * Construct a directory with parent directory.
+   *
+   * @param name    The name of this directory
+   * @param address The full path of this directory
+   * @param parent  The parent directory of this directory
+   */
+  public Directory(String name, String address, Directory parent) {
+
+    this.name = name;
+    this.address = address;
+    this.parent = parent;
+    content = new ArrayList<>();
+  }
+
+  /**
+   * Return a string representaion of the directory content.
+   *
+   * @return  a string representation of this directory.
+   */
+  public String toString() {
+
+    String stat = "";
+
+    for (Object item : content) {
+      if (item instanceof File) {
+        stat += ((File) item).getName();
+      } else if (item instanceof Directory) {
+        stat += ((Directory) item).getName();
+      }
+    }
+    return stat;
+  }
+  /**
+   * Get the name of this directory.
+   *
+   * @return The name of this directory.
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * Get the content of this directory.
+   *
+   * @return The content of this directory.
+   */
+  public ArrayList<Object> getContent() {
+
+    return content;
+  }
+
+  /**
+   * Get the name list of the content of the directory.
+   *
+   * @return The name list of the content of the directory
+   */
+  public ArrayList<String> getContentList() {
+
+    ArrayList<String> nameList = new ArrayList<>();
+
+    for (Object item : content) {
+      if (item instanceof File) {
+        nameList.add(((File) item).getName());
+      } else if (item instanceof Directory) {
+        nameList.add(((Directory) item).getName());
+      }
+    }
+    return nameList;
+  }
+  /**
+   * Get the full path of this directory.
+   *
+   * @return The full path of directory.
+   */
+  public String getAddress() {
+
+    return address;
+  }
+
+  /**
+   * Get the parent directory of this directory.
+   *
+   * @return The parent directory of this directory.
+   */
+  public Directory getParent() {
+
+    return parent;
+  }
+
+  /**
+   * Update the content of this directory.
+   *
+   * @param content The new content of this directory.
+   */
+  public void setContent(ArrayList<Object> content) {
+
+    this.content = content;
+  }
+
+}

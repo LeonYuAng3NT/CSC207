@@ -1,0 +1,138 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.List;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+/**
+ * This file reader use to print out the contents of a file.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class FileReader implements Command, OutputProducer {
+
+  private boolean isRedirectMode;
+  private String[] command;
+  private FileSystem fileSystem;
+  private List<File> targetFile;
+  private FileEditor editor;
+
+
+  /**
+   * Construct a ContentViewer by passing a FileSystem object.
+   */
+  public FileReader() {}
+
+  /**
+   * Check the validity of User's Input.
+   * 
+   * @param command The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException if the command have incorrect argument
+   * @throws PathDoesNotExistException if a path in this command is invalid
+   * @throws NameConflictException if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   */
+  @Override
+  public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException {
+    String[] command = userInput.trim().split("\\s+");
+    this.fileSystem = fileSystem;
+
+    if (command.length != 2 && command.length != 4) {
+      throw new ArgumentDeclareException();
+    }
+
+    // Call Path Analyzer to split the path and initialize searcher
+    PathAnalyzer split = new PathAnalyzer(command[1]);
+    Searcher searcher = new Searcher(split.convert(), fileSystem);
+    if (searcher.searchTarget(true) == null) {
+      throw new PathDoesNotExistException(command[1]);
+    } else if (command.length == 4) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    targetFile.add((File) searcher.searchTarget(true));
+
+    if (isRedirectMode) {
+      editor = new FileEditor(command, fileSystem);
+    }
+  }
+
+  /**
+   * Execute the command, start to edit the file based on user input.
+   * 
+   * @return the updated version of file system after execution
+   */
+  @Override
+  public void execute() {
+
+
+    String result = this.produce();
+
+    if (isRedirectMode) {
+      FileEditor editor = new FileEditor(command, fileSystem);
+      editor.write(command[command.length - 1], result);
+    } else {
+      System.out.println(result);
+    }
+  }
+
+  @Override
+  public String produce() {
+    
+    // This method needs to be modified
+    String result = "";
+    for (int i = 0; i < targetFile.size(); i++) {
+      if (i == 0) {
+        System.out.println(targetFile.get(i).getContents());
+      }
+      result +="\n\n\n";
+      result += targetFile.get(i).getContents();
+    }
+    // TODO Auto-generated method stub
+
+    return result;
+  }
+}
+

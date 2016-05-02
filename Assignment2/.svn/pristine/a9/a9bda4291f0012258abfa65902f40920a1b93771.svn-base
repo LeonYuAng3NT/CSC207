@@ -1,0 +1,52 @@
+Sprint 5  Backlog.
+March 19 to March 25
+
+ Backlog Items
+e) As a user, I am able to see the content of sub-directories      1 day
+f) As a user, I am able to inspect my specific order input         2 days
+g) As a user, I am able to find specific line in directories       2 days
+              or their sub-directories          
+h) As a user, I am able to inspect multiple files at one time      1 day
+i) As a user, I am able to check whether the redirection I input   2 day 
+     is correct or not 
+     
+-JUnit tests from last Sprint have not completed
+
+
+
+
+Specific tasks to be accomplished:
+e-1. (ContentViewer) Write the method for recursively traversing sub-directories
+e-2. (ContentViewer) Write JUnit test for ContentViewer specifically the method
+                     relates to recursive traversal.
+e-3  (ContentViewer) Allow JShell to catch Exceptions thrown from ContentViewer.
+f-1. (History) Write the base code for storing users' input.
+f-2. (History) Develop the functionality of displaying specific history.
+f-3. (History) Run basic tests to ensure the functionality in normal and
+                  special cases.
+f-4  (History) Write the JUnit test cases for History.
+g-1. (RegexFinder) Write the base code for RegFinder.
+g-2. (RegexFinder) Develop the method that recursively traverses the path given
+                   and find specific regular expression
+g-3  (RegexFinder) Write the JUnit test cases for RegexFinder.
+h-1. (FileReader) Write the execute() method so that the JShell is able to 
+
+h-2. (FileReader) Write the JUnit test cases that consists of multiple files 
+i-1  (Searcher) Implement the method in Searcher class in order to check the
+                   validity of path in redirection
+i-2  (Searcher) Build the connection between FileEditor and PathChecker and 
+                    therefore improve the functionality of actual redirection
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: e-1, e-2, e-3, g-2
+
+User: Yiming Huang
+Tasks: f-1, f-2, f-3, f-4
+
+User: Yi Jian Wang
+Tasks: g-1, g-3, i-1, i-2
+
+User: Yu Wang
+Tasks: h-1, h-2

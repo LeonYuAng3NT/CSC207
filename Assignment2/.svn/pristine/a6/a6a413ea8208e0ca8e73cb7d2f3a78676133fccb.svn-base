@@ -1,0 +1,68 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryNavigator;
+
+
+public class DirectoryNavigatorTest {
+  
+  private FileSystem fileSystem;
+  private DirectoryNavigator dirNavigator;
+  
+  @Before
+  public void setUp() {
+    fileSystem = new FileSystem();
+    
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", root);
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+  }
+
+  @Test
+  public void testDirectoryNavigator() {
+    
+    try {
+     dirNavigator = new DirectoryNavigator(fileSystem);
+    } catch (Exception e) {
+      fail("Failed to create an instance of directory navigator.");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+
+    DirectoryNavigator navigator = new DirectoryNavigator(fileSystem);
+    assertTrue(navigator.isValid("cd abc"));
+    assertTrue(navigator.isValid("     cd .."));
+    assertTrue(navigator.isValid("cd abc      "));
+  }
+
+  @Test
+  public void testExecute() {
+    
+    FileSystem afterExecuted = dirNavigator.execute();
+ 
+    assertTrue(afterExecuted.getCurrDir().getName().equals("abc"));
+  }
+
+}
+
+

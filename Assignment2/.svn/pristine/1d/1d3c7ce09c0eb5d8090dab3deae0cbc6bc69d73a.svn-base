@@ -1,0 +1,228 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.DirectoryStackEmptyException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryCreator;
+import a2a.operator.DirectoryStackOperator;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
+/**
+ * The directory stack operator uses to test if the methods
+ * are working as expected.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryStackOperatorTest {
+
+  private FileSystem fileSystem;
+  private DirectoryStackOperator directoryStackOperator;
+
+  /**
+   * Set up the test.
+   */
+  @Before public void setUp() {
+
+    this.fileSystem = new FileSystem();
+    this.directoryStackOperator = new DirectoryStackOperator();
+    DirectoryCreator dirCreator = new DirectoryCreator();
+    String[] temp =
+        new String[] {"mkdir please", "mkdir please/let", "mkdir please/let/me",
+            "mkdir please/let/me/get", "mkdir please/let/me/get/enrolled"};
+
+    try {
+      for (String command : temp) {
+        dirCreator.setUp(command, fileSystem);
+        dirCreator.execute();
+        dirCreator = new DirectoryCreator();
+      }
+    } catch (Exception e) {
+      fail("Failed to set up the test");
+    }
+  }
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test public void testDirectoryStackOperator() {
+    try {
+      directoryStackOperator = new DirectoryStackOperator();
+    } catch (Exception e) {
+      fail("Failed to create an instance of directory stack operator.");
+    }
+  }
+
+  /**
+   * Test if the method can successfully set up the command.
+   */
+  @Test public void testSetUp() {
+
+    try {
+      directoryStackOperator.setUp("pushd please", fileSystem);
+      directoryStackOperator.setUp("pushd /please/let", fileSystem);
+      directoryStackOperator.setUp("pushd /../please/let", fileSystem);
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the method can throw out ArgumentDeclareException.
+   *
+   * @throws ArgumentDeclareException if argument is not correct
+   */
+  @Test(expected = ArgumentDeclareException.class)
+  public void testSetUpWithArgumentDeclareException()
+      throws ArgumentDeclareException {
+
+    try {
+      directoryStackOperator.setUp("pushd", fileSystem);
+    } catch (ArgumentDeclareException a) {
+      throw a;
+    } catch (Exception e) {
+      fail("Unhandled Exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the method can throw out PathDoesNotExistException.
+   *
+   * @throws PathDoesNotExistException if output file path is not exist
+   */
+  @Test(expected = PathDoesNotExistException.class)
+  public void testSetUpWithPathDoesNotExistException()
+      throws PathDoesNotExistException {
+
+    try {
+      directoryStackOperator.setUp("pushd /NOTEXISTED", fileSystem);
+    } catch (PathDoesNotExistException p) {
+      throw p;
+    } catch (Exception e) {
+      fail("Unhandled Exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the method can throw out NameConflictException.
+   *
+   * @throws NameConflictException if the output file name is conflict
+   */
+  @Test(expected = NameConflictException.class)
+  public void testSetUpWithNameConflictException()
+      throws NameConflictException {
+
+    try {
+      directoryStackOperator.setUp("pushd please > please", fileSystem);
+    } catch (NameConflictException n) {
+      throw n;
+    } catch (Exception e) {
+      fail("Unhandled Exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the method can throw out InvalidTargetNameException.
+   *
+   * @throws InvalidTargetNameException if the output filename is invalid
+   */
+  @Test(expected = InvalidTargetNameException.class)
+  public void testSetUpWithInvalidTargetNameException()
+      throws InvalidTargetNameException {
+
+    try {
+      directoryStackOperator.setUp("pushd please > out!put.txt", fileSystem);
+    } catch (InvalidTargetNameException i) {
+      throw i;
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+      fail("Unhandled Exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the correct exception have been thrown or not.
+   *
+   * @throws DirectoryStackEmptyException if the directory stack is empty
+   */
+  @Test(expected = DirectoryStackEmptyException.class)
+  public void testSetUpException() throws DirectoryStackEmptyException {
+    try {
+      directoryStackOperator.setUp("popd", fileSystem);
+
+    } catch (DirectoryStackEmptyException d) {
+      throw new DirectoryStackEmptyException();
+
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+  }
+
+  /**
+   * Test if the execute method works as expected.
+   */
+  @Test public void testExecute() {
+    try {
+      // The stack was empty
+      assertTrue(fileSystem.getDirStack().isEmpty());
+      directoryStackOperator.setUp("pushd please", fileSystem);
+      directoryStackOperator.execute();
+
+      // The stack is not empty now
+      assertEquals("please", fileSystem.getCurrDir().getName());
+      assertFalse(fileSystem.getDirStack().isEmpty());
+
+      // Have successfully change directory to pop out directory
+      directoryStackOperator.setUp("popd", fileSystem);
+      directoryStackOperator.execute();
+      assertEquals("/", fileSystem.getCurrDir().getName());
+    } catch (Exception e) {
+      fail("Unhandled Exception have been thrown");
+    }
+  }
+
+}
+
+

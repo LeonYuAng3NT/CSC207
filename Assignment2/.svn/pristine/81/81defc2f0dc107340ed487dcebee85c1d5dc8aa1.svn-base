@@ -1,0 +1,10 @@
+Class name:DirectoryCreator 
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Create a Directory object
+*Check if the input is a valid command for DirectoryCreator.
+Collaborators:
+*Directory
+*FileSystem

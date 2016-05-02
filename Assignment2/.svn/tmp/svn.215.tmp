@@ -1,0 +1,65 @@
+package a2a.operator;
+
+import a2a.exceptions.*;
+import a2a.foundation.FileSystem;
+
+import java.util.regex.Pattern;
+
+/**
+ * The Path Checker uses to check the validity of the path.
+ * It provides different ways to check the path.
+ *
+ * @author Yi Jian Wang
+ */
+public class PathChecker {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a PathChecker.
+   *
+   * @param fileSystem The file system uses to check the path.
+   */
+  public PathChecker(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * The purpose of this method is uses to serve other function
+   * to check the path. If one other function will create new file
+   * or directory in a specified location, then it will check the
+   * validity of this process.
+   *
+   * @param pathString The string of the path
+   * @throws PathDoesNotExistException  if the path does not exist
+   * @throws NameConflictException      if the target name is occupied
+   * @throws InvalidTargetNameException if the target name is invalid
+   */
+  public void inspectSinglePath(String pathString)
+      throws PathDoesNotExistException, NameConflictException,
+      InvalidTargetNameException {
+
+    // Split the pathString to array and search the path
+    PathAnalyzer analyzer = new PathAnalyzer(pathString);
+    String[] path = analyzer.convert();
+    Searcher searcher = new Searcher(path, fileSystem);
+    Pattern ch = Pattern.compile("^[^!@$&*()?:\\[\\]\"<>'`|={}/\\\\,;]+$");
+
+    boolean locationExist = searcher.searchLocation() != null;
+    boolean dirIsOccupied = searcher.searchTarget(false) != null;
+
+    if (!locationExist) {
+      throw new PathDoesNotExistException(pathString);
+    } else if (dirIsOccupied) {
+      throw new NameConflictException();
+    }
+
+    // Check the format of the name of the new target
+    String targetName = path[path.length - 1];
+    if (!ch.matcher(targetName).matches() || targetName.equals(".")
+        || targetName.equals("..")) {
+      throw new InvalidTargetNameException(targetName);
+    }
+  }
+}

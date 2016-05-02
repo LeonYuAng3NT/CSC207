@@ -1,0 +1,10 @@
+class name: PathAnalyzer
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Analyze and convert the path into preferred format to computer.
+
+Collaborators:
+None

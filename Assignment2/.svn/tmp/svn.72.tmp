@@ -1,0 +1,66 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.ContentViewer;
+
+public class ContentViewerTest {
+  private ContentViewer viewer;
+
+  @Test
+  public void testContentViewer() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    FileSystem fileSystem = new FileSystem();
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryA = new Directory("A", "/A", fileSystem.getRoot());
+    Directory directoryB = new Directory("B", "/B", fileSystem.getRoot());
+    Directory directoryC = new Directory("C", "/C", fileSystem.getRoot());
+    contentOfRoot.add(directoryA);
+    contentOfRoot.add(directoryB);
+    contentOfRoot.add(directoryC); 
+    directoryA.getContent()
+        .add(new Directory("file1", "/A/file1", 
+            ((Directory) root.getContent().get(0))));
+    directoryA.getContent()
+        .add(new Directory("file2", "/A/file2", 
+            (Directory) root.getContent().get(0)));
+    directoryC.getContent()
+    .add(new Directory("file3", "/C/file3", 
+        (Directory) root.getContent().get(0)));
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+    // Update the root to file system
+    fileSystem.setRoot(root);
+    viewer = new ContentViewer(fileSystem);
+    assertFalse(viewer.isValid("ls .."));
+    assertFalse(viewer.isValid("ls D"));
+    assertTrue(viewer.isValid("ls A/file1     "));
+    assertTrue(viewer.isValid("ls B/"));
+    assertTrue(viewer.isValid("ls C/file3   "));
+  }
+
+  @Test
+  public void testExecute() {
+    
+  }
+
+}

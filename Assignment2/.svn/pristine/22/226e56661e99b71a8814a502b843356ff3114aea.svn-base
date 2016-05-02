@@ -1,0 +1,21 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+
+public final class WorkingPathPrinter {
+
+  /**
+   * Default constructor.
+   */
+  private WorkingPathPrinter() {
+  }
+
+  /**
+   * Print out the address of current working directory.
+   *
+   * @param currDir The current working directory
+   */
+  public static void print(Directory currDir) {
+    System.out.println(currDir.getAddress());
+  }
+}

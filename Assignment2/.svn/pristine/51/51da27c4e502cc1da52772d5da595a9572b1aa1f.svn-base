@@ -1,0 +1,18 @@
+package a2a;
+
+import a2a.Directory;
+import a2a.File;
+import java.util.ArrayList;
+
+public class PrintContent {
+
+	public PrintContent(Directory directory) {
+
+		System.out.println(directory.getContent());
+	}
+
+	public PrintContent(File file) {
+		System.out.println(file.getContents());
+
+	}
+}

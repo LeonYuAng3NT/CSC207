@@ -1,0 +1,10 @@
+Class name: DirectoryNavigator  
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Be able to change the current directory's address to antoher's.
+*Check if the input is a valid command for DirectoryNavigator.
+Collaborators:
+*Directory
+*FileSystem

@@ -1,0 +1,45 @@
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+
+/**
+ * The History Performer uses to get the specified number
+ * of history, then re-execute the command from the history
+ * record.
+ *
+ * @author Yi Jian Wang
+ */
+public class HistoryPerformer implements Command {
+
+  /**
+   * Construct a HistoryPerformer
+   */
+  public HistoryPerformer() {
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException {
+
+  }
+
+  @Override public void execute() {
+
+  }
+
+}

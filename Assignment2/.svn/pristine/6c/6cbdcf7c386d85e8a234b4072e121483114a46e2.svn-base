@@ -1,0 +1,74 @@
+package a2a.operator;
+
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+
+/**
+ * The Path Checker uses to check the validity of the path.
+ * It provides different mode to check the validity.
+ *
+ * @author Yi Jian Wang
+ */
+public class PathChecker {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a PathChecker.
+   *
+   * @param fileSystem The file system uses to check the path.
+   */
+  public PathChecker(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * Check if the new target name has been occupied.
+   *
+   * @param pathString The string of the path
+   * @return True if the new target name has been occupied
+   * @throws PathDoesNotExistException 
+   */
+  public boolean singlePathIsOccupied(String pathString) throws 
+    PathDoesNotExistException {
+
+    PathAnalyzer analyzer = new PathAnalyzer(pathString);
+    String[] path = analyzer.convert();
+    Searcher searcher = new Searcher(path, fileSystem);
+
+    boolean locationExist = searcher.searchLocation() != null;
+    boolean dirIsOccupied = searcher.searchTarget(false) == null;
+
+    return locationExist && !dirIsOccupied;
+  }
+
+  /**
+   * Check if the first path and the second path is valid
+   * and the name of item is not occupied in second path.
+   *
+   * @param firstPath  The first path of the address
+   * @param secondPath The second path of the address
+   * @return True if the two path is valid for operation
+   * @throws PathDoesNotExistException 
+   */
+  public boolean twoPathIsOccupied(String firstPath, String secondPath) throws 
+  PathDoesNotExistException {
+
+    PathAnalyzer analyzer = new PathAnalyzer(firstPath);
+    PathAnalyzer converter = new PathAnalyzer(secondPath);
+    Searcher searcher = new Searcher(analyzer.convert(), fileSystem);
+    Searcher finder = new Searcher(converter.convert(), fileSystem);
+
+    boolean firstLocationExist = searcher.searchLocation() != null;
+    boolean firstPathIsValid =
+        (searcher.searchTarget(true) != null) || (searcher.searchTarget(false)
+            != null);
+    boolean secondLocationExist = finder.searchLocation() != null;
+    boolean secondPathOccupied =
+        (finder.searchTarget(true) == null) && (finder.searchTarget(false)
+            == null);
+    return firstLocationExist && secondLocationExist && firstPathIsValid
+        && !secondPathOccupied;
+  }
+}

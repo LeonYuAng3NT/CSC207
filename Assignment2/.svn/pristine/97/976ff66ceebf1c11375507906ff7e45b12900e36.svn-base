@@ -1,0 +1,271 @@
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.ConflictPathException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.TypeNotMatchException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ItemDuplicator implements Command {
+
+  private FileSystem fileSystem;
+  private String[] command;
+  private List<File> targetFile;
+  private List<Directory> targetDirectory;
+  private boolean isRedirectMode;
+
+  public ItemDuplicator() {
+    targetFile = new ArrayList<>();
+    targetDirectory = new ArrayList<>();
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated by user input,
+   * and set up the command before execute.
+   *
+   *
+   * @param fileSystem The file system use to execute this command
+   * @throws PathDoesNotExistException if path is invalid
+   * @throws NameConflictException if name has been occupied
+   * @throws InvalidTargetNameException if name contain invalid character
+   * @throws TypeNotMatchException if the target's type is invalid
+   * @throws ConflictPathException if two paths conflict with each other
+   * @throws ArgumentDeclareException if the argument is wrongly declared
+   * 
+   * @author Yu Ang Zhang
+   * 
+   */
+  @Override
+  public void setUp(String userInput, FileSystem fileSystem)
+      throws InvalidTargetNameException, PathDoesNotExistException,
+      NameConflictException, TypeNotMatchException, ConflictPathException, 
+      ArgumentDeclareException {
+    
+    command = userInput.trim().split("\\s+");
+    this.fileSystem = fileSystem;
+    this.isRedirectMode =
+        (command.length >= 3 && (command[command.length - 2].equals(">>")
+            || command[command.length - 2].equals(">")));
+    if(command.length < 3 || command.length >5 || 
+        (command.length ==4 && (!command[3].equals(">") 
+            || !command[3].equals(">>")))){
+      throw new ArgumentDeclareException();
+    }
+
+    // Setup and Check the first argument
+    PathAnalyzer analyzer = new PathAnalyzer(command[1]);
+    Searcher searcher = new Searcher(analyzer.convert(), fileSystem);
+    this.firstDeepSetUp(searcher);
+   // Setup and Check the second argument
+    PathAnalyzer analyzer2 = new PathAnalyzer(command[2]);
+    Searcher searcher2 = new Searcher(analyzer2.convert(), fileSystem);
+    this.secondDeepSetUp(searcher2);
+    if (isRedirectMode) {
+      //operates RedirectMode
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+  }
+
+  /**
+   * This is a helper uses to continue set up the first argument of user's
+   * command.
+   *
+   * @param searcher The searcher of current searching process
+   * @throws PathDoesNotExistException throw exception if a path does not exist
+   * @throws TypeNotMatchException throw exception if the target's type is
+   *         invalid
+   * @author Yu Ang Zhang
+   * 
+   */
+  private void firstDeepSetUp(Searcher searcher)
+      throws PathDoesNotExistException, TypeNotMatchException {
+
+    // Searcher cannot find anything
+    boolean fileIsFound = searcher.searchTarget(true) != null;
+    boolean dirIsFound = (searcher.searchTarget(false) != null);
+
+
+    if (!fileIsFound && !dirIsFound) {
+      throw new PathDoesNotExistException();
+
+    } else if (fileIsFound) {
+      // Path is a file
+      this.targetFile.add((File) searcher.searchTarget(true));
+      this.targetDirectory.add(searcher.searchLocation());
+
+    } else {
+      // Path is a directory
+      this.targetDirectory.add((Directory) searcher.searchTarget(false));
+    }
+  }
+
+  /**
+   * This is a helper uses to continue set up the first argument of user's
+   * command.
+   *
+   * @param searcher The searcher of current searching process
+   * @throws PathDoesNotExistException throw exception if a path does not exist
+   * @throws TypeNotMatchException throw exception if the target's type is
+   *         invalid
+   * @throws ConflictPathException throw exception if paths conflict with each
+   *         other
+   * 
+   */
+  private void secondDeepSetUp(Searcher searcher)
+      throws PathDoesNotExistException, TypeNotMatchException,
+      ConflictPathException {
+
+    boolean locationIsFound = searcher.searchLocation() != null;
+    // add target file's or directory's parent into the list
+    targetDirectory.add(searcher.searchLocation());
+
+    if (!locationIsFound) {
+      // Searcher cannot find anything
+      throw new PathDoesNotExistException();
+
+    } else if (searcher.searchTarget(true) instanceof File) {
+      // Second path is a file
+        throw new TypeNotMatchException();
+    } else if (searcher.searchTarget(false) instanceof Directory) {
+      // Second path is a directory    
+      for (int i = 0; i < targetDirectory.get(1).getContent().size(); i++) {
+      if ((targetDirectory.get(1).getContent().get(i) instanceof File)
+          &&((File) targetDirectory.get(1).getContent().get(i)).getName()
+          .equals(targetFile.get(0).getName())) {
+        throw new  ConflictPathException();
+      }
+    }
+      this.targetDirectory.add((Directory) searcher.searchTarget(false));
+      // Throw Exception if two Directories are identical
+      if (targetDirectory.size() == 3) {
+        if (checkTwoPath(targetDirectory.get(1),
+            targetDirectory.get(0)) == false && targetFile.size() != 1) {
+          throw new ConflictPathException();
+        }
+      }
+    }
+  }
+
+  /**
+   * Check whether one path contains another and return a boolean for setup()
+   * method so that the exceptions can be thrown. This method only works for the
+   * case where two paths both lead to a directory
+   * 
+   * @param firstDirectory the directory that first path leads to
+   * @param target the directory that second path leads to
+   * @return boolean on whether path conflict with each other
+   * 
+   * @author Yu Ang Zhang
+   */
+  private boolean checkTwoPath(Directory firstDirectory, Directory target) {
+    boolean result = true;
+    if (firstDirectory.equals(target)) {
+      return false;
+    }
+    for (Object item : firstDirectory.getParent().getContent()) {
+      if (firstDirectory.getParent().equals(target.getParent())
+          || firstDirectory.getParent().equals(fileSystem.getRoot())) {
+        return true;
+      } else if (item instanceof Directory
+          && ((Directory) item).equals(target)) {
+        return false;
+      }
+      result = checkTwoPath(firstDirectory.getParent(), target);
+    }
+    return result;
+  }
+  
+  
+  
+  /**
+   * Execute the command, then allow user to move directory with specific path
+   * to certain path that is different from the original one
+   * 
+   * @author Yu Ang Zhang
+   */
+  @Override public void execute() {
+    String newAddress = "";
+    if (targetDirectory.size() == 3) {
+      // move one directory into target directory
+   
+      if (targetFile.size() == 1) { 
+        File copiedFile= targetFile.get(0);
+        File temp = copiedFile;
+        File local = temp;
+        local.setAddress(targetDirectory.get(2).getAddress() 
+            + newAddress); 
+        // copy one file into the target directory
+        targetDirectory.get(2).getContent().add(targetFile.get(0));
+      }
+
+      Directory copiedDirectory = targetDirectory.get(0);
+      addressChanger(copiedDirectory,targetDirectory.get(2),
+              copiedDirectory.getAddress(),0); 
+      // execute new parent for targetDirectory
+      copiedDirectory.setParent(targetDirectory.get(2));
+      targetDirectory.get(2).getContent().add(copiedDirectory);
+      System.out.println(copiedDirectory.getAddress());
+      
+    } else if (targetDirectory.size() == 2) {
+      if (targetFile.size() == 0) {
+        // case where the target folder does not have the target directory
+        Directory copiedDirectory = targetDirectory.get(0);
+        Directory temp = copiedDirectory;
+        Directory local = temp;
+        addressChanger(targetDirectory.get(0),targetDirectory.get(1),
+                local.getAddress(),0); 
+        local.setAddress(targetDirectory.get(1).getAddress() 
+            + newAddress); 
+        // execute new parent for targetDirectory
+        local.setParent(targetDirectory.get(2));
+        targetDirectory.get(1).getContent().add(local);
+
+      } else if (targetFile.size() == 1) {
+        // case where the user is copying the target file
+        File copiedFile= targetFile.get(0);
+        File temp = copiedFile;
+        File local = temp; 
+        local.setAddress(targetDirectory.get(2).getAddress() 
+            + newAddress); 
+        targetDirectory.get(1).getContent().add(local);      
+      }
+    }
+  }
+  /**
+   * Change the address of either File or Directory in order to do further
+   * modification
+   * 
+   * @param address the address of either File or Directory
+   * @return modified version of address
+   * 
+   * @author Yu Ang Zhang
+   */
+
+  private void addressChanger(Directory dir,Directory newDir , String address
+      , int flag) {
+    String parentAddress =newDir.getAddress();
+    String[] result = address.split("/");
+    if(flag ==0){
+      dir.setAddress(parentAddress + result[result.length-1] + "/");
+    } else if (flag > 0){
+      dir.setAddress(address);   
+    }
+    for ( int i =0 ;  i < dir.getContent().size(); i++){
+      if( dir.getContent().get(i) instanceof Directory){
+          addressChanger(((Directory)dir.getContent().get(i)), newDir,
+             newDir.getAddress() +
+      ((Directory)dir.getContent().get(i)).getAddress().replaceFirst("/", ""), 
+      flag +1);
+      }
+    }
+  }
+}

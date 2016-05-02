@@ -1,0 +1,17 @@
+Class name: DirectoryStackOperator
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Save the current working directory then transfer to target directory
+*Get saved directory from stack then transfer to it
+
+Collaborators:
+*FileSystem
+*DirectoryNavigator
+*ArgumentDeclareException
+*PathDoesNotExistException
+*NameConflictException
+*InvalidTargetNameException
+*DirectoryStackEmptyException

@@ -1,0 +1,138 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+/**
+ * A directory navigator, it uses to navigate the user transfer
+ * from current directory to the target directory
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryNavigator implements Command {
+
+  private FileSystem fileSystem;
+  private Directory targetDirLocation;
+  private String targetDirectoryName;
+  /**
+   * Construct a DirectoryNavigator
+   *
+   * @param filesystem The file system uses to execute this command
+   */
+  public DirectoryNavigator(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user Input which indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    String[] action = userInput.trim().split("\\s+");
+
+    // Command have no argument
+    if (action.length < 2) {
+      return false;
+
+    } else {
+      // Split path into an array
+      ArgumentAnalyzer split = new ArgumentAnalyzer(action[1]);
+      String[] path = split.convert();
+
+      targetDirectoryName = path[path.length - 1];
+
+      Searcher searcher = new Searcher(fileSystem);
+      targetDirLocation = searcher.find(path);
+
+      // Check the directory which store the target is exist or not
+      if (targetDirLocation != null) {
+        switch (targetDirectoryName) {
+          case ".":
+          case "..":
+          case "/":
+            return true;
+          default:
+            for (Object item : targetDirLocation.getContent()) {
+              if (item instanceof Directory) {
+                String name = ((Directory) item).getName();
+                if (name.equals(targetDirectoryName)) {
+                  return true;
+                }
+              }
+            }
+        }
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Navigate to the target directory.
+   *
+   * @return The new file system after execution
+   */
+  @Override
+  public FileSystem execute() {
+
+    switch (targetDirectoryName) {
+      case ".":
+        fileSystem.setCurrDir(targetDirLocation);
+        return fileSystem;
+      case "..":
+        fileSystem.setCurrDir(fileSystem.getCurrDir().getParent());
+        return fileSystem;
+      case "/":
+        fileSystem.setCurrDir(fileSystem.getRoot());
+        return fileSystem;
+      default:
+        for (Object item : targetDirLocation.getContent()){
+          if (item instanceof Directory){
+            String name = ((Directory) item).getName();
+            if (name.equals(targetDirectoryName)){
+              fileSystem.setCurrDir((Directory)item);
+            }
+          }
+        }
+        return fileSystem;
+    }
+  }
+}

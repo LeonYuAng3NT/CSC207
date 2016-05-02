@@ -1,0 +1,10 @@
+class name: InvalidTargetNameException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the target object in the path has invalid name
+
+Collaborators:
+None

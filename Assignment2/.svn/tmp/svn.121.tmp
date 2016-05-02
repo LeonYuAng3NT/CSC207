@@ -1,0 +1,142 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+import a2a.foundation.InputHistory;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+/**
+ * The HistoryViewer use to print out the history record.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class HistoryViewer implements Command {
+
+  private String[] command;
+  private FileSystem filesystem;
+
+  /**
+   * Construct a HistoryViewer
+   *
+   * @param fileSystem The file system uses to excute this command
+   */
+  public HistoryViewer(FileSystem fileSystem) {
+
+    this.filesystem = fileSystem;
+  }
+
+  /**
+   * Check the validity of user input, and store the user input
+   * if it is valid.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate a valid action
+   */
+  @Override public boolean isValid(String userInput) {
+
+    String[] action = userInput.trim().split("\\s+");
+
+    switch (action.length) {
+      case 1:
+        command = action;
+        return true;
+      case 2:
+        // Use regex to check the number is positive integer or not
+        if (Pattern.compile("[0-9]*").matcher(action[1]).matches()) {
+          // Number of history already recorded
+          int size = filesystem.getHistory().getUserInputHistory().size();
+          if (Integer.parseInt(action[1]) <= size) {
+            command = action;
+            return true;
+          }
+        }
+        System.out.println("There is not enough history recorded, try again.");
+        return false;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Print out the input history.
+   *
+   * @return The update version of file system after execution
+   */
+  @Override public FileSystem execute() {
+
+    InputHistory inputHistory = filesystem.getHistory();
+
+    // View all history
+    if (command.length == 1) {
+      ArrayList<String> history = inputHistory.getUserInputHistory();
+      for (int curr = 0; curr < history.size(); curr++) {
+        System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+      }
+
+      // View specified number of history
+    } else if (command.length == 2) {
+
+      String numberOfHistory = command[1];
+      view(numberOfHistory, inputHistory);
+    }
+    return filesystem;
+  }
+
+  /**
+   * A helper method that prints out the number of most recent user
+   * input history.
+   *
+   * @param number       The number of most recent history
+   * @param inputHistory The input history which store the user input
+   */
+  private void view(String number, InputHistory inputHistory) {
+
+    ArrayList<String> history = inputHistory.getUserInputHistory();
+
+    // The index of start history
+    int startIndex = history.size() - Integer.parseInt(number);
+
+
+    for (int curr = 0; curr < history.size(); curr++) {
+      // start printing now
+      if (curr >= startIndex) {
+        System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+      }
+    }
+  }
+}

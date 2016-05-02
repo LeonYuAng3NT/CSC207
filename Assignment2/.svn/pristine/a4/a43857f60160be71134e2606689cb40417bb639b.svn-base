@@ -1,0 +1,16 @@
+Class name: ItemDuplicator
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Copy the contents from a directory to another
+
+Collaborators:
+*ArgumentDeclareException
+*InvalidTargetNameException
+*NameConflictException
+*PathDoesNotExistException
+*Directory
+*File
+*FileSystem

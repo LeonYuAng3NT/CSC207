@@ -1,0 +1,83 @@
+package a2a;
+
+public class File {
+
+  private String name;
+  private String contents;
+  private String address;
+
+  /**
+   * Construct a file.
+   *
+   * @param name     The name of this file.
+   * @param contents The contents of this file.
+   * @param address  The location of this.
+   */
+  public File(String name, String contents, String address) {
+
+    this.name = name;
+    this.contents = contents;
+    this.address = address;
+  }
+
+  /**
+   * The getter of name.
+   *
+   * @return The name of this file
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * The getter of contents.
+   *
+   * @return The contents of this file
+   */
+  public String getContents() {
+
+    return contents;
+  }
+
+  /**
+   * The getter of Address.
+   *
+   * @return The address of this file
+   */
+  public String getAddress() {
+
+    return address;
+  }
+
+  /**
+   * The setter of name.
+   *
+   * @param name The name of this file
+   */
+  public void setName(String name) {
+
+    this.name = name;
+  }
+
+  /**
+   * The setter of contents.
+   *
+   * @param contents The name of this file
+   */
+  public void setContents(String contents) {
+
+    this.contents = contents;
+  }
+
+  /**
+   * The setter of address.
+   *
+   * @param address The new location of this file
+   */
+  public void setAddress(String address) {
+
+    this.address = address;
+  }
+
+}

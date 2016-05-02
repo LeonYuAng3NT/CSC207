@@ -1,0 +1,57 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+
+public class FileTest {
+  
+  @Test
+  public void testFile(){
+    try {
+      
+    } catch (Exception e) {
+      fail ("error msg");
+    }
+  }
+
+  @Test
+  public void testGetName() {
+    File file = new File("filename","filecontents");
+    String name = "myfile";
+    file.setName(name);
+    String output = file.getName();
+    assertEquals(output,name);
+  }
+  @Test
+  public void testGetContents() {
+    File file = new File("filename","filecontents");
+    String contents = "mycontents";
+    file.setContents(contents);
+    String output = file.getContents();
+    assertEquals(output,contents);
+  }
+  @Test
+  public void testSetName() {
+    File file = new File("filename","filecontents");
+    String name = "myfile";
+    file.setName(name);
+    String output = file.getName();
+    assertEquals(name,output);
+  }
+  
+  @Test
+  public void testSetContents() {
+    File file = new File("filename","filecontents");
+    String contents = "mycontents";
+    file.setContents(contents);
+    String output = file.getContents();
+    assertEquals(contents,output);
+  }
+  
+  
+
+}

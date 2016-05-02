@@ -1,0 +1,10 @@
+Class name: Directory
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Store other directories or file
+
+Collaborators:
+*None

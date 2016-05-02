@@ -1,0 +1,99 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.ArrayList;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+/**
+ * This file reader use to print out the contents of a file.
+ */
+public class FileReader implements Command {
+
+  private FileSystem fileSystem;
+  private ArrayList<Object> nameList;
+
+  /**
+   * Construct a ContentViewer
+   */
+  public FileReader(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+    nameList = new ArrayList<>();
+  }
+
+  @Override
+  public boolean isValid(String userInput) {
+ 
+    String[] command = userInput.trim().split("\\s+");
+
+    if (command.length >= 2) {
+      for (int i = 1; i < command.length - 1; i++) {
+        Searcher search = new Searcher(this.fileSystem);
+        String valid = userInput.trim();
+        ArgumentAnalyzer split = new ArgumentAnalyzer(valid);
+
+        String[] result = split.convert();
+
+        Directory adjacentDir = search.find(result);
+
+        if (adjacentDir != null) {
+          for (Object item : adjacentDir.getContent()) {
+           if (item instanceof File) {
+              String name = ((File) item).getName();
+              if (name.equals(result[result.length - 1])) {
+                nameList.add(item);
+              }
+            }
+          }
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+
+  @Override
+  public FileSystem execute() {
+    for (Object item : nameList) {
+        System.out.println(((File) item).getContents());
+        System.out.println("\n \n \n");
+    }
+    return fileSystem;
+  }
+}
+
+

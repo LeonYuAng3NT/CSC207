@@ -1,0 +1,17 @@
+package a2a;
+
+import a2a.Directory;
+
+public class PrintWorkingDirectory {
+    /*
+     * Default Contructor for PrintWorkingDirectory class
+     */
+	private PrintWorkingDirectory(){
+	  
+	}
+    public static void PrintWorkingDirectory(Directory directory){
+			
+			System.out.println(directory.getAddress());
+			
+		}			
+   }

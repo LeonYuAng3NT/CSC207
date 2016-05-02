@@ -1,0 +1,149 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.QueriedCommandNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+import java.util.Hashtable;
+
+
+/**
+ * A command manual that is used to store the usage and
+ * specified documentation of a command, and print out these information.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class CommandManual implements Command {
+
+  private String[] command;
+  private Hashtable<String, String> commandManual;
+  private boolean isRedirectMode;
+  private Directory targetLocation;
+
+  /**
+   * Construct a CommandManual.
+   */
+  public CommandManual() {
+
+    commandManual = new Hashtable<>();
+    commandManual.put("exit", "Usage: exit\nQuit the program");
+    commandManual.put("mkdir", "Usage: mkdir DIR\nCreate directories"
+        + " in the current directory or in a full path.");
+    commandManual.put("cd", "Usage: cd DIR\nChange directory to DIR, which"
+        + " may be current directory or a full path. \n.. means a parent "
+        + "directory and a . means the current directory.");
+    commandManual.put("ls", "Usage: ls [PATH …]\nIf no path are given, list"
+        + " out the content of current working directory.\nOtherwise, if the"
+        + " path specific a file, then print out the name of the file."
+        + "\nIf the path specific a directory, then list out its content.");
+    commandManual.put("pwd", "Usage: pwd\nPrint the full path of current "
+        + "working directory (including the whole path)");
+    commandManual.put("pushd", "Usage: pushd DIR\nSaves the current working "
+        + "directory onto the directory stack and then change the new "
+        + "current working directory to DIR.");
+    commandManual.put("popd", "Usage: popd Remove the top entry from the "
+        + "directory stack, and change current working directory into it.");
+    commandManual.put("history", "Usage: history [number]\nPrint out "
+        + "recent command.\nIf number is specified, print out the number"
+        + "of recent history.");
+    commandManual.put("cat", "Usage: cat FILE1[FILE2]\nDisplay the contents"
+        + "of FILE1 and also print out the FILE2 if FILE2 is specified.");
+    commandManual.put("echo", "Usage: echo STRING [MODE OUTFILE]\nPrint "
+        + "out the STRING if MODE and OUTFILE is not given. Otherwise, "
+        + "edit the file depends on the MODE.\nMode can be '>' or '>>'.\n"
+        + "The mode '>' is override, and '>>' is append.");
+    commandManual.put("man", "Usage: man CMD\nPrint documentation of CMD");
+  }
+
+  /**
+   * Inspect validity of the action which indicated by user input.
+   *
+   * @param command    The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws QueriedCommandNotExistException if queried command does not exist
+   * @throws ArgumentDeclareException        if command does not have argument
+   * @throws PathDoesNotExistException       if path is invalid
+   */
+  @Override public void setUp(String[] command, FileSystem fileSystem)
+      throws QueriedCommandNotExistException, ArgumentDeclareException,
+      PathDoesNotExistException {
+
+    if (command.length != 2 && command.length != 4) {
+      throw new ArgumentDeclareException();
+
+    } else if (!commandManual.containsKey(command[1])) {
+      throw new QueriedCommandNotExistException();
+
+    } else {
+      this.command = command;
+      isRedirectMode = (command.length == 4);
+
+      // Check the operator
+      if (command.length == 4) {
+        if (!command[2].equals(">") && !command[2].equals(">>")) {
+          throw new ArgumentDeclareException();
+        }
+        Searcher searcher = new Searcher(command, fileSystem);
+        if (searcher.find() == null) {
+          throw new PathDoesNotExistException(command[3]);
+        }
+        targetLocation = searcher.find();
+      }
+    }
+
+
+  }
+
+  /**
+   * Print out the documentation of a command.
+   */
+  @Override public void execute() {
+
+    String result = commandManual.get(command[1]);
+
+    if (isRedirectMode) {
+      // TODO: Write content into a file
+
+    } else {
+      // Call inspection to check the validity of this command
+      System.out.println(result);
+    }
+  }
+
+}

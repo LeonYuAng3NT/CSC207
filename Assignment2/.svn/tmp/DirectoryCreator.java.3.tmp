@@ -1,0 +1,152 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The Directory Creator uses to create directories in current
+ * directory or in a full path.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ */
+public class DirectoryCreator implements Command {
+
+  // The parents of the new directories
+  private List<Directory> targetParents;
+
+  // The names of the new directories
+  private List<String> newDirectoryNames;
+
+  /**
+   * Construct a DirectoryCreator.
+   */
+  public DirectoryCreator() {
+
+    this.newDirectoryNames = new ArrayList<>();
+    this.targetParents = new ArrayList<>();
+  }
+
+  /**
+   * This is a helper uses to check if the command may contain the
+   * same path or not. If the command contain the same path, which
+   * means that the user is attempt to make more than one directory
+   * with the same name and within the same location.
+   *
+   * @param command The command which contain multiple path
+   * @return True if path contain same path
+   */
+  private boolean hasSamePath(String[] command) {
+
+    // Start from index of one to avoid the keyword of command
+    for (int i = 1; i < command.length; i++) {
+      int counter = 0;
+      for (int j = 1; j < command.length; j++) {
+        if (command[i].equals(command[j])) {
+          counter++;
+        }
+      }
+      if (counter > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, InvalidTargetNameException,
+      PathDoesNotExistException, NameConflictException {
+
+    String[] command = userInput.trim().split("\\s+");
+    PathChecker checker = new PathChecker(fileSystem);
+
+    if (command.length < 2 || hasSamePath(command))
+      throw new ArgumentDeclareException();
+
+    boolean isRedirectMode =
+        command.length >= 4 && (command[command.length - 2].equals(">>")
+            || command[command.length - 2].equals(">"));
+
+    // Check the output file path
+    if (isRedirectMode)
+      checker.inspectSinglePath(command[command.length - 1]);
+
+    int endIndex = (isRedirectMode) ? command.length - 2 : command.length;
+    for (int i = 1; i < endIndex; i++) {
+      checker.inspectSinglePath(command[i]);
+      PathAnalyzer analyzer = new PathAnalyzer(command[i]);
+      String[] path = analyzer.convert();
+
+      String currNewDirName = path[path.length - 1];
+      Directory currParent = new Searcher(path, fileSystem).searchLocation();
+      this.newDirectoryNames.add(currNewDirName);
+      this.targetParents.add(currParent);
+    }
+  }
+
+  /**
+   * Execute the command, then start create directories
+   * in the specified location.
+   */
+  @Override public void execute() {
+
+    for (int i = 0; i < newDirectoryNames.size(); i++) {
+      Directory parent = targetParents.get(i);
+
+      String newDirName = newDirectoryNames.get(i);
+      String newAddress = parent.getAddress() + newDirName + "/";
+      Directory newDirectory = new Directory(newDirName, newAddress, parent);
+      parent.getContent().add(newDirectory);
+    }
+  }
+}

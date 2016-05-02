@@ -1,0 +1,150 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import a2a.foundation.FileSystem;
+import a2a.operator.WorkingPathPrinter;
+
+/**
+ * A working path printer test, use to test if the methods in the class are
+ * working as expected.
+ * 
+ * @author Yiming Huang
+ */
+public class WorkingPathPrinterTest {
+  private FileSystem fileSystem;
+  // The cases that should be passed
+  private String[] passed;
+  // The cases that should be failed
+  private String[] failed;
+  private String[] userInput;
+
+  /**
+   * Set up the WorkingPathPrinter test.
+   */
+  @Before
+  public void setUp() throws Exception {
+    fileSystem = new FileSystem();
+    passed = new String[] {"pwd", "    pwd", "pwd     "};
+    failed = new String[] {"pwd abc"};
+    userInput = new String[] {"","","","",""};
+    
+  }
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test
+  public void testWorkingPathPrinter() {
+    try {
+      new WorkingPathPrinter();
+    } catch (Exception e) {
+      fail("Failed to created the instance of working path printer.");
+    }
+  }
+
+  /**
+   * Test if the method successfully set up or throw exception in suitable
+   * cases.
+   */
+  @Test
+  public void testSetUp() {
+    // Test cases that should be passed
+    try {
+      WorkingPathPrinter printer = new WorkingPathPrinter();
+<<<<<<< .mine
+        printer.setUp(userInput[1], fileSystem);
+=======
+      for (String command : passed) {
+        printer.setUp(command, fileSystem);
+>>>>>>> .r694
+
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+
+    // Test cases that should be failed
+    try {
+      WorkingPathPrinter printer = new WorkingPathPrinter();
+<<<<<<< .mine
+     
+        printer.setUp(userInput[0], fileSystem);
+=======
+      for (String command : failed) {
+        printer.setUp(command, fileSystem);
+      }
+>>>>>>> .r694
+      fail("Exception should be thrown.");
+    } catch (Exception e) {
+      // Empty catch statement
+    }
+
+  }
+
+  /**
+   * Test if the Execute method is working as expected.
+   */
+  @Test
+  public void testExecute() {
+    // ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    // System.setOut(new PrintStream(outContent));
+    // database = new FileSystem();
+    // printer = new WorkingPathPrinter(database);
+    // printer.isValid("pwd");
+    // printer.execute();
+    // Directory directoryAbc = new Directory("abc", "/abc",
+    // database.getRoot());
+    // database.getCurrDir().getContent().add(directoryAbc);
+    // database.setCurrDir(directoryAbc);
+    // printer = new WorkingPathPrinter(database);
+    // printer.isValid(" pwd");
+    // printer.execute();
+    // Directory directoryAdc = new Directory("adc", "/abc/adc",
+    // database.getRoot());
+    // database.getCurrDir().getContent().add(directoryAdc);
+    // database.setCurrDir(directoryAdc);
+    // printer = new WorkingPathPrinter(database);
+    // printer.isValid("pwd");
+    // printer.execute();
+    //
+    //
+    //
+    // String expectedOutput = "/\n"+"/abc\n"+ "/abc/adc\n";
+    // assertEquals( expectedOutput, outContent.toString());
+
+
+  }
+
+}

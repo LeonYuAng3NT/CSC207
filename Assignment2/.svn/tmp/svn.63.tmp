@@ -1,0 +1,95 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryCreator;
+
+
+public class DirectoryCreatorTest {
+
+  private FileSystem fileSystem;
+  private DirectoryCreator creator;
+
+  @Before
+  public void setUp() {
+    fileSystem = new FileSystem();
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", fileSystem.getRoot());
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+
+  }
+
+  @Test
+  public void testDirectoryCreator() {
+    try {
+      creator = new DirectoryCreator(fileSystem);
+    } catch (Exception e) {
+      fail("Failed to create an instance of directory creator.");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    FileSystem database = new FileSystem();
+    creator = new DirectoryCreator(database);
+    assertTrue(creator.isValid("mkdir adc"));
+    creator.execute();
+    assertTrue(creator.isValid("    mkdir file1"));
+    creator.execute();
+
+    assertTrue(creator.isValid("    mkdir file1/targetdir adc/targetdir"));
+    creator.execute();
+    assertTrue(creator.isValid("mkdir   file2  adc/file3"));
+    creator.execute();
+    assertFalse(creator.isValid("mkdir file4 file2"));
+    creator.execute();
+    assertFalse(creator.isValid("    mkdir adc"));
+    creator.execute();
+    assertFalse(creator.isValid("    mkdir abc/abc abc/abc"));
+
+  }
+
+  @Test
+  public void testExecute() {
+    DirectoryCreator creator = new DirectoryCreator(fileSystem);
+    creator.isValid("mkdir abc");
+    creator.isValid("    mkdir adc");
+    creator.isValid("mkdir   file2  abc/file3");
+    FileSystem afterExecuted = creator.execute();
+
+    assertTrue(((Directory) afterExecuted.getCurrDir().getContent().get(0))
+        .getName().equals("abc"));
+    assertTrue(((Directory) afterExecuted.getCurrDir().getContent().get(1))
+        .getName().equals("adc"));
+    assertTrue(((Directory) afterExecuted.getCurrDir().getContent().get(2))
+        .getName().equals("file2"));
+    assertTrue(((Directory) ((Directory) afterExecuted.getCurrDir().getContent()
+        .get(0)).getContent().get(0)).getName().equals("file3"));
+
+  }
+
+  @Test
+  public void testCreate() {
+    // not yet done
+
+
+  }
+
+}

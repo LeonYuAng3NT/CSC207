@@ -1,0 +1,13 @@
+package a2a;
+
+import a2a.Directory;
+
+public class PrintWorkingDirectory {
+
+		
+    public PrintWorkingDirectory(Directory directory){
+			
+			System.out.println(directory.getAddress());
+			
+		}			
+   }

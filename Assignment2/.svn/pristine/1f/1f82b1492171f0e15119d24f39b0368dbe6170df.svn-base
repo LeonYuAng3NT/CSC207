@@ -1,0 +1,105 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+/**
+ * A Searcher, it uses to search the location of a file or directory.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class Searcher {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a Searcher.
+   *
+   * @param fileSystem The file system which uses to search the target
+   */
+  public Searcher(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * Find the directory which contain the target.
+   *
+   * @param path The path array after analyzed by ArgumentAnalyzer
+   * @return The location directory of target or null if it does not exist
+   */
+  public Directory find(String[] path) {
+
+    // Initially point to current, it will change continuously till find it
+    Directory curr = fileSystem.getCurrDir();
+
+    for (int i = 0; i < path.length - 1; i++) {
+      String name = path[i];
+
+      // Except root directory, other directories cannot be root name
+      if (name.equals("/") && i != 0) {
+        return null;
+
+      } else if (name.equals("/") && i == 0) {
+        System.out.println("Root");
+        curr = fileSystem.getRoot();
+
+      } else if (name.equals("..")) {
+        curr = curr.getParent();
+
+      } else if (!name.equals(".")) {
+        boolean isNotFound = true;
+        for (Object item : curr.getContent()) {
+          if (item instanceof Directory) {
+            Directory target = (Directory) item;
+            if (target.getName().equals(name)) {
+              curr = target;
+              isNotFound = false;
+              break;
+            }
+          }
+        }
+        // Some part of the directories in the path does not exist
+        if (isNotFound) {
+          return null;
+        }
+      }
+    }
+    return curr;
+  }
+
+}

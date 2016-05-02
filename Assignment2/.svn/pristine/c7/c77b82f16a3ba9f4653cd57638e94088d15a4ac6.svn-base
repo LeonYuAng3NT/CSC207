@@ -1,0 +1,15 @@
+i-1. (CommandManual) Write the general script for CommandManual.
+i-2. (CommandManual) Write the description of each command's functionality.
+
+What did I do last time?
+	- Worked on base code of the CommandManual class.
+	- Discussed the idea of polymorphism and ADT with team. 
+	
+What do I plan to do now?
+    - Confirm the necessary of ADT.
+    - Improve or modify the CommandManual class to function properly.
+    - Meet with team before the demo and be prepared by confirm all command classes function as expected. 
+
+Am I blocked on anything?
+    - Implementation of unit tests.
+    - Change the design to meet single responsibilities. 

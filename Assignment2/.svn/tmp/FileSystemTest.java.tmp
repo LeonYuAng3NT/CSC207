@@ -1,0 +1,161 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+import a2a.foundation.InputHistory;
+
+/**
+ * A file system test, uses to test if the methods in FileSystem is working as
+ * expected.
+ */
+public class FileSystemTest {
+  /**
+   * Test if instance can be successfully created.
+   */
+  @Test
+  public void testFileSystem() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+
+  }
+
+  /**
+   * Test if GetRoot method can be worked as expected.
+   */
+  @Test
+  public void testGetRoot() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    String output = root.getName();
+    String filesystemoutput = fileSystem.getRoot().getName();
+    assertEquals(output, filesystemoutput);
+  }
+
+  /**
+   * Test if the SetRoot method is working as expected.
+   */
+  @Test
+  public void testSetRoot() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    fileSystem.setRoot(root);
+    Directory output = fileSystem.getRoot();
+    assertEquals(root, output);
+  }
+
+  /**
+   * Test if the GetCurrDir method is working as expected.
+   */
+  @Test
+  public void testGetCurrDir() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    Directory currDirectory = root;
+    String output = currDirectory.getName();
+    String filesystemoutput = fileSystem.getRoot().getName();
+    assertEquals(output, filesystemoutput);
+  }
+
+  /**
+   * Test if the SetCurrDir method is working as expected.
+   */
+  @Test
+  public void testSetCurrDir() {
+    FileSystem fileSystem = new FileSystem();
+    Directory root = new Directory();
+    Directory currDirectory = root;
+    fileSystem.setCurrDir(currDirectory);
+    Directory output = fileSystem.getCurrDir();
+    assertEquals(currDirectory, output);
+  }
+
+  /**
+   * Test if the GetDirStack method is working as expected.
+   */
+  @Test
+  public void testGetDirStack() {
+    FileSystem fileSystem = new FileSystem();
+    Stack dirStack = new Stack<Directory>();
+    Stack output = fileSystem.getDirStack();
+    assertEquals(dirStack, output);
+  }
+
+  /**
+   * Test if the SetDir method is working as expected.
+   */
+  @Test
+  public void testSetDirStack() {
+    FileSystem fileSystem = new FileSystem();
+    Stack dirStack = new Stack<Directory>();
+    fileSystem.setDirStack(dirStack);
+    Stack output = fileSystem.getDirStack();
+    assertEquals(dirStack, output);
+  }
+
+  /**
+   * Test if the GetHistory method is working as expected.
+   */
+  @Test
+  public void testGetHistory() {
+    FileSystem fileSystem = new FileSystem();
+    ArrayList<String> output = fileSystem.getHistory().getUserInputHistory();
+    assertEquals(Arrays.asList(), output);
+  }
+
+  /**
+   * Test if the SetHistory method is working as expected.
+   */
+  @Test
+  public void testSetHistory() {
+    FileSystem fileSystem = new FileSystem();
+    InputHistory inputHistory = new InputHistory();
+    fileSystem.setHistory(inputHistory);
+    InputHistory output = fileSystem.getHistory();
+    assertEquals(inputHistory, output);
+  }
+}
+
+

@@ -1,0 +1,149 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryCreator;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+/**
+ * The directory creator test uses to test if the methods are working as
+ * expected.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryCreatorTest {
+
+  private FileSystem fileSystem;
+<<<<<<< .mine
+  private String[][] passed;
+  private String[][] failed;
+  private String[] userInput;
+
+=======
+  private String[] passed;
+  private String[] failed;
+  private DirectoryCreator dirCreator;
+>>>>>>> .r752
+
+  /**
+   * Set up Directory Creator test.
+   */
+  @Before public void setUp() {
+    this.fileSystem = new FileSystem();
+    this.passed = new String[] {"mkdir aec", "     mkdir adc", "mkdir file1",
+        "mkdir cs > 1.txt", "mkdir objc >> 1.txt"};
+    this.failed =
+        new String[] {"mkdir", "mkdir aec", "mkdir .", "mkdir abc/abc abc/abc",
+            "mkdir #new", "mkdir @123dada", "mkdir ..", "mkdir /",
+            "mkdir ? > 1.txt", "mkdir good > aec"};
+    this.dirCreator = new DirectoryCreator();
+    userInput = new String[] {"","","","",""};  
+  }
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test public void testDirectoryCreator() {
+    try {
+      this.dirCreator = new DirectoryCreator();
+    } catch (Exception e) {
+      fail("Failed to create an instance of directory creator.");
+    }
+  }
+
+  /**
+   * Test if the method successfully set up or throw exception in suitable
+   * cases.
+   */
+  @Test public void testSetUp() {
+
+    try {
+<<<<<<< .mine
+      DirectoryCreator dirCreator = new DirectoryCreator();
+
+        dirCreator.setUp(userInput[0], fileSystem);
+=======
+      for (String command : passed)
+        dirCreator.setUp(command, fileSystem);
+>>>>>>> .r752
+<<<<<<< .mine
+        // System.out.println(Arrays.toString(command));
+
+=======
+>>>>>>> .r752
+    } catch (Exception e) {
+      fail("Cases should be passed but failed");
+    }
+
+    try {
+<<<<<<< .mine
+      DirectoryCreator dirCreator = new DirectoryCreator();
+
+        dirCreator.setUp(userInput[1], fileSystem);
+=======
+      for (String command : failed)
+        dirCreator.setUp(command, fileSystem);
+      fail("Exception should be thrown.");
+>>>>>>> .r752
+    } catch (Exception e) {
+      // Empty catch statement
+    }
+  }
+
+  /**
+   * Test if the execute method for Directory Creator is working as expected.
+   */
+  @Test public void testExecute() {
+
+    try {
+      // File system should be empty now
+      assertEquals(0, fileSystem.getCurrDir().getContent().size());
+      for (String command : passed) {
+        dirCreator.setUp(command, fileSystem);
+        dirCreator.execute();
+      }
+      // After creation, it should have five directories now
+      assertEquals(5, fileSystem.getCurrDir().getContent().size());
+
+    } catch (Exception e) {
+      fail("Failed to execute the command.");
+    }
+  }
+}

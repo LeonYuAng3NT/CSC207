@@ -1,0 +1,14 @@
+     Backlog Items                                                 Estimate
+ 
+a) As a user, I am able to see the invalid message through Shell   2 days
+b) As a user, I am able to remove item from one path to another    1 day
+c) As a user, I am able to move item from one path to another      2 days
+d) As a user, I am able to retrieve items from URL address         2 days
+e) As a user, I am able to see the content of sub-directories      1 day
+f) As a user, I am able to inspect my specific order input         2 days
+g) As a user, I am able to find specific line in directories       2 days
+              or their sub-directories          
+h) As a user, I am able to inspect multiple files at one time      1 day
+i) As a user, I am able to check whether the redirection I input   2 day 
+     is correct or not 
+

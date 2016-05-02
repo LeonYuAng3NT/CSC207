@@ -1,0 +1,151 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package driver;
+
+import java.util.Scanner;
+
+public class JShell {
+
+  public static void main(String[] args) {
+
+    Directory root = new Directory("/", "/");
+    Directory currDir = root;
+
+    System.out.printf("%n%s# %n", root );
+
+    boolean programIsRunning = true;
+
+    do {
+      Scanner in = new Scanner(System.in);
+      String userInput = in.nextLine();
+
+      if (userInput.equals("exit")) {
+        programIsRunning = false;
+
+      } else{
+        String[] command = userInput.split("\\S+");
+
+        if (FormatChecker.isValid(command)){
+
+          switch (command[0]) {
+            case "ls":
+            case "pwd":
+            case "cd":
+            case "mkdir":
+            case "push":
+            case "cp":
+       
+          }
+
+        } else {
+          System.out.println("Invalid command, please try again")
+        }
+      }
+
+
+    } while (programIsRunning);
+
+
+
+
+  }
+
+}
+
+
+
+
+// A class that contains helper methods for displaying the output of
+// specific commands
+//  The following class will be used for CommandChecker class 
+class FormatChecker {
+
+  public void TypeOneCommand(String Command) {
+    System.out.println(Command);
+    System.out.println();
+    return;
+  }
+
+  public void TypeTwoCommand(String Command) {
+    String NewModify = Command.replaceFirst(" ", "@");
+    String[] Whole = NewModify.split("@");
+    String result = Whole[1].trim();
+    if (result.contains(" ")) {
+      System.out.println("Invalid command, please try again");
+    } else {
+      System.out.println(Whole[0]);
+      System.out.println(result);
+      return;
+    }
+  }
+
+  public void TypeThreeCommand(String Command) {
+    String[] FirstTest = Command.split(" ");
+    if (FirstTest.length < 3) {
+      System.out.println("Invalid command, please try again");
+      // System.out.print("/# ");
+      return;
+
+    }
+    String[] Whole = Command.split(" ", 2);
+    String Test = Whole[1].trim();
+
+    String Test_two = Test.replaceFirst(" ", "@");
+    String[] Second = Test_two.split("@");
+    String SecondPart = Second[1].trim();
+
+    if (SecondPart.contains(" ")) {
+      System.out.println("Invalid command, please try again");
+    } else {
+      System.out.println(Whole[0]);
+      System.out.println(Second[0] + " " + SecondPart);
+      return;
+
+    }
+  }
+
+  public void TypeEchoCommand(String Command) {
+    String NewModify = Command.replaceFirst(" ", "@");
+    String[] Whole = NewModify.split("@");
+    if (!Whole[1].contains(" >> ") && !Whole[1].contains(" > ")) {
+      System.out.println("Invalid command, please try again");
+      return;
+    }
+    for (String element : Whole) {
+      String result = element.trim();
+      System.out.println(result);
+    }
+    return;
+  }
+}
+
+

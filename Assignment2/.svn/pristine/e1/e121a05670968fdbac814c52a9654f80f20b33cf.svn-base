@@ -1,0 +1,63 @@
+package a2a.operator;
+
+import a2a.foundation.*;
+import a2a.operator.*;
+
+
+/**
+ * A directory navigator, it uses to navigate
+ * from current directory to target directory
+ */
+public class DirectoryNavigator implements Command {
+
+  String[] command;
+  private FileSystem filesystem;
+  private Directory dir;
+  /**
+   * Construct a DirectoryNavigator
+   */
+  public DirectoryNavigator(FileSystem filesystem) {
+    this.filesystem = filesystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user Input which indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+    // Find the final directory and then assign it to the private attribute
+    // of class
+    Searcher search = new Searcher(this.filesystem);
+    ArgumentAnalyzer split = new ArgumentAnalyzer(userInput);
+    
+    String [] result = split.convert();
+    Directory adjacentdir = search.findDir(result);
+ 
+    if (adjacentdir != null){
+      for (Object item : adjacentdir.getContent()){
+        if (item instanceof Directory){
+          String name = ((Directory) item).getName();
+          if(name.equals(result[result.length-1])){
+            return true;
+          }
+        }
+      }
+    }   
+    return false;
+  }
+
+  /**
+   * Navigate to the target directory.
+   *
+   * @param fileSystem The file system which used to navigate
+   */
+  @Override
+  public FileSystem execute() {
+    filesystem.setCurrDir(dir);
+    // TODO: Complete this as soon as possible.
+    return this.filesystem;
+  }
+}

@@ -1,0 +1,102 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+<<<<<<< .mine
+public class ContentViewer implements Command{
+=======
+/**
+ * A content viewer, it uses to view the content of a directory.
+ */
+public class ContentViewer implements Command {
+>>>>>>> .r170
+
+  private String[] command;
+
+  /**
+   * Construct a ContentViewer
+   */
+  public ContentViewer() {
+
+  }
+  public boolean isvalid(){
+    return true;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   */
+<<<<<<< .mine
+  public void functiondir(String name, Directory dir) {
+
+    dir = (Directory) target;
+    ArrayList<Object> content = dir.getContent();
+=======
+  public boolean isValid(String userInput) {
+>>>>>>> .r170
+
+    InputCommandChecker icc = new InputCommandChecker(userInput);
+    if (icc.isValid()) {
+      command = userInput.split("\\s+");
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  /**
+   * Print out the content of a specified target.
+   *
+   * @param fileSystem The file system which used to print out the content.
+   */
+<<<<<<< .mine
+  public void printfunction() {
+=======
+  public void execute(FileSystem fileSystem) {
+>>>>>>> .r170
+
+    Searcher searcher = new Searcher();
+    // TODO: Complete this as soon as possible
+
+  }
+
+<<<<<<< .mine
+=======
+
+>>>>>>> .r170
+}

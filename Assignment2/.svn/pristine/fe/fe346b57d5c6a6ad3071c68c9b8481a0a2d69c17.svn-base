@@ -1,0 +1,10 @@
+Class name: TypeNotMatchException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the target type is not match the requirement
+
+Collaborators:
+None

@@ -1,0 +1,10 @@
+Class name: HistoryViewer
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Print out the history of user command.
+*Check if the input is a valid command for HistoryViewer.
+Collaborators:
+*FileSystem
+*InputSystem

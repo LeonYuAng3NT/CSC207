@@ -1,0 +1,8 @@
+Class name: InputCommandChecker
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Check if the user command is valid or not.
+Collaborators:
+*None

@@ -1,0 +1,112 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryCreator;
+import a2a.operator.Searcher;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+
+
+/**
+ * A Searcher test, it uses to test the Searcher.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class SearcherTest {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Set up the Searcher.
+   *
+   * @throws Exception
+   */
+  @Before
+  public void setUp() throws Exception {
+
+    fileSystem = new FileSystem();
+    DirectoryCreator dirCreator = new DirectoryCreator(fileSystem);
+
+    dirCreator.isValid("mkdir /jeep");
+    fileSystem = dirCreator.execute();
+
+    dirCreator.isValid("mkdir /jeep/company");
+    fileSystem = dirCreator.execute();
+
+    dirCreator.isValid("mkdir /jeep/company/office");
+    fileSystem = dirCreator.execute();
+
+    dirCreator.isValid("mkdir /jeep/company/office/engineer");
+    fileSystem = dirCreator.execute();
+
+    dirCreator.isValid("mkdir /jeep/company/office/engineer/de");
+    fileSystem = dirCreator.execute();
+  }
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test
+  public void testSearcher() {
+
+    Searcher searcher = new Searcher(fileSystem);
+  }
+
+  /**
+   * Test if find method is working as expected.
+   */
+  @Test
+  public void testFind() {
+
+    Searcher searcher = new Searcher(fileSystem);
+
+    String[] pathOne = {"/", "jeep"};
+    String[] pathTwo = {"/", "jeep", "company"};
+    String[] pathThree = {"/", "jeep", "company", "office"};
+    String[] pathFour = {"/", "jeep", "company", "office", "engineer"};
+    String[] pathFive = {"/", "jeep", "company", "office", "engineer", "de"};
+
+    assertEquals("/", searcher.find(pathOne).getName());
+    assertEquals("jeep", searcher.find(pathTwo).getName());
+    assertEquals("company", searcher.find(pathThree).getName());
+    assertEquals("office", searcher.find(pathFour).getName());
+    assertEquals("engineer", searcher.find(pathFive).getName());
+  }
+}

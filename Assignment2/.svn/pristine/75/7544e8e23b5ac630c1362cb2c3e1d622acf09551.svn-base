@@ -1,0 +1,224 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.QueriedCommandNotExistException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * A content viewer, it uses to view the content of a directory.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class ContentViewer implements Command, OutputProducer{
+
+  private String[] command;
+  private FileSystem fileSystem;
+  private ArrayList<Object> targetLocation;
+  private ArrayList<String> targetNames;
+  private boolean isRedirectMode;
+  private FileEditor editor;
+  /**
+   * Construct a ContentViewer by passing a FileSystem object
+   *
+   * @param filesystem The file system uses to execute this command
+   */
+  public ContentViewer() {
+    targetNames = new ArrayList<>();
+    targetLocation = new ArrayList<>();
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   * @throws PathDoesNotExistException 
+   * @throws InvalidTargetNameException 
+   * @throws QueriedCommandNotExistException 
+   * @throws NameConflictException 
+   * @throws ArgumentDeclareException 
+   */
+  public void setUp(String[] command, FileSystem fileSystem) 
+      throws PathDoesNotExistException, ArgumentDeclareException, 
+      NameConflictException, QueriedCommandNotExistException, 
+      InvalidTargetNameException {
+    this.command = command;
+    this.fileSystem = fileSystem;
+    switch (command.length) {
+      case 1:
+        String currName = fileSystem.getCurrDir().getName();
+        targetNames.add(currName);
+        targetLocation.add(fileSystem.getCurrDir());
+        break;
+
+      default:
+        if (isRedirectMode) {
+           editor = new FileEditor(command, fileSystem);
+         }
+        for (int i = 1; i < command.length; i++) {
+          Searcher searcher = new Searcher(command, fileSystem);
+          if (Arrays.asList(command[i]).contains("")) {
+            throw new PathDoesNotExistException();
+          }
+          Directory currTarget = searcher.searchLocation();
+          targetLocation.add(currTarget);
+          currName = command[command[i].length() - 1];
+          targetNames.add(currName);
+          this.checker(currTarget, currName);
+        }
+      
+    }
+  }
+
+  /**
+   * Print out the content of a specified target.
+   * 
+   * @return The updated version of file system after execution
+   */
+  public void execute() {
+    if (isRedirectMode) {
+      editor.write(command[command.length-1], this.produce());;
+    }
+    if (targetLocation.size() == 0) {
+      System.out.println(fileSystem.getCurrDir() + " ");
+    }
+    
+    for (int i=0 ; i < targetLocation.size(); i++) {
+      if (command.length == 1) {
+        System.out.println(fileSystem.getCurrDir() + " ");
+      } else {
+        if (targetLocation.get(i) instanceof Directory) {
+          ((Directory)targetLocation.get(i)).getName().
+          equals(targetNames.get(i));
+          String r = PrintAllSubDirectories((Object)targetLocation.get(i));
+          System.out.println(r);
+          // Need to know whether the user input has -R 
+        }
+          System.out.println(((Directory) targetLocation.get(i)).getName() 
+              + " : ");
+          System.out.println(((Directory) targetLocation.get(0)).getContent());
+          
+          
+        }if (targetLocation.get(i) instanceof File) {
+          System.out.println(((File) targetLocation.get(i)).getName());
+        }
+      }
+    }
+
+  /**
+   * This is a helper, it uses to check the content of directory.
+   * @throws QueriedCommandNotExistException if queried command does not exist
+   * @throws ArgumentDeclareException        if command have incorrect argument
+   * @throws PathDoesNotExistException       if path is invalid
+   * @throws NameConflictException           if name has been occupied
+   * @throws InvalidTargetNameException      if name contain invalid character
+   */
+  private void checker(Directory curr, String name) throws 
+         ArgumentDeclareException, NameConflictException, 
+          PathDoesNotExistException, QueriedCommandNotExistException,
+          InvalidTargetNameException{
+    if (curr != null) {
+      switch (name) {
+        case ".":
+          targetLocation.add(fileSystem.getCurrDir());
+          break;
+        case "..":
+          targetLocation.add(fileSystem.getCurrDir().getParent());
+          break;
+        case "/":
+          targetLocation.add(fileSystem.getRoot());
+          break;
+        default:
+          for (Object item : curr.getContent()) {
+            if (item instanceof Directory) {
+              String objectName = ((Directory) item).getName();
+              if (objectName.equals(name)) {
+                targetLocation.add(item);
+              }
+            } else if (item instanceof File) {
+              String objectName = ((File) item).getName();
+               if (objectName.equals(name)) {
+                targetLocation.add(item);
+               }
+              }
+            }
+          if(targetLocation.size() == 0){
+            throw new PathDoesNotExistException();
+          }
+         }
+      }
+  }
+  private String PrintAllSubDirectories(Object item){
+   String result ="";
+   if (item instanceof Directory) {
+      Directory dir = (Directory)item;
+      if (dir.getContent().size() == 0) {
+          return dir.getName();
+      }
+     else{
+      
+      for(Object stuff : dir.getContent()){
+        result += PrintAllSubDirectories(stuff);
+      return result;
+      }
+    }
+   }else if (item instanceof File){
+      return ((File) item).getName();
+    }
+  return result;
+ }
+
+  @Override
+  public String produce() {
+   
+    return null;
+  }
+
+  @Override
+  public void setUp(String userInput, FileSystem fileSystem) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+}

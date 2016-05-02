@@ -1,0 +1,10 @@
+Class name: JShell
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Initialize a Shell System
+Collaborators:
+*Name
+*FormatChecker
+*FileSystem

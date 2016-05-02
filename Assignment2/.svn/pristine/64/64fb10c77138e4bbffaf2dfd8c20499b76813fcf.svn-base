@@ -1,0 +1,124 @@
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.NameConflictException;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.regex.Pattern;
+
+/**
+ * A file editor uses to edit a file.
+ *
+ * @author Yi Jian Wang
+ */
+public class FileEditor {
+
+  // The name of the target file
+  private String fileName;
+
+  // The operator represents the edit mode is override or append
+  private String[] command;
+
+  // The existedFile is null if the file does not existed
+  private File existedFile;
+
+  // The directory which is store the target file
+  private Directory targetLocation;
+
+  /**
+   * Construct a FileEditor.
+   *
+   * @param command    The string array of command
+   * @param fileSystem The file system uses to store the edited file
+   * @throws ArgumentDeclareException   if command contain invalid argument
+   * @throws PathDoesNotExistException  if the path is invalid
+   * @throws NameConflictException      if the name has occupied by directory
+   * @throws InvalidTargetNameException if the name contain invalid character
+   */
+  public FileEditor(String[] command, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      InvalidTargetNameException, NameConflictException {
+
+    String pathString = command[command.length - 1];
+    PathAnalyzer analyzer = new PathAnalyzer(pathString);
+    Searcher searcher = new Searcher(analyzer.convert(), fileSystem);
+
+    this.command = command;
+
+    switch (inspect(analyzer.convert(), searcher.searchLocation())) {
+      case "ArgumentError":
+        throw new ArgumentDeclareException();
+      case "PathDoesNotExist":
+        throw new PathDoesNotExistException(pathString);
+      case "FileNameInvalid":
+        throw new InvalidTargetNameException(fileName);
+      case "NameConflict":
+        throw new NameConflictException(pathString, fileName);
+      default:
+        existedFile = (File) searcher.searchTarget(true);
+        targetLocation = searcher.searchLocation();
+    }
+  }
+
+  /**
+   * This is a helper uses to check the command for constructor.
+   *
+   * @return The string representation of the result
+   */
+  private String inspect(String[] path, Directory targetLocation) {
+
+    Pattern ch = Pattern.compile("^[^!@$&*()?:\\[\\]\"<>'`|={}/\\\\,;]+$");
+    String editOperator = command[command.length - 2];
+
+    // Check the edit operator
+    if (!editOperator.equals(">") && !editOperator.equals(">>")) {
+      return "ArgumentError";
+    } else if (targetLocation == null || path.length == 0) {
+      return "PathDoesNotExist";
+    }
+    // Check if the name is invalid.
+    fileName = path[path.length - 1];
+    if (!ch.matcher(fileName).matches() || fileName.equals("..") || fileName
+        .equals(".")) {
+      return "FileNameInvalid";
+    }
+    // Check if the content of target location has same name conflict
+    for (Object item : targetLocation.getContent()) {
+      if (item instanceof Directory) {
+        Directory curr = (Directory) item;
+        if (curr.getName().equals(fileName)) {
+          return "NameConflict";
+        }
+      }
+    }
+    return "Pass";
+  }
+
+  /**
+   * Edit a existed file or create a new file with new contents.
+   *
+   * @param newContents The new contents of the file
+   */
+
+  public void write(String newContents) {
+
+    // File does not exist, create file
+    if (existedFile == null) {
+      FileCreator creator = new FileCreator();
+      creator.create(fileName, newContents, targetLocation);
+
+    } else {
+      // Override or append the new contents to the original contents
+      if (command[command.length - 2].equals(">")) {
+        existedFile.setContents(newContents);
+      } else {
+        existedFile.setContents(existedFile.getContents() + "\n" + newContents);
+      }
+    }
+  }
+
+}

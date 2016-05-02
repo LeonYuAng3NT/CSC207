@@ -1,0 +1,26 @@
+package test;
+
+import driver.JShell;
+import org.junit.Test;
+import static org.junit.Assert.fail;
+
+
+/**
+ * A test for JShell.
+ */
+public class JShellTest {
+
+  private JShell jShell;
+
+  /**
+   * Test to create an instance of JShell.
+   */
+  @Test public void testJShell() {
+
+    try {
+      jShell = new JShell();
+    } catch (Exception e) {
+      fail("Failed to create an instance of JShell.");
+    }
+  }
+}

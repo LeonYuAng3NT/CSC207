@@ -1,0 +1,223 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.*;
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+/**
+ * The Regex Finder uses to search for a line which may contain
+ * the Regex in all files for a specified full path.
+ *
+ * @author Yu Ang Zhang
+ * @author Yi Jian Wang
+ */
+public class RegexFinder implements Command, OutputProducer {
+
+  private String[] command;
+  private FileSystem fileSystem;
+
+  // Regex Pattern
+  private Pattern regex;
+
+  private List<File> targetFile;
+
+  //A list to store different directory objects of every path
+  private List<Directory> targetDirectory;
+
+  // RedirectionMode flag
+  private boolean isRedirectMode;
+
+  // RecursiveMode flag
+  private boolean isRecursiveMode;
+
+
+  /**
+   * Construct a RegexFinder.
+   */
+  public RegexFinder() {
+    this.targetFile = new ArrayList<>();
+    this.targetDirectory = new ArrayList<>();
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output file name is occupied
+   * @throws InvalidTargetNameException if output file name is invalid
+   * @throws TypeNotMatchException      if type of path is a directory
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, InvalidTargetNameException,
+      PathDoesNotExistException, NameConflictException, TypeNotMatchException {
+
+    this.command = userInput.trim().split("\\s+");
+    if (command.length < 3) {
+      throw new ArgumentDeclareException();
+    }
+    // Set up the flag and the regex pattern
+    this.fileSystem = fileSystem;
+    this.isRecursiveMode = (command.length >= 4 && command[1].equals("-R"));
+    this.isRedirectMode =
+        (command.length >= 5 && (command[command.length - 2].equals(">")
+            || command[command.length - 2].equals(">>")));
+    this.regex = Pattern.compile(isRecursiveMode ? command[2] : command[1]);
+
+    // Check the redirect output file path
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    // Start and end index will be change if condition is true
+    int startIndex = (isRecursiveMode) ? 3 : 2;
+    int endIndex = (isRedirectMode) ? command.length - 2 : command.length;
+    // Continue set up the command
+    for (int i = startIndex; i < endIndex; i++) {
+      PathAnalyzer analyzer = new PathAnalyzer(command[i]);
+      this.deepSetUp(new Searcher(analyzer.convert(), fileSystem));
+    }
+  }
+
+  /**
+   * This is a helper uses to continue set up the command.
+   *
+   * @param searcher The searcher of current searching process
+   * @throws PathDoesNotExistException if a path does not exist
+   * @throws TypeNotMatchException     if type of path is a directory
+   */
+  private void deepSetUp(Searcher searcher)
+      throws PathDoesNotExistException, TypeNotMatchException {
+
+    boolean fileIsFound = (searcher.searchTarget(true) != null);
+    boolean dirIsFound = (searcher.searchTarget(false) != null);
+
+    // Current path given by user is not valid
+    if (!fileIsFound && !dirIsFound) {
+      throw new PathDoesNotExistException();
+
+    } else if (fileIsFound) {
+      this.targetFile.add((File) searcher.searchTarget(true));
+
+    } else {
+      // Path cannot be directory unless it is on Recursive Mode
+      if (!isRecursiveMode) {
+        throw new TypeNotMatchException();
+      }
+      this.targetDirectory.add((Directory) searcher.searchTarget(false));
+    }
+
+  }
+
+  /**
+   * Execute this command, then start to print out the result or
+   * redirect it to a specified file.
+   */
+  @Override public void execute() {
+
+    String result = this.produce();
+
+    if (isRedirectMode) {
+      FileEditor editor = new FileEditor(command, fileSystem);
+      editor.write(command[command.length - 1], result);
+
+    } else {
+      System.out.println(result);
+    }
+  }
+
+  /**
+   * Produce the output of the content.
+   *
+   * @return The standard output of this command.
+   */
+  @Override public String produce() {
+
+    String result = "";
+    // Searching line in the target files
+    for (File curr : targetFile) {
+      String[] contents = curr.getContents().split("\n");
+      for (String line : contents) {
+        // Found the line which contain the REGEX
+        if (regex.matcher(line).find())
+          result += curr.getAddress() + ": " + line + "\n";
+      }
+    }
+
+    // Travel the target directories and search for any files
+    for (Directory curr : targetDirectory)
+      result += this.travelAllDirectories(curr);
+
+    // Clear the targets for more easy to test purpose
+    this.targetFile.clear();
+    this.targetDirectory.clear();
+    return result;
+  }
+
+  /**
+   * Recursive method that traverses the sub-directories of current directory
+   * and returns the string of line that the file contains REGEX.
+   *
+   * @param item The current item is file or directory
+   * @return The string representation of the result
+   */
+  private String travelAllDirectories(Object item) {
+
+    String result = "";
+
+    if (item instanceof File) {
+      String[] contents = ((File) item).getContents().split("\n");
+      // Searching in the contents of current file
+      for (String line : contents) {
+        // Found the line which contain the REGEX
+        if (regex.matcher(line).find())
+          result += ((File) item).getAddress() + ": " + line + "\n";
+      }
+
+    } else if (item instanceof Directory) {
+      for (Object stuff : ((Directory) item).getContent())
+        result += travelAllDirectories(stuff);
+    }
+    return result;
+  }
+
+}

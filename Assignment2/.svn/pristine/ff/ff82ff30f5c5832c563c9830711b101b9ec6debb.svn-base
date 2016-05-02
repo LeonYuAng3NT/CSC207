@@ -1,0 +1,48 @@
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+/**
+ * A directory navigator, it uses to navigate
+ * from current directory to target directory
+ */
+public class DirectoryNavigator implements Command {
+
+  String[] command;
+
+  /**
+   * Construct a DirectoryNavigator
+   */
+  public DirectoryNavigator() {
+
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user Input which indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    InputCommandChecker checker = new InputCommandChecker(userInput);
+    if (checker.isValid()) {
+      command = userInput.split("\\s+");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Navigate to the target directory.
+   *
+   * @param fileSystem The file system which used to navigate
+   */
+  @Override
+  public void execute(FileSystem fileSystem) {
+
+    // TODO: Complete this as soon as possible.
+  }
+}

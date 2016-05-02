@@ -1,0 +1,10 @@
+class name: InvalidCommandException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the entered command is invalid
+
+Collaborators:
+None

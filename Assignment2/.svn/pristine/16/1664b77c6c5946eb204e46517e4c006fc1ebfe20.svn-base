@@ -1,0 +1,12 @@
+What did I do last time?
+    - Demonstrate and share idea about test void method
+    - Recommended team to change return type of String for all the
+      method which will print out the result
+    - Refactor some methods to use the new method from Interface of
+      OutputProducer
+
+What do I plan to do now?
+	- Finish debugging and refactor as soon as possible
+
+Am I blocked on anything?
+    - Design style is not certainly confirmed

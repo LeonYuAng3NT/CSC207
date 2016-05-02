@@ -1,0 +1,14 @@
+Class name: FileEditor
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Be able to modify the contents of a file.
+
+Collaborators:
+*File
+*FileSystem
+*Searcher
+*PathAnalyzer
+*FileCreator

@@ -1,0 +1,42 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import a2a.foundation.FileSystem;
+import a2a.operator.CommandManual;
+
+
+public class CommandManualTest {
+
+
+  @Test
+  public void testCommandManual() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    FileSystem fileSystem = new FileSystem();
+    CommandManual cmdManual = new CommandManual(fileSystem);
+    assertTrue(cmdManual.isValid("man cd"));
+    assertTrue(cmdManual.isValid("man ls"));
+    assertTrue(cmdManual.isValid("man mkdir"));
+    assertTrue(cmdManual.isValid("man pwd"));
+  }
+
+  @Test
+  public void testExecute() {
+    // not yet done
+
+  }
+
+
+}
+
+

@@ -1,0 +1,45 @@
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+
+/**
+ * A directory stack operator, it uses to push a directory or pop out a
+ * directory in the file system.
+ */
+public class DirectoryStackOperator implements Command {
+
+  String[] command;
+  private FileSystem filesystem;
+
+  /**
+   * Construct a DirectoryStackOperator
+   */
+  public DirectoryStackOperator() {
+
+  }
+
+  /**
+   * Check the validity of a user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+    // input only pushd/popd
+    // No arguments need to be assigned
+    return userInput.trim().equals("popd") | userInput.trim().equals("pushd");
+  }
+
+  /**
+   * Push or pop out the directory stack in the file system.
+   *
+   * @param fileSystem
+   */
+  @Override
+  public FileSystem execute() {
+
+    // TODO: Complete this as soon as possible
+    return this.filesystem;
+  }
+}

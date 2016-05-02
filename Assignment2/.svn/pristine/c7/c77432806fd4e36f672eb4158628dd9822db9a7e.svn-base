@@ -1,0 +1,17 @@
+Class name: PathNavigator
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Move an item from old location to new location
+
+Collaborators:
+*ArgumentDeclareException
+*InvalidTargetNameException
+*NameConflictException
+*PathDoesNotExistException
+*Directory
+*File
+*FileSystem
+*Searcher

@@ -1,0 +1,103 @@
+package a2a.operator;
+
+import java.util.Arrays;
+import java.util.List;
+
+public final class InputCommandChecker {
+
+  /**
+   * Default Constructor
+   */
+  private InputCommandChecker() {
+  }
+
+  /**
+   * Check the validity of user input command
+   *
+   * @param command The informations of command
+   * @return True if it is a valid command, false otherwise
+   */
+  public static Boolean isValid(String[] command) {
+
+    switch (command.length) {
+      case 1:
+        return typeOneCommandIsValid(command);
+      case 2:
+        return typeTwoCommandIsValid(command);
+      default:
+        return otherTypeCommandIsValid(command);
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with no argument.
+   *
+   * @param command The informations of command
+   * @return True if the type one command is valid
+   */
+  private static Boolean typeOneCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "ls":
+      case "pwd":
+      case "history":
+      case "popd":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  private static Boolean typeTwoCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "mkdir":
+
+      case "cd":
+        // TODO
+      case "ls":
+        // TODO
+      case "pushd":
+        // TODO
+      case "history":
+        for (int i = 0; i < command[1].length(); i++){
+          if (!Character.isDigit(command[1].charAt(i))){
+            return false;
+          }
+        }
+        // each character is numeric and positive, since "-" is not numeric
+        return true;
+      case "cat":
+        // TODO
+      case "echo":
+        return (command[1].startsWith("\"\"") && command[1].endsWith("\"\""));
+      case "man":
+        List<String> validArguments = Arrays
+            .asList("ls", "pwd", "history", "popd", "mkdir", "cd", "pushd",
+                "cat", "echo", "man");
+        return validArguments.contains(command[1]);
+      default:
+        return false;
+    }
+  }
+
+  private static Boolean otherTypeCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "mkdir":
+        // TODO
+      case "cat":
+        // TODO
+      case "echo":
+        // TODO
+      default:
+        return false;
+    }
+
+
+  }
+
+
+
+}

@@ -1,0 +1,126 @@
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * The Network Protocol uses to communicate with website and
+ * then download the contents from the target website.
+ *
+ * @author Yi Jian Wang
+ */
+public class NetworkProtocol implements Command {
+
+  private String[] command;
+  private FileSystem fileSystem;
+
+  // The fileName of the output from the website
+  private String fileName;
+
+  // The contents of the website
+  private String contents;
+
+  /**
+   * Construct a NetworkProtocol
+   */
+  public NetworkProtocol() {
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if the command have incorrect argument
+   * @throws PathDoesNotExistException  if a path in this command is invalid
+   * @throws NameConflictException      if output filename has been occupied
+   * @throws InvalidTargetNameException if output file have invalid name
+   * @throws MalformedURLException      if the entered url is invalid
+   * @throws IOException                if the target website does not exist
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException, IOException {
+
+    command = userInput.trim().split("\\s+");
+    this.inspect(command, fileSystem);
+    try {
+      URL url;
+      if (command[1].startsWith("http")) {
+        url = new URL(command[1]);
+      } else {
+        url = new URL("http://" + command[1]);
+      }
+      InputStreamReader webStream = new InputStreamReader(url.openStream());
+      BufferedReader urlReader = new BufferedReader(webStream);
+
+      // Read contents from website get fill the contents
+      String curr;
+      while ((curr = urlReader.readLine()) != null) {
+        if (contents == null) {
+          contents = curr;
+        } else {
+          contents += "\n" + curr;
+        }
+      }
+    } catch (MalformedURLException e) {
+      throw new MalformedURLException("Invalid URL form: " + command[1]);
+    } catch (IOException i) {
+      throw new IOException("Target website does not exist: " + command[1]);
+    }
+  }
+
+  /**
+   * Check if the argument and the path of output file is invalid.
+   *
+   * @param command    The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException  if the command have incorrect argument
+   * @throws PathDoesNotExistException if a path in this command is invalid
+   */
+  private void inspect(String[] command, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      InvalidTargetNameException, NameConflictException {
+
+
+    // Check the argument and the output file path
+    if (command.length != 2 && command.length != 4) {
+      throw new ArgumentDeclareException();
+    }
+    PathChecker checker = new PathChecker(fileSystem);
+    PathAnalyzer analyzer = new PathAnalyzer(command[1]);
+
+    // Check the fileName is not been occupied by directory and its valid
+    fileName = analyzer.convert()[analyzer.convert().length - 1];
+    checker.inspectSinglePath(fileName);
+
+    // Check the path of the redirection output
+    if (command.length == 4) {
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    this.command = command;
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * Execute the command, then download the contents from website.
+   */
+  @Override public void execute() {
+
+    FileEditor editor = new FileEditor(command, fileSystem);
+
+    // Writes contents to a file
+    editor.write(fileName, contents);
+  }
+}

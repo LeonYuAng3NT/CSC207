@@ -1,0 +1,147 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.foundation.Directory;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
+
+/**
+ * The directory test uses to test if the methods are working as described.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryTest {
+
+  private Directory directory;
+
+  /**
+   * Set up this test.
+   */
+  @Before public void setUp() {
+    this.directory = new Directory();
+  }
+
+  /**
+   * Test if the instance can be created as expected.
+   */
+  @Test public void testDirectory() {
+    try {
+      this.directory = new Directory();
+      this.directory = new Directory("abc", "/abc", directory);
+    } catch (Exception e) {
+      fail("Failed to create an instance of Directory.");
+    }
+  }
+
+  /**
+   * Test if ToString method is working as expected.
+   */
+<<<<<<< .mine
+  @Test
+  public void testToString() {
+    Directory directory = new Directory();
+    String output = directory.toString();
+    assertEquals( "", output);
+=======
+  @Test public void testToString() {
+>>>>>>> .r694
+
+    String actual = directory.toString();
+    assertEquals("", actual);
+
+    directory.getContent().add(new Directory("abc", "/abc", directory));
+    String newActual = this.directory.toString();
+    assertEquals("abc", newActual);
+  }
+
+  /**
+   * Test if the GetName method is working as expected.
+   */
+  @Test public void testGetName() {
+
+    String expected = "/";
+    String actual = directory.getName();
+    assertEquals(expected, actual);
+  }
+
+  /**
+   * Test if the GetContent method is working as expected.
+   */
+  @Test public void testGetContent() {
+    assertNotNull(directory.getContent());
+    assertTrue(directory.getContent().size() == 0);
+  }
+
+  /**
+   * Test if the GetAddress can be functioned as it expected.
+   */
+  @Test public void testGetAddress() {
+    String expected = "/";
+    String actual = directory.getAddress();
+    assertEquals(expected, actual);
+  }
+
+  /**
+   * Test if GetParent can be worked as expected.
+   */
+  @Test public void testGetParent() {
+
+    Directory root = new Directory();
+    this.directory = new Directory("system", "/system", root);
+
+    // The new directory is under the root directory
+    assertSame(root, directory.getParent());
+  }
+
+  /**
+   * Test if SetContent is working as expected.
+   */
+  @Test public void testSetContent() {
+
+    Directory newDirectory = new Directory("system", "/system", directory);
+    this.directory.getContent().add(newDirectory);
+    assertTrue(directory.getContent().size() == 1);
+
+    // The original content should be erased
+    directory.setContent(new ArrayList<>());
+    assertTrue(directory.getContent().size() == 0);
+  }
+
+}

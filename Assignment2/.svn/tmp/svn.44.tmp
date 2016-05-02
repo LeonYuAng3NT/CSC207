@@ -1,0 +1,99 @@
+package a2a.operator;
+
+import a2a.foundation.*;
+
+import java.util.Arrays;
+
+
+/**
+ * A directory navigator, it uses to navigate
+ * from current directory to target directory
+ */
+public class DirectoryNavigator implements Command {
+
+  private FileSystem fileSystem;
+  private Directory targetDir;
+  private String targetDirectoryName;
+  /**
+   * Construct a DirectoryNavigator
+   */
+  public DirectoryNavigator(FileSystem filesystem) {
+    this.fileSystem = filesystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user Input which indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    String[] action = userInput.trim().split("\\s+");
+
+    // UserInput does not contain argument
+    if (action.length < 2) {
+      return false;
+
+    } else {
+      ArgumentAnalyzer split = new ArgumentAnalyzer(action[1]);
+      String[] path = split.convert();
+
+      // local variable points to the target directory that the user is calling
+      targetDirectoryName = path[path.length - 1];
+
+      if (targetDirectoryName.equals(".") ||
+          targetDirectoryName.equals("..") ||
+          targetDirectoryName.equals("/")) {
+        return true;
+      }
+
+      Searcher searcher = new Searcher(fileSystem);
+      targetDir = searcher.find(path);
+      System.out.println(targetDirectoryName);
+
+      if (targetDir != null) {
+        for (Object item : targetDir.getContent()) {
+          if (item instanceof Directory) {
+            String name = ((Directory) item).getName();
+            if (name.equals(targetDirectoryName)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Navigate to the target directory.
+   *
+   * @return The new file system after execution
+   */
+  @Override
+  public FileSystem execute() {
+
+    switch (targetDirectoryName) {
+      case ".":
+        return fileSystem;
+      case "..":
+        fileSystem.setCurrDir(fileSystem.getCurrDir().getParent());
+        return fileSystem;
+      case "/":
+        fileSystem.setCurrDir(fileSystem.getRoot());
+        return fileSystem;
+      default:
+        for (Object item : targetDir.getContent()){
+          if (item instanceof Directory){
+            String name = ((Directory) item).getName();
+            if (name.equals(targetDirectoryName)){
+              fileSystem.setCurrDir((Directory)item);
+            }
+          }
+        }
+        return fileSystem;
+    }
+  }
+}

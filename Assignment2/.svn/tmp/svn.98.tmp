@@ -1,0 +1,176 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * A content viewer, it uses to view the content of a directory.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class ContentViewer implements Command {
+
+  private String[] command;
+  private FileSystem fileSystem;
+  private ArrayList<Object> targetItems;
+  private ArrayList<String> targetNames;
+
+  /**
+   * Construct a ContentViewer by passing a FileSystem object
+   *
+   * @param filesystem The file system uses to execute this command
+   */
+  public ContentViewer(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+    targetNames = new ArrayList<>();
+    targetItems = new ArrayList<>();
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   */
+  public boolean isValid(String userInput) {
+
+    command = userInput.trim().split("\\s+");
+    boolean result = true;
+
+    switch (command.length) {
+      case 1:
+        String currName = fileSystem.getCurrDir().getName();
+        targetNames.add(currName);
+        targetItems.add(fileSystem.getCurrDir());
+        return true;
+
+      default:
+        for (int i = 1; i < command.length; i++) {
+          Searcher searcher = new Searcher(this.fileSystem);
+          ArgumentAnalyzer analyzer = new ArgumentAnalyzer(command[i]);
+          String[] path = analyzer.convert();
+
+          if (Arrays.asList(path).contains("")) {
+            return false;
+          }
+
+          Directory currTarget = searcher.find(path);
+          currName = path[path.length - 1];
+          targetNames.add(currName);
+
+          result = this.checker(currTarget, currName);
+        }
+        return result;
+      }
+      //return true;
+  }
+
+  /**
+   * Print out the content of a specified target.
+   * 
+   * @return The updated version of file system after execution
+   */
+  public FileSystem execute() {
+
+    if (targetItems.size() == 0) {
+      System.out.println(fileSystem.getCurrDir() + " ");
+    }
+    for (Object item : targetItems) {
+      if (command.length == 1) {
+        System.out.println(fileSystem.getCurrDir() + " ");
+      } else {
+        if (item instanceof Directory) {
+          System.out.println(((Directory) item).getName() + " : ");
+          System.out.println(((Directory) item) );
+        } else if (item instanceof File) {
+          System.out.println(((File) item).getName());
+        }
+      }
+    }
+    return fileSystem;
+  }
+
+  /**
+   * This is a helper, it uses to check the content of directory.
+   *
+   * @param curr The directory which store the target
+   * @param name The name of target object
+   * @return True if the target is found
+   */
+  private boolean checker(Directory curr, String name) {
+
+    boolean isFound = false;
+    if (curr != null) {
+      switch (name) {
+        case ".":
+          targetItems.add(fileSystem.getCurrDir());
+          isFound = true;
+          break;
+        case "..":
+          targetItems.add(fileSystem.getCurrDir().getParent());
+          isFound = true;
+          break;
+        case "/":
+          targetItems.add(fileSystem.getRoot());
+          isFound = true;
+          break;
+        default:
+          for (Object item : curr.getContent()) {
+            if (item instanceof Directory) {
+              String objectName = ((Directory) item).getName();
+              if (objectName.equals(name)) {
+                targetItems.add(item);
+                isFound = true;
+              }
+            } else if (item instanceof File) {
+              String objectName = ((File) item).getName();
+              if (objectName.equals(name)) {
+                targetItems.add(item);
+                isFound = true;
+              }
+            }
+          }
+      }
+    }
+    return isFound;
+  }
+}

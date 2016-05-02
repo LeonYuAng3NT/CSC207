@@ -1,0 +1,22 @@
+package a2a.operator;
+
+import a2a.foundation.File;
+
+public final class FileReader {
+
+  /**
+   * Default Constructor
+   */
+  private FileReader() {
+  }
+
+  /**
+   * Read the contents of a file.
+   *
+   * @param file The file which is to be read
+   */
+  public static void read(File file) {
+
+    System.out.println(file.getContents());
+  }
+}

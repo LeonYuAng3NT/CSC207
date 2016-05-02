@@ -1,0 +1,84 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+/**
+ * An argument analyzer, uses to analyze an arguments and convert it into a
+ * useful information array.
+ * 
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class ArgumentAnalyzer {
+
+  private String argument;
+
+  /**
+   * Construct an ArgumentAnalyzer.
+   *
+   * @param argument The argument represent the full path
+   */
+  public ArgumentAnalyzer(String argument) {
+
+    this.argument = argument;
+  }
+
+  /**
+   * Convert argument string into a useful list.
+   *
+   * @return The argument information list
+   */
+  public String[] convert() {
+
+    String[] argumentInformation;
+
+    if (argument.equals("/")) {
+      argumentInformation = new String[1];
+      argumentInformation[0] = "/";
+
+    } else {
+      argumentInformation = argument.trim().split("/");
+
+      // An invalid path is empty after split
+      if (argumentInformation.length == 0) {
+        return argumentInformation;
+
+        // First is root, is
+      } else if (argumentInformation[0].equals("")) {
+        argumentInformation[0] = "/";
+      }
+    }
+    return argumentInformation;
+  }
+}

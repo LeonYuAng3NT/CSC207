@@ -1,0 +1,44 @@
+package a2a.operator;
+
+
+/**
+ * An argument analyzer, uses to analyze an arguments
+ * and convert it into a useful information array.
+ */
+public class ArgumentAnalyzer {
+
+  private String argument;
+
+  public ArgumentAnalyzer(String argument) {
+
+    this.argument = argument;
+  }
+
+  /**
+   * Convert argument string into a useful list.
+   *
+   * @return The argument information list
+   */
+  public String[] convert() {
+
+    String[] argumentInformation;
+
+    if (argument.equals("/")) {
+      argumentInformation = new String[1];
+      argumentInformation[0] = "/";
+
+    } else {
+      argumentInformation = argument.trim().split("/");
+
+      // An invalid path is empty after split
+      if (argumentInformation.length == 0) {
+        return argumentInformation;
+
+        // First is root, is
+      } else if (argumentInformation[0].equals("")) {
+        argumentInformation[0] = "/";
+      }
+    }
+    return argumentInformation;
+  }
+}

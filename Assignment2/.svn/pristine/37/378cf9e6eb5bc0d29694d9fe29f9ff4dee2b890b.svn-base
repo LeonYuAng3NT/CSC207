@@ -1,0 +1,127 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.DirectoryStackEmptyException;
+import a2a.foundation.FileSystem;
+
+/**
+ * The Directory Stack Operator uses to push the current directory
+ * to the directory stack then navigate the user transfer from current
+ * directory to target directory or pop out a directory in the stack,
+ * then navigate the user transfer to the it.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class DirectoryStackOperator implements Command {
+
+  // The file system uses to get the directory stack
+  private FileSystem fileSystem;
+
+  // Uses to navigate to target directory after push directory onto stack
+  private DirectoryNavigator navigator;
+
+  private boolean isPushMode;
+
+  /**
+   * Construct a DirectoryStackOperator.
+   */
+  public DirectoryStackOperator() {
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param userInput  The text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException     if command have incorrect argument
+   * @throws PathDoesNotExistException    if path is invalid
+   * @throws NameConflictException        if name has been occupied
+   * @throws InvalidTargetNameException   if name contain invalid character
+   * @throws DirectoryStackEmptyException if directory stack is empty
+   */
+  @Override public void setUp(String userInput, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException,
+      DirectoryStackEmptyException {
+
+    String[] command = userInput.trim().split("\\s+");
+    this.fileSystem = fileSystem;
+    this.isPushMode = command[0].equals("pushd");
+    boolean isRedirectMode = (command.length == 3 || command.length == 4) && (
+        command[command.length - 2].equals(">") || command[command.length - 2]
+            .equals(">>"));
+
+    if ((isPushMode && command.length != 2 && !isRedirectMode) || (!isPushMode
+        && command.length != 1 & !isRedirectMode)) {
+      throw new ArgumentDeclareException();
+    }
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    if (isPushMode) {
+      this.navigator = new DirectoryNavigator();
+      this.navigator.setUp("cd " + command[1], fileSystem);
+    } else if (fileSystem.getDirStack().isEmpty()) {
+      throw new DirectoryStackEmptyException();
+    }
+  }
+
+  /**
+   * Execute the command, then push current directory to the stack
+   * and navigate the user or pop out a directory from stack then
+   * navigate the user transfer to it.
+   */
+  @Override public void execute() {
+
+    if (isPushMode) {
+      // Push current directory onto stack, then start change directory
+      fileSystem.getDirStack().push(fileSystem.getCurrDir());
+      navigator.execute();
+
+    } else {
+      // Navigate to the directory which is pop out from directory stack
+      fileSystem.setCurrDir(fileSystem.getDirStack().pop());
+    }
+  }
+
+}

@@ -1,0 +1,64 @@
+ package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.FileReader;
+
+public class FileReaderTest {
+  private FileSystem fileSystem;
+  private FileReader reader;
+  
+  @Before
+  public void setUp(){
+    fileSystem = new FileSystem();
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", fileSystem.getRoot());
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+    
+  }
+
+  @Test
+  public void testFileReader() {
+    try {
+      reader = new FileReader(fileSystem);
+    } catch (Exception e) {
+      fail("Failed to create an instance of FileReader");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    
+
+    FileReader reader = new FileReader(fileSystem);
+    assertTrue(reader.isValid("       cat abc"));
+    assertTrue(reader.isValid("cat abc"));
+  }
+  
+  @Test
+  public void testExecute() {
+    FileSystem afterExecuted = reader.execute();   
+    assertTrue(afterExecuted.getCurrDir().getName().equals("abc"));
+    
+    // not yet done
+  }
+  
+
+}

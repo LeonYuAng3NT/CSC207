@@ -1,0 +1,91 @@
+package a2a.operator;
+
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+
+import java.util.regex.Pattern;
+
+/**
+ * The Path Checker uses to check the validity of the path.
+ * It provides different mode to check the validity.
+ *
+ * @author Yi Jian Wang
+ */
+public class PathChecker {
+
+  private FileSystem fileSystem;
+
+  /**
+   * Construct a PathChecker.
+   *
+   * @param fileSystem The file system uses to check the path.
+   */
+  public PathChecker(FileSystem fileSystem) {
+
+    this.fileSystem = fileSystem;
+  }
+
+  /**
+   * The purpose of this method is uses to check the path when
+   * an other function will create new file or directory in a
+   * specified location, then it will check the validity of this
+   * process.
+   *
+   * @param pathString The string of the path
+   */
+  public void inspectSinglePath(String pathString)
+      throws PathDoesNotExistException, NameConflictException,
+      InvalidTargetNameException {
+
+    PathAnalyzer analyzer = new PathAnalyzer(pathString);
+    String[] path = analyzer.convert();
+    Searcher searcher = new Searcher(path, fileSystem);
+    Pattern ch = Pattern.compile("^[^!@$&*()?:\\[\\]\"<>'`|={}/\\\\,;]+$");
+
+    boolean locationExist = searcher.searchLocation() != null;
+    boolean dirIsOccupied = searcher.searchTarget(false) != null;
+
+    if (!locationExist) {
+      throw new PathDoesNotExistException(pathString);
+    } else if (dirIsOccupied) {
+      throw new NameConflictException();
+    }
+
+    // Check the format of the name of the new target
+    String targetName = path[path.length - 1];
+    if (!ch.matcher(targetName).matches() || targetName.equals(".")
+        || targetName.equals("..")) {
+      throw new InvalidTargetNameException(targetName);
+    }
+  }
+
+  /**
+   * Check if the first path and the second path is valid
+   * and the name of item is not occupied in second path.
+   *
+   * @param firstPath  The first path of the address
+   * @param secondPath The second path of the address
+   * @return True if the two path is valid for operation
+   */
+  public boolean twoPathIsOccupied(String firstPath, String secondPath) {
+
+    PathAnalyzer analyzer = new PathAnalyzer(firstPath);
+    PathAnalyzer converter = new PathAnalyzer(secondPath);
+    Searcher searcher = new Searcher(analyzer.convert(), fileSystem);
+    Searcher finder = new Searcher(converter.convert(), fileSystem);
+
+    boolean firstLocationExist = searcher.searchLocation() != null;
+    boolean firstPathIsValid =
+        (searcher.searchTarget(true) != null) || (searcher.searchTarget(false)
+            != null);
+    boolean secondLocationExist = finder.searchLocation() != null;
+    boolean secondPathOccupied =
+        (finder.searchTarget(true) == null) && (finder.searchTarget(false)
+            == null);
+
+    return firstLocationExist && secondLocationExist && firstPathIsValid
+        && !secondPathOccupied;
+  }
+}

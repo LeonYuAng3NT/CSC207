@@ -1,0 +1,17 @@
+package a2a.exceptions;
+
+/**
+ * The Directory Stack Empty Exception happened whenever an user
+ * attempt to remove a directory on the directory but the directory
+ * does not have directory stored.
+ */
+public class DirectoryStackEmptyException extends Exception{
+
+  /**
+   * Construct a DirectoryStackEmptyException.
+   */
+  public DirectoryStackEmptyException() {
+
+    super("Sorry, the directory stack is empty.");
+  }
+}

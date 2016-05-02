@@ -1,0 +1,125 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.exceptions.ArgumentDeclareException;
+import a2a.exceptions.InvalidTargetNameException;
+import a2a.exceptions.NameConflictException;
+import a2a.exceptions.PathDoesNotExistException;
+import a2a.foundation.FileSystem;
+
+/**
+ * The working path printer uses to get the
+ * full path of current working directory.
+ *
+ * @author Yu Ang Zhang
+ * @author Yiming Huang
+ * @author Yi Jian Wang
+ * @author Yu Wang
+ */
+public class WorkingPathPrinter implements Command, OutputProducer {
+
+
+  private boolean isRedirectMode;
+
+  private String[] command;
+  private FileSystem filesystem;
+
+  /**
+   * Construct a Working Path Printer
+   */
+  public WorkingPathPrinter() {
+
+  }
+
+  /**
+   * Inspect the validity of the action which indicated
+   * by user input, and set up the command before execute.
+   *
+   * @param command    The array of text entered by user
+   * @param fileSystem The fileSystem which may be uses to execute command
+   * @throws ArgumentDeclareException   if command have incorrect argument
+   * @throws PathDoesNotExistException  if path is invalid
+   * @throws NameConflictException      if name has been occupied
+   * @throws InvalidTargetNameException if name contain invalid character
+   */
+  @Override public void setUp(String[] command, FileSystem fileSystem)
+      throws ArgumentDeclareException, PathDoesNotExistException,
+      NameConflictException, InvalidTargetNameException {
+
+    isRedirectMode = (command.length == 3);
+
+    // Check the arguments of this command
+    if (command.length != 1 && !isRedirectMode || (isRedirectMode && !command[
+        command.length - 2].equals(">") && !command[command.length - 2]
+        .equals(">>"))) {
+      throw new ArgumentDeclareException();
+    }
+
+    // Check the output filename and the output file path
+    // Exception may be pass from PathChecker to this method
+    if (isRedirectMode) {
+      PathChecker checker = new PathChecker(fileSystem);
+      checker.inspectSinglePath(command[command.length - 1]);
+    }
+    this.command = command;
+    this.filesystem = fileSystem;
+  }
+
+  /**
+   * Produce the output of this command.
+   *
+   * @return The output of this command.
+   */
+  @Override public String produce() {
+
+    return filesystem.getCurrDir().getAddress();
+  }
+
+  /**
+   * Execute the command, then print out the full path
+   * of current working directory or redirect the output
+   * to the file.
+   */
+  @Override public void execute() {
+
+    String result = this.produce();
+
+    if (isRedirectMode) {
+      FileEditor editor = new FileEditor(command, filesystem);
+      editor.write(command[command.length - 1], result);
+    } else {
+      System.out.println(result);
+    }
+  }
+
+}

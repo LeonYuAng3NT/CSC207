@@ -1,0 +1,15 @@
+What did I do last time?
+    - Refactor and redesign many classes
+    - Redesign the searcher that make it supplied multiple ways to search
+      a target
+    - Refactor Working Path Printer, and Directory Navigator
+    - Refactor the file editor to improve all other the classes
+    - Added missing Javadoc to some classes
+    - Refactor History Viewer
+    - Refactor Directory and FileSystem
+
+What do I plan to do now?
+    - Work with teammate to complete all the command
+
+Am I blocked on anything?
+    - Doubt on the durability of searcher

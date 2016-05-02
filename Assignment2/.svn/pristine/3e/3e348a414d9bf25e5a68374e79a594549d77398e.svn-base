@@ -1,0 +1,8 @@
+Class name: DirectoryNavigator  
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Able to change the current directory's address to antoher's 
+Collaborators:
+*Directory

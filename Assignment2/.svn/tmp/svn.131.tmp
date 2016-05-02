@@ -1,0 +1,14 @@
+package a2a.operator;
+
+/**
+ * The OutputProducer interface have method produce output string.
+ */
+public interface OutputProducer {
+
+  /**
+   * Produce the output.
+   *
+   * @return The actual output of a specified command.
+   */
+  String produce();
+}

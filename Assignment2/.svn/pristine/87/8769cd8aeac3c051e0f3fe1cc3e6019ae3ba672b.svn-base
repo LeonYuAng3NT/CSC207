@@ -1,0 +1,16 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Modifications on ItemDuplicator and PathNavigator classes
+   -Modifications on setUp() method in several classes
+   -Modification on execute() method in several classes
+   
+   
+   
+b) What do I plan to work on now?  
+   -Write base code for ContentViewer for searching the sub-directories
+   -Modified the implementation of ItemDuplicator and PathNavigator classes
+   -Modifications on previous Command classes especially the setUp() method
+
+c) Am I blocked on anything?  
+   -Re-design setUp() method in FileReader and DirectoryCreator class

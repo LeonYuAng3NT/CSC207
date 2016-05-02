@@ -1,0 +1,8 @@
+Class name: InputHistory
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Store user history as a stack.
+Collaborators:
+*None

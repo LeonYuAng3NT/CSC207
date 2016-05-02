@@ -1,0 +1,59 @@
+Backlog Item
+
+i) As a user, I can inquiry the usage of commands                  1 days
+j) As a user, I can store address into the database                2 days
+   or remove it from the database
+k) As a user, I am able to store commands                          1 day
+   and print out the commands
+                 
+l) As a user, I am able to interact with computer through Shell    3 days
+   and input any commands 
+    
+
+Specific tasks to be accomplished:
+i-1. (CommandManual) Write the general script for CommandManual.
+i-2. (CommandManual) Write the description of each command's functionality.
+j-1. (FileSystem) Write the base code for DirectoryStack
+j-2. (FileSystem) Develop the functionality of  DirectoryStack 
+j-3. (FileSystem) Run basic tests to ensure the functionality in normal and
+                      special cases
+j-4  (FileSystem) Have the structure of FileSystem ready for further 
+                  collaboration with Command type objects
+k-1. (InputHistory) Write the base code for InputHistory
+k-2. (InputHistory) Develop the method that stores users' command as a stack
+k-3. (InputHistory) Build the connection between HistoryViewer and InputHistory
+
+l-1. (ArugumentAnalyzer) Develop the split method and allow JShell to interpret
+                          users' command and argument.
+l-2. (Command) Improve the design aspect of isValid() method in classes that 
+                implement Command ADTA and form discussion on this with other team members
+l-3. (Searcher) Implement test cases for Searcher class
+l-4. (File,Directory)   Implement test cases for File and Directory class
+l-5. (DirectoryStackOperator) Implement the structure and methods 
+                              for DirectoryStack class
+l-6. (DirectoryStackOperator) Build the connection between DirectoryStackOperator
+                              and FileSystem and create a parser to the file 
+                              that is being popped or pushed
+l-7. (Command) Improve the design aspect of execute() method in each class and 
+               have discussion on this with other team members
+l-8. (JShell) Generate parsers to link every class object that implements Command
+l-9. (JShell) Set the parser within JShell directly
+
+l-10.(JShell) Improve the design of JShell's implementation with more 
+              discussions
+l-11.(Command) Modify Command type class with implementations for better style
+               and design
+
+These tasks are assigned as follows:
+
+User: Yu Ang Zhang
+Tasks: l-7, l-8, l-9, l-10 
+
+User: Yiming Huang
+Tasks: l-3, l-4, l-5,  l-6
+
+User: YI JIAN Wang
+Tasks: k-1, k-2, k-3, l-1, l-2, l-11
+
+User: Yu Wang
+Tasks: i-1, i-2

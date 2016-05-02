@@ -1,0 +1,67 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+
+public class DirectoryTest {
+
+  @Test
+  public void testDirectory() {
+    try {
+
+    } catch (Exception e) {
+      fail("error msg");
+    }
+  }
+
+  @Test
+  public void testToString() {
+    Directory directory = new Directory();
+    String output = directory.toString();
+    assertEquals("", output);
+
+  }
+
+  @Test
+  public void testGetName() {
+    Directory directory = new Directory();
+    String output = directory.getName();
+    assertEquals("/", output);
+  }
+
+  @Test
+  public void testGetContent() {
+    Directory directory = new Directory();
+    ArrayList<Object> output = directory.getContent();
+    assertEquals(new ArrayList<>(), output);
+  }
+
+  @Test
+  public void testGetAddress() {
+    Directory directory = new Directory();
+    String output = directory.getAddress();
+    assertEquals("/", output);
+  }
+
+  @Test
+  public void testGetParent() {
+    Directory directory = new Directory();
+    Directory output = directory.getParent();
+    // not yet done
+  }
+
+  @Test
+  public void testSetContent() {
+    Directory directory = new Directory();
+    directory.setContent(new ArrayList<>());
+    ArrayList<Object> output = directory.getContent();
+    assertEquals(new ArrayList<>(), output);
+  }
+
+
+}

@@ -1,0 +1,97 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+/**
+ * A directory navigator, it uses to navigate the user transfer
+ * from current directory to the target directory
+ */
+public class DirectoryNavigator implements Command {
+
+  private FileSystem fileSystem;
+  private Directory targetDirLocation;
+  private String targetDirectoryName;
+  /**
+   * Construct a DirectoryNavigator
+   *
+   * @param filesystem The file system uses to execute this command.
+   */
+  public DirectoryNavigator(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user Input which indicate to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    String[] action = userInput.trim().split("\\s+");
+    // Command have no argument
+    if (action.length < 2) {
+      return false;
+    } else {
+      // Split path into an array
+      ArgumentAnalyzer split = new ArgumentAnalyzer(action[1]);
+      String[] path = split.convert();
+      targetDirectoryName = path[path.length - 1];
+      Searcher searcher = new Searcher(fileSystem);
+      targetDirLocation = searcher.find(path);
+
+      // Check the directory which store the target is exist or not
+      if (targetDirLocation != null) {
+        switch (targetDirectoryName) {
+          case ".":
+          case "..":
+          case "/":
+            return true;
+          default:
+            for (Object item : targetDirLocation.getContent()) {
+              if (item instanceof Directory) {
+                String name = ((Directory) item).getName();
+                if (name.equals(targetDirectoryName)) {
+                  return true;
+                }
+              }
+            }
+        }
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Navigate to the target directory.
+   *
+   * @return The new file system after execution
+   */
+  @Override
+  public FileSystem execute() {
+
+    switch (targetDirectoryName) {
+      case ".":
+        return fileSystem;
+      case "..":
+        fileSystem.setCurrDir(fileSystem.getCurrDir().getParent());
+        return fileSystem;
+      case "/":
+        fileSystem.setCurrDir(fileSystem.getRoot());
+        return fileSystem;
+      default:
+        for (Object item : targetDirLocation.getContent()){
+          if (item instanceof Directory){
+            String name = ((Directory) item).getName();
+            if (name.equals(targetDirectoryName)){
+              fileSystem.setCurrDir((Directory)item);
+            }
+          }
+        }
+        return fileSystem;
+    }
+  }
+}

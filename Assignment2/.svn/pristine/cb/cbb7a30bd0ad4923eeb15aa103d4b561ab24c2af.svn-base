@@ -1,0 +1,306 @@
+// **********************************************************
+// Assignment2:
+// Student1:
+// CDF user_name:
+// UT Student #:
+// Author:
+//
+// Student2:
+// CDF user_name:
+// UT Student #:
+// Author:
+//
+// Student3:
+// CDF user_name:
+// UT Student #:
+// Author:
+//
+// Student4:
+// CDF user_name:
+// UT Student #:
+// Author:
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package driver;
+
+import a2a.foundation.FileSystem;
+import a2a.foundation.InputHistory;
+import a2a.operator.*;
+
+import java.util.Scanner;
+//import java.util.Stack;
+
+/**
+ * A JShell, use to receive user command and allocate tasks to different
+ * part of the system based on user command.
+ */
+public class JShell {
+
+  /**
+   * An user action of execute command: "mkdir"
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionMkdir(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: ls
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionLs(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: cd
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionCd(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: pushd
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionPushd(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: popd
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionPopd(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: pwd
+   *
+   * @param fileSystem The file system that the JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionPwd(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      WorkingPathPrinter pathPrinter = new WorkingPathPrinter(fileSystem);
+      pathPrinter.print();
+
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+  }
+
+  /**
+   * An user action of execute command: cat
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionCat(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: echo
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionEcho(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      // Debugging
+      System.out.println("Ok!");
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: man
+   *
+   * @param fileSystem The file system that a JShell is using
+   * @param userInput  The command that user input
+   */
+  private void actionMan(FileSystem fileSystem, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+    if (commandChecker.isValid()) {
+      String commandName = userInput.split("\\s+")[1];
+      CommandManual cmdManual = new CommandManual();
+      cmdManual.inquiry(commandName);
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+
+  }
+
+  /**
+   * An user action of execute command: history
+   *
+   * @param inputHistory The input history uses to record input history
+   * @param userInput  The command that user input
+   */
+  private void actionHistory(InputHistory inputHistory, String userInput) {
+
+    InputCommandChecker commandChecker = new InputCommandChecker(userInput);
+
+    if (commandChecker.isValid()) {
+      String[] command = userInput.split("\\s+");
+      HistoryViewer historyViewer = new HistoryViewer(inputHistory);
+
+      // display all of the input history
+      if (command.length == 1) {
+        historyViewer.viewAll();
+
+      // display specified number of recent input history
+      } else if (command.length == 2) {
+        historyViewer.view(command[1]);
+      }
+    } else {
+      System.out.println("Invalid command, please try again");
+    }
+  }
+
+  /**
+   * JShell application entry point.
+   *
+   * @param args The array of command-line arguments passed to this method
+   */
+  public static void main(String[] args) {
+
+    JShell js = new JShell();
+
+    Scanner in = new Scanner(System.in);
+    FileSystem mainSystem = new FileSystem();
+    InputHistory iHistory = new InputHistory();
+    Boolean programIsRunning = true;
+
+    do {
+      // print out the current path, record every user input command
+      System.out.printf("%s# ", mainSystem.getCurrDir().getAddress());
+      String userInput = in.nextLine();
+      iHistory.record(userInput);
+
+      /*
+       Call helpers to execute user action
+       */
+      if (userInput.equals("exit")) {
+        programIsRunning = false;
+
+      } else if (userInput.startsWith("mkdir")) {
+        js.actionMkdir(mainSystem, userInput);
+
+      } else if (userInput.startsWith("cd")) {
+        js.actionCd(mainSystem, userInput);
+
+      } else if (userInput.startsWith("ls")) {
+        js.actionLs(mainSystem, userInput);
+
+      } else if (userInput.startsWith("pwd")) {
+        js.actionPwd(mainSystem, userInput);
+
+      } else if (userInput.startsWith("pushd")) {
+        js.actionPushd(mainSystem, userInput);
+
+      } else if (userInput.startsWith("popd")) {
+        js.actionPopd(mainSystem, userInput);
+
+      } else if (userInput.startsWith("history")) {
+        js.actionHistory(iHistory, userInput);
+
+      } else if (userInput.startsWith("cat")) {
+        js.actionCat(mainSystem, userInput);
+
+      } else if (userInput.startsWith("echo")) {
+        js.actionEcho(mainSystem, userInput);
+
+      } else if (userInput.startsWith("man")) {
+        js.actionMan(mainSystem, userInput);
+
+      } else if (!userInput.equals("")) {
+        System.out.println("Invalid command, please try again");
+      }
+
+    } while (programIsRunning);
+  }
+
+}

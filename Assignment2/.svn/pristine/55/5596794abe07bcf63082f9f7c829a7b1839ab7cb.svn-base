@@ -1,0 +1,12 @@
+Class name: JShell
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*receive user command
+*allocate tasks to different part of the system based on user command
+
+Collaborators:
+*FileSystem
+*InvalidCommandException

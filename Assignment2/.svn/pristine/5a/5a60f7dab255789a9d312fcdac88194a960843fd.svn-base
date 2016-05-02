@@ -1,0 +1,16 @@
+package a2a.exceptions;
+
+/**
+ * A Queried Command Not Exist Exception happened whenever
+ * an user attempt to inquiry an invalid command.
+ */
+public class QueriedCommandNotExistException extends Exception {
+
+  /**
+   * Construct a QueriedCommandNotExistException.
+   */
+  public QueriedCommandNotExistException() {
+
+    super("Sorry, the queried command does not exist.");
+  }
+}

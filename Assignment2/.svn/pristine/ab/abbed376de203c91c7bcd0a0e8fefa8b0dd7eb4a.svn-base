@@ -1,0 +1,11 @@
+What did I do last time?
+    - Improve the FileSystem, and remove the directory stack.
+    - Completed the FileEditor
+    - Completed the FileCreator
+    - Discuss the my idea about the Searcher and InputCommandChecker
+
+What do I plan to do now?
+    - Improve the code and try to make every line of the code shorter
+
+Am I blocked on anything?
+    - Confused on single responsibilities principle about the FileSystem

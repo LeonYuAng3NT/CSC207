@@ -1,0 +1,84 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+
+public class FileCreator implements Command {
+
+  private FileSystem filesystem;
+  private File newfile;
+
+  /**
+   * Construct a FileCreator
+   */
+  public FileCreator(FileSystem filesystem) {
+    this.filesystem = filesystem;
+  }
+
+  /**
+   * Create a new file with given name and contents to target directory.
+   *
+   * @param name The name of the new file
+   * @param contents The contents of the new file
+   * @param dir The target directory use to store the new file
+   */
+  public void create(String name, String contents, Directory dir) {
+
+    File file = new File(name, contents);
+    ArrayList<Object> content = dir.getContent();
+
+    content.add(file);
+    dir.setContent(content);
+  }
+
+  @Override
+  public boolean isValid(String userInput) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public FileSystem execute() {
+    FileSystem newfilesystem = new FileSystem();
+    Directory currdir = filesystem.getCurrDir();
+    Directory newcurr = newfilesystem.getCurrDir();
+    filesystem.getCurrDir().getContent().add(newfile);
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+}

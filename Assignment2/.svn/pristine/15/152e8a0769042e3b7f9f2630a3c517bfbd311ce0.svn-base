@@ -1,0 +1,97 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+/**
+ * A file, it contains the filename and contents of itself.
+ * 
+ * @author Yu Ang Zhang, Yiming Huang, Yi Jian Wang, Yu Wang
+ * 
+ */
+public class File {
+
+  private String name;
+  private String contents;
+
+  /**
+   * Construct a file.
+   *
+   * @param name     The name of this file.
+   * @param contents The contents of this file.
+   */
+  public File(String name, String contents) {
+
+    this.name = name;
+    this.contents = contents;
+  }
+
+  /**
+   * The getter of name.
+   *
+   * @return The name of this file
+   */
+  public String getName() {
+
+    return name;
+  }
+
+  /**
+   * The getter of contents.
+   *
+   * @return The contents of this file
+   */
+  public String getContents() {
+
+    return contents;
+  }
+
+  /**
+   * The setter of name.
+   *
+   * @param name The name of this file
+   */
+  public void setName(String name) {
+
+    this.name = name;
+  }
+
+  /**
+   * The setter of contents.
+   *
+   * @param contents The contents of this file
+   */
+  public void setContents(String contents) {
+
+    this.contents = contents;
+  }
+
+}

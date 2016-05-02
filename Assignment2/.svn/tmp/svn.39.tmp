@@ -1,0 +1,112 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.operator.*;
+import a2a.foundation.*;
+
+/**
+ * A content viewer, it uses to view the content of a directory.
+ */
+public class ContentViewer implements Command {
+
+  private String[] command;
+  private FileSystem filesystem;
+  private Directory dir;
+  private String name;
+
+  /**
+   * Construct a ContentViewer
+   */
+  public ContentViewer(FileSystem filesystem) {
+    this.filesystem = filesystem;
+  }
+
+  /**
+   * Check the validity of an user input.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate to an valid action
+   */
+  public boolean isValid(String userInput) {
+    Searcher search = new Searcher(this.filesystem);
+    String valid = userInput.trim();
+    ArgumentAnalyzer split = new ArgumentAnalyzer(valid);
+    
+    String [] result = split.convert();
+    
+    dir  = search.findDir(result);
+ 
+    if (dir != null){
+      for (Object item : dir.getContent()){
+        if (item instanceof Directory){
+          String name = ((Directory) item).getName();
+          if(name.equals(result[result.length-1])){
+            return true;
+          }
+        }
+        else if (item instanceof File){
+          String name = ((File) item).getName();
+          if(name.equals(result[result.length-1])){
+            return true;
+          }
+        }
+      }
+    }   
+    return false;
+  }
+
+
+  /**
+   * Print out the content of a specified target.
+   *
+   * @param fileSystem The file system which used to print out the content.
+   */
+  public FileSystem execute() {
+    for (Object item : dir.getContent()){
+      if (item instanceof Directory){
+        String name = ((Directory) item).getName();
+        if(name.equals(this.name)){
+          System.out.println(((Directory)item).getAddress());
+        }
+      }
+      else if (item instanceof File){
+        String name = ((File) item).getName();
+        if(name.equals(this.name)){
+          System.out.println(name);
+        }
+      }
+    }
+    return this.filesystem;
+    // TODO: Complete this as soon as possible
+  }
+}

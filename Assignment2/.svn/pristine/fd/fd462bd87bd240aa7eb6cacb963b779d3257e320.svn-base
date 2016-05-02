@@ -1,0 +1,325 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.Arrays;
+
+
+/**
+ * An input command checker, uses to check the format of a command.
+ */
+public class InputCommandChecker {
+
+  private String[] command;
+
+  /**
+   * Construct an InputCommandChecker.
+   */
+  public InputCommandChecker(String userInput) {
+
+    command = userInput.split("\\s+");
+  }
+
+  /**
+   * Check the format of an user input command.
+   *
+   * @return True if it is a valid command, false otherwise
+   */
+  public boolean isValid() {
+
+    // Debugging
+    System.out.println(Arrays.toString(command));
+
+    // Call different helper depends on the number of arguments of command
+    switch (command.length) {
+      case 1:
+        return typeOneCommandIsValid(command);
+      case 2:
+        return typeTwoCommandIsValid(command);
+      default:
+        return otherTypeCommandIsValid(command);
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with no argument.
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private boolean typeOneCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "ls":
+      case "pwd":
+      case "history":
+      case "popd":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with one argument
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private boolean typeTwoCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "cd":
+      case "pushd":
+        return dirNameIsValid(command[1]) || dirPathIsValid(command[1]);
+      case "mkdir":
+        return dirNameIsValid(command[1]) || makeDirPathIsValid(command[1]);
+      case "ls":
+        return filePathIsValid(command[1]) || dirPathIsValid(command[1]) ||
+            fileNameIsValid(command[1]) || dirNameIsValid(command[1]);
+      case "cat":
+        return filePathIsValid(command[1]) || fileNameIsValid(command[1]);
+      case "echo":
+        return (command[1].startsWith("\"") && command[1].endsWith("\""));
+      case "history":
+        for (int i = 0; i < command[1].length(); i++) {
+          if (!Character.isDigit(command[1].charAt(i))) {
+            return false;
+          }
+        }
+        return true;
+      case "man":
+        return Arrays
+            .asList("ls", "pwd", "history", "popd", "mkdir", "cd", "pushd",
+                "cat", "echo", "man").contains(command[1]);
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * This is a helper for method isValid.
+   * Check the command with two or more argument
+   *
+   * @param command The information of command
+   * @return True if the command is valid
+   */
+  private boolean otherTypeCommandIsValid(String[] command) {
+
+    switch (command[0]) {
+      case "mkdir":
+        for (int i = 1; i < command.length; i++) {
+          if (!dirPathIsValid(command[i]) && !dirNameIsValid(command[i])) {
+            return false;
+          }
+        }
+        return true;
+      case "cat":
+        for (int i = 1; i < command.length; i++) {
+          if (!filePathIsValid(command[i]) || !fileNameIsValid(command[i])) {
+            return false;
+          }
+        }
+        // Cat support open two files at the same time only
+        return command.length <= 3;
+      case "echo":
+        // return false if any below condition is false
+        return (command.length != 4
+            || (!command[1].startsWith("\"") && !command[1].endsWith("\"")) &&
+            (!command[2].equals(">") && !command[2].equals(">>")) &&
+            !fileNameIsValid(command[3]) && !filePathIsValid(command[3]));
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * This is a helper, check the format of the file path.
+   * <p>
+   * A valid format of a file may contains special directory names such as
+   * "." or "..", and alphabetic or digit character only, except the name at
+   * the last of the argument.
+   * <p>
+   * The name at the last of the argument is the name of the file, it should
+   * contain at most one dot and alphabetic or digit character only.
+   *
+   * @param argument The full path of a file
+   * @return True if the argument is valid, false otherwise
+   */
+
+  private boolean filePathIsValid(String argument) {
+
+    ArgumentAnalyzer analyzer = new ArgumentAnalyzer(argument);
+    String[] pathArgs = analyzer.convert();
+
+    for (int i = 0; i < pathArgs.length; i++) {
+      String curr = pathArgs[i];
+
+      if (i == 0 && curr.equals("/")) {
+        continue;
+      }
+      // Check the name is alphabetic or digit or special directory name
+      if (!curr.equals("..") && !curr.equals(".") && !dirNameIsValid(curr)) {
+        return false;
+
+        // Check the filename in last argument is valid or not
+      } else if ((i == pathArgs.length - 1) && fileNameIsValid(curr)) {
+        return false;
+      }
+    }
+    return pathArgs.length >= 1;
+  }
+
+  /**
+   * This is a helper, check the format of a full path.
+   * <p>
+   * A valid format of a directory path may contain special directory name
+   * such as "." or "..", alphabetic character or digit character only.
+   *
+   * @param argument The full path of a directory
+   * @return True if the directory path is in valid format, false otherwise
+   */
+  private boolean dirPathIsValid(String argument) {
+
+    ArgumentAnalyzer analyzer = new ArgumentAnalyzer(argument);
+    String[] pathArgs = analyzer.convert();
+
+    for (int i = 0; i < pathArgs.length; i++) {
+      String curr = pathArgs[i];
+
+      if (i == 0 && curr.equals("/")) {
+        continue;
+      }
+      if (!curr.equals("..") && !curr.equals(".") && !dirNameIsValid(curr)) {
+        return false;
+
+        // Invalid empty argument
+      } else if (curr.equals("")) {
+        return false;
+      }
+    }
+    return pathArgs.length >= 1;
+  }
+
+  /**
+   * This is a helper, check the format of a path which will be used to
+   * make a new directory.
+   * <p>
+   * A valid format of a path used to make a directory may contain special
+   * directory name such as "." or "..", and alphabetic or digit character
+   * only, except the directory name at the last of the path.
+   * <p>
+   * The name at the last will be the name of the new directory, it should
+   * contain alphabetic or digit character only.
+   *
+   * @param argument The full path or the name of the new directory
+   * @return True if the argument is valid, false otherwise
+   */
+  private boolean makeDirPathIsValid(String argument) {
+
+    // call Analyzer to split directory name in a path into an array
+    ArgumentAnalyzer analyzer = new ArgumentAnalyzer(argument);
+    String[] pathArgs = analyzer.convert();
+
+    for (int i = 0; i < pathArgs.length; i++) {
+      String curr = pathArgs[i];
+
+      // Path start from root
+      if (i == 0 && curr.equals("/")) {
+        continue;
+      }
+
+      // Curr is the last argument
+      if ((i == pathArgs.length - 1) && !dirNameIsValid(curr)) {
+        return false;
+
+        /*
+         Curr is not the last argument,
+         special directory name and alphabetic or digit.
+         */
+      } else if ((i != pathArgs.length - 1) &&
+          !curr.equals("..") && !curr.equals(".") && !dirNameIsValid(curr)) {
+        return false;
+      }
+    }
+    return pathArgs.length >= 1;
+  }
+
+  /**
+   * This is a helper, check the format of a filename.
+   * <p>
+   * A valid filename may contain at most one dot,
+   * and its name should be alphabetic or digit only.
+   *
+   * @param argument The argument which contain the filename
+   * @return True if the file name is in valid format
+   */
+
+  private boolean fileNameIsValid(String argument) {
+
+    int pointOccurrence = 0;
+    for (int i = 0; i < argument.length(); i++) {
+      char ch = argument.charAt(i);
+
+      // The maximum allowed point character is one
+      if (ch == '.') {
+        pointOccurrence++;
+        // Test the filename contain alphabetic or digit character only
+      } else if (!Character.isAlphabetic(ch) && !Character.isDigit(ch)) {
+        return false;
+      }
+    }
+    return pointOccurrence <= 1;
+  }
+
+  /**
+   * This is a helper, check the format of a directory name.
+   * <p>
+   * A valid directory name in this case should be alphabetic or digit only.
+   *
+   * @param argument The name of a directory
+   * @return True if the directory name is in valid format
+   */
+  private boolean dirNameIsValid(String argument) {
+
+    for (int i = 0; i < argument.length(); i++) {
+      char ch = argument.charAt(i);
+      if (!Character.isAlphabetic(ch) && !Character.isDigit(ch)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+}

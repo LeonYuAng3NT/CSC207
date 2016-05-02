@@ -1,0 +1,19 @@
+package a2a.exceptions;
+
+/**
+ * A Type Not Match Exception happened whenever an user
+ * attempt to execute command on a specified file and the
+ * return type is not match what they expected.
+ *
+ * @author Yi Jian Wang
+ */
+public class TypeNotMatchException extends Exception{
+
+  /**
+   * Construct a TypeNotMatchException.
+   */
+  public TypeNotMatchException() {
+
+    super("The type of the target path is not match.e");
+  }
+}

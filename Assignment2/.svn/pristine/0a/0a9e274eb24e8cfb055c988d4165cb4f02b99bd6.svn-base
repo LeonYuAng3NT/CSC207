@@ -1,0 +1,8 @@
+Class name: DirectoryStack
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Save Directory object as a Stack Structure
+Collaborators:
+*Directory

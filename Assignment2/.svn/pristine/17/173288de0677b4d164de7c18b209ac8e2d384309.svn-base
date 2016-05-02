@@ -1,0 +1,147 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+
+/**
+ * This file reader use to print out the contents of a file.
+ */
+public class FileReader implements Command {
+
+  private String[] command;
+  private FileSystem fileSystem;
+  private ArrayList<Object> targetItems;
+  private ArrayList<String> targetNames;
+
+  /**
+   * Construct a ContentViewer by passing a FileSystem object
+   */
+  public FileReader(FileSystem filesystem) {
+
+    this.fileSystem = filesystem;
+    targetNames = new ArrayList<>();
+    targetItems = new ArrayList<>();
+  }
+
+  /**
+   * Check the validity of User's Input
+   */
+  @Override
+  public boolean isValid(String userInput) {
+    command = userInput.trim().split("\\s+");
+    boolean result = true;
+    if (command.length > 1) {
+      for (int i = 1; i < command.length; i++) {
+        // Split and convert the user command to a string list
+        Searcher searcher = new Searcher(this.fileSystem);
+        ArgumentAnalyzer analyzer = new ArgumentAnalyzer(command[i]);
+        String[] path = analyzer.convert();
+
+        if (Arrays.asList(path).contains("")) {
+          return false;
+        }
+        if (path.length < 1) {
+          return true;
+        }
+        // Parse the parent directory of the string at final index
+        // to data stored in FileSystem
+        Directory currTarget = searcher.find(path);
+
+        String currName = path[path.length - 1];
+        targetNames.add(currName);
+        result =  this.checker(currTarget, currName);
+      }
+    }
+    return result;
+  }
+
+  @Override
+  public FileSystem execute() {
+
+    if (targetItems.size() == 0) {
+      System.out.println(fileSystem.getCurrDir() + " ");
+    }
+    for (int i= 0; i< targetItems.size(); i++) {
+      if ( targetItems.get(i) instanceof File) {
+        System.out.println(((File) targetItems.get(i)).getContents());
+        if(i>1){
+          System.out.println("\n" +  "\n" + "\n");
+          System.out.println(((File) targetItems.get(i)).getContents());
+        }
+      }
+    }
+    return fileSystem;
+  }
+
+  /**
+   * Check whether the current directory contains the targeted file
+   * @param curr  the current directory where the parser points at 
+   * @param name  the name of the file
+   * @return boolean validity on whether the file exists or not 
+   */
+  private boolean checker(Directory curr, String name) {
+    boolean isFound = false;
+    if (curr != null) {
+      switch (name) {
+        case ".":
+          targetItems.add(fileSystem.getCurrDir());
+          break;
+        case "..":
+          targetItems.add(fileSystem.getCurrDir().getParent());
+          break;
+        case "/":
+          targetItems.add(fileSystem.getRoot());
+          break;
+        default:
+          for (Object item : curr.getContent()) {
+            if (item instanceof File) {
+              String objectName = ((File) item).getName();
+              if (objectName.equals(name)) {
+                targetItems.add(item);
+                isFound = true;
+              }
+            }
+          }
+      }
+    }
+    if (!isFound) {
+      return false;
+    }
+    return true;
+  }
+}

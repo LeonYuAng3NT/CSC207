@@ -1,0 +1,179 @@
+<<<<<<< .mine
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+=======
+// **********************************************************
+// Assignment2:
+>>>>>>> .r170
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+<<<<<<< .mine
+
+=======
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.FileSystem;
+>>>>>>> .r170
+import a2a.foundation.InputHistory;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+/**
+ * The HistoryViewer use to print out the history record.
+ */
+public class HistoryViewer implements Command {
+
+  String[] command;
+
+  /**
+   * Construct a HistoryViewer
+   */
+  public HistoryViewer() {
+
+  }
+
+  /**
+   * Check the validity of user input, and store the user input
+   * if it is valid.
+   *
+   * @param userInput An userInput which indicate an action
+   * @return True if the user input indicate a valid action
+   */
+<<<<<<< .mine
+  public void function() {
+=======
+  @Override public boolean isValid(String userInput) {
+>>>>>>> .r170
+
+    String[] action = userInput.trim().split("\\s+");
+
+    switch (action.length) {
+      case 1:
+        command = action;
+        return true;
+      case 2:
+        // Use regex to check the number is positive integer or not
+        if (Pattern.compile("[0-9]*").matcher(action[1]).matches()) {
+          command = action;
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Print out the input history.
+   *
+   * @param fileSystem The file system used to get InputHistory.
+   */
+  @Override public void execute(FileSystem fileSystem) {
+
+    InputHistory inputHistory = fileSystem.getHistory();
+
+    // View all history
+    if (command.length == 1) {
+      ArrayList<String> history = inputHistory.getUserInputHistory();
+      for (int curr = 0; curr < history.size(); curr++) {
+        System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+      }
+
+      // View specified number of history
+    } else if (command.length == 2) {
+
+      String numberOfHistory = command[1];
+      view(numberOfHistory, inputHistory);
+    }
+  }
+
+  /**
+   * Print out the number of most recent user input history.
+   *
+   * @param number The number of most recent history
+   * @param inputHistory The input history which store
+   */
+<<<<<<< .mine
+  public void PrintHistory(String number) {
+=======
+  private void view(String number, InputHistory inputHistory) {
+>>>>>>> .r170
+
+    ArrayList<String> history = inputHistory.getUserInputHistory();
+    int startIndex = history.size() - Integer.parseInt(number);
+
+    for (int curr = 0; curr < history.size(); curr++) {
+      // start printing now
+      if (curr >= startIndex) {
+        System.out.printf("%d. %s%n", curr + 1, history.get(curr));
+      }
+    }
+  }
+
+  @Override
+  public boolean isvalid() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+ 
+}

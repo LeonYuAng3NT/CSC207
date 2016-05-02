@@ -1,0 +1,15 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Modifications on design 
+   -Modifications on setUp() method
+   -Implement ItemDuplicator and PathNavigator classes
+   -Discuss the design structure with group members.
+   
+   
+b) What do I plan to work on now?  
+   -Implement test cases
+   -Implement Exception classes 
+
+c) Am I blocked on anything?  
+   -Re-design setUP() method in each Command class

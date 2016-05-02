@@ -1,0 +1,8 @@
+Class name: DirectoryStackOperator
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Push a directory or pop out a directory in the file system.
+Collaborators:
+*FileSystem

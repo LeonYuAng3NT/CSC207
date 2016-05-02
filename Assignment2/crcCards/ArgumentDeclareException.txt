@@ -1,0 +1,10 @@
+class name: ArgumentDeclareException
+
+Parent class (if any): Exception
+Subclasses (if any): None
+
+Responsibilities:
+*Alert the user that the command has invalid argument
+
+Collaborators:
+None

@@ -1,0 +1,15 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Worked on JShell and Modified FormatChecker to InputCommandChecker
+   -Discussed with team members and argued the idea of design aspect in details.
+   
+b) What do I plan to work on now?  
+   - Edit JShell and add more implementation if there are any further changes
+   - Discuss with others on the design of other Classes as the original ones 
+    have been deleted 
+   - Write unit test for InputCommandChecker
+   - Plan and work on Sprint 2 
+
+c) Am I blocked on anything?  
+   - Unit tests for InputCommandChecker

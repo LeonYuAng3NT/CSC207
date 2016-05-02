@@ -1,0 +1,46 @@
+package test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.operator.FileCreator;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ * A test for FileCreator
+ */
+public class FileCreatorTest {
+  private FileCreator fileCreator;
+  private Directory root;
+
+  /**
+   * Initially set up this test.
+   * @throws Exception
+   */
+  @Before public void setUp() throws Exception {
+
+    root = new Directory();
+  }
+
+  /**
+   * Test the constructor.
+   */
+  @Test public void testFileCreator() {
+
+    fileCreator = new FileCreator();
+  }
+
+  /**
+   * Test the create method.
+   */
+  @Test public void testCreate() {
+
+    fileCreator = new FileCreator();
+    fileCreator.create("filename.txt", "I am contents", root);
+
+    File target = (File) root.getContent().get(0);
+    assertEquals("filename.txt", target.getName());
+    assertEquals("I am contents", target.getContents());
+  }
+}

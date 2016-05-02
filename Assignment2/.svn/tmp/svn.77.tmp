@@ -1,0 +1,66 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+import a2a.operator.DirectoryCreator;
+import a2a.operator.DirectoryStackOperator;
+
+public class DirectoryStackOperatorTest {
+
+  private FileSystem fileSystem;
+  private DirectoryStackOperator operator;
+  
+  @Before
+  public void SetUp(){
+    fileSystem = new FileSystem();
+    
+    // Get root
+    Directory root = fileSystem.getRoot();
+    ArrayList<Object> contentOfRoot = root.getContent();
+
+    // Create new directory
+    Directory directoryAbc = new Directory("abc", "/abc", root);
+    contentOfRoot.add(directoryAbc);
+
+    // Update the root content
+    root.setContent(contentOfRoot);
+
+    // Update the root to file system
+    fileSystem.setRoot(root);
+    
+  }
+  @Test
+  public void testDirectoryStackOpeartor() {
+    try {
+      operator = new DirectoryStackOperator(fileSystem);
+    } catch (Exception e) {
+      fail("Failed to create an instance of directory stack operator.");
+    }
+  }
+
+  @Test
+  public void testIsValid() {
+    DirectoryStackOperator operator = new DirectoryStackOperator(fileSystem);
+    String userinput = "pushd abc";
+    boolean output = operator.isValid(userinput);
+    assertTrue(output);
+
+  }
+
+  @Test
+  public void testExecute() {
+    FileSystem afterExecuted = operator.execute();   
+    assertTrue(afterExecuted.getCurrDir().getName().equals("abc"));
+
+  }
+  
+  }
+
+

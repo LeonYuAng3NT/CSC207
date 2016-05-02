@@ -1,0 +1,12 @@
+What did I do last time?
+	- Modified the pwd class name to WorkingPathPrinter and improved the base code.
+	- Modified the Print Content class name to ContentViewer and improved the base code.
+	- confirmed the collaboration of the WorkingPathPrinter class and the ContentViewer class with other classes.
+
+What do I plan to do now?
+    - Implement common test method for WorkingPathPrinter class and ContentViwer classes.
+    - Make the two classes to function.
+    - Meet with team and decide which tasks to assign for the next sprint.
+
+Am I blocked on anything?
+    - Finish implement common test method.

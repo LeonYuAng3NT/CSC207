@@ -1,0 +1,16 @@
+Each one of you is responsible for adding a file in this folder every three days with the following contents: Do not ask your colleague to commit for you. That won't count. 
+
+a) What did I work on last time? 
+   -Modifications on JShell 
+   -Edit the methods in InputCommandChecker
+   -Constructed the Sprint backlog and product backlog
+   -Implemented Searcher class and collaborated with group member and finished
+    FileSystem
+   
+b) What do I plan to work on now?  
+   - figure out the implementation of Unit tests
+   - Prepare for Demo
+   - Collaboration between JShell and several classes
+
+c) Am I blocked on anything?  
+   - Unit Test design

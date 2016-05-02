@@ -1,0 +1,8 @@
+Class name: Searcher
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Find the directory/file address.
+Collaborators:
+*FileSystem

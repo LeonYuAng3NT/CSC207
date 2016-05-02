@@ -1,0 +1,72 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+
+import java.util.ArrayList;
+
+public class ContentViewer implements Command{
+
+  Object target;
+
+  /**
+   * Construct a ContentViewer
+   */
+  public ContentViewer(Object target) {
+
+    this.target = target;
+  }
+  public boolean isvalid(){
+    return true;
+  }
+
+  /**
+   * List out the content of the current directory
+   */
+  public void functiondir(String name, Directory dir) {
+
+    dir = (Directory) target;
+    ArrayList<Object> content = dir.getContent();
+
+    // Print out each item in directory
+    for (Object item : content) {
+      if (item instanceof File) {
+        System.out.println(((File) item).getName());
+      } else if (item instanceof Directory) {
+        System.out.println(((Directory) item).getName());
+      }
+    }
+  }
+
+  /**
+   * List out the content of the target
+   */
+  public void printfunction() {
+
+    if (target instanceof File) {
+      File file = (File) target;
+      System.out.println(file.getName());
+
+    } else if  (target instanceof Directory) {
+      Directory directory = (Directory) target;
+      ArrayList<Object> content = directory.getContent();
+
+      // Print out the name of target directory
+      System.out.println(directory.getName() + "\n");
+
+      // Start list out the content
+      for (Object item : content) {
+        if (item instanceof File) {
+          System.out.println(((File) item).getName());
+        } else if (item instanceof Directory) {
+          System.out.println(((Directory) item).getName());
+        }
+      }
+      // Empty new line
+      System.out.println("");
+    }
+
+  }
+
+}
+

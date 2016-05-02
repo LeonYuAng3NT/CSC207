@@ -1,0 +1,66 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+
+import java.util.ArrayList;
+
+public final class DirectoryCreator {
+
+  /**
+   * Default Constructor
+   */
+  private DirectoryCreator() {
+  }
+
+  /**
+   * Make a new directory into the current directory.
+   *
+   * @param name             The name of the new directory
+   * @param currentDirectory The current working directory
+   */
+  public static void create(String name, Directory currentDirectory) {
+
+    // address of new directory
+    String address = currentDirectory.getAddress() + "/" + name;
+
+    Directory newDirectory = new Directory(name, address);
+
+    ArrayList<Object> currentContent = currentDirectory.getContent();
+    currentContent.add(newDirectory);
+
+    // update the content of current working directory
+    currentDirectory.setContent(currentContent);
+  }
+
+}

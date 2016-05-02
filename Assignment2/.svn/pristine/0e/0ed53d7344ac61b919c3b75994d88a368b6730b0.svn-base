@@ -1,0 +1,15 @@
+What did I do last time?
+	- brainstormed ideas during the first team meeting for the combination of design.
+	- discussed the details about Sprint1Backlog and CRC cards.
+	- made some changes to the user stories of productBacklog.
+	- wrote the base code for the PrintWorkingDirectory class and the PrintContent class.
+
+What do I plan to do now?
+    - Improve and modify the base code for the PrintWorkingDirectory class
+    - Improve and modify the base code for the Print Content class.
+    - Make the two classes to function and confirm their collaboration with other classes.
+    - Implement common test method for pwd command.
+
+Am I blocked on anything?
+    - Confirm details about the new design.
+ 

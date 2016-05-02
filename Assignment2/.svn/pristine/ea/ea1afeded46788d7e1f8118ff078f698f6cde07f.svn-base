@@ -1,0 +1,136 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+import java.util.Stack;
+
+/**
+ * A file system, it stores the directory structure, directory stack and
+ * the input history. It is the most fundamental database.
+ */
+public class FileSystem {
+
+  private Directory root;
+  private Directory currDirectory;
+  private Stack dirStack;
+  private InputHistory inputHistory;
+
+  /**
+   * Construct a file system.
+   */
+  public FileSystem() {
+
+    root = new Directory();
+    currDirectory = root;
+    dirStack = new Stack<Directory>();
+    inputHistory = new InputHistory();
+  }
+
+  /**
+   * Get the root directory
+   *
+   * @return The root directory
+   */
+  public Directory getRoot() {
+
+    return root;
+  }
+
+  /**
+   * Set the root directory
+   *
+   * @return The root directory
+   */
+  public void setRoot(Directory root) {
+
+    this.root = root;
+  }
+
+  /**
+   * Get the current directory
+   *
+   * @return The current directory
+   */
+  public Directory getCurrDir() {
+
+    return currDirectory;
+  }
+
+  /**
+   * Update the current directory
+   *
+   * @return The new current directory
+   */
+  public void setCurrDir(Directory currDirectory) {
+
+    this.currDirectory = currDirectory;
+  }
+
+  /**
+   * Get the directory stack.
+   */
+  public Stack getDirStack() {
+
+    return dirStack;
+  }
+
+  /**
+   * Set the directory stack.
+   *
+   * @param dirStack The new directory stack
+   */
+  public void setDirStack(Stack dirStack) {
+
+    this.dirStack = dirStack;
+  }
+
+  /**
+   * Get the input history.
+   *
+   * @return The input history
+   */
+  public InputHistory getHistory() {
+
+    return inputHistory;
+  }
+
+  /**
+   * Update the input history.
+   *
+   * @param inputHistory The user input
+   */
+  public void setHistory(InputHistory inputHistory) {
+
+    this.inputHistory = inputHistory;
+  }
+
+}

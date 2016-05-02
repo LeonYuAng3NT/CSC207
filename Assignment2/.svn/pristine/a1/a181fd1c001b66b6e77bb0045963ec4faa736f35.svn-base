@@ -1,0 +1,9 @@
+Class name: ContentViewer
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Print the content of the directory.
+*Check whether the input for ContentViewer is valid or not.
+Collaborators:
+*FileSystem

@@ -1,0 +1,13 @@
+Class name: Searcher
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Search for the location of a target
+*Directly search for the target
+
+Collaborators:
+*FileSystem
+*Directory
+*File

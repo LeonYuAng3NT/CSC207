@@ -1,0 +1,16 @@
+Class name: WorkingPathPrinter
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Print out the full path of the current working directory.
+
+Collaborators:
+*ArgumentDeclareException
+*InvalidTargetNameException
+*NameConflictException
+*PathDoesNotExistException
+*FileSystem
+*PathChecker
+*FileEditor

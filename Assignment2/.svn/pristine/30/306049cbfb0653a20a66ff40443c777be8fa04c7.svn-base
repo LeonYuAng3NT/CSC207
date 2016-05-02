@@ -1,0 +1,106 @@
+class FormatChecker {
+  /*
+   * Default Constructor for FormatChecker
+   */
+  private FormatChecker(){
+    
+  }
+  public static Boolean FormatChecker(String[] Command){
+
+      // Initialize Command Objects and call helper methods
+
+
+      // Commands with One keyword; TypeOneCommand
+      if (Command.equals("ls") || Command.equals("pwd")) {
+        // Call helper method to display output
+        this.TypeOneCommand(Command);
+      }
+
+      // Commands with two keywords;TypeTwoCommand
+      if (Command.contains("mkdir") || Command.contains("cat")
+          || Command.contains("cd") || Command.contains("get")) {
+        this.TypeTwoCommand(Command);
+      }
+      // UserCommand = scanner.nextLine();
+
+      // Command with Move two files; TypeThreeCommand
+      if (Command.contains("mv") || Command.contains("cp")) {
+        this.TypeThreeCommand(UserCommand);
+      
+
+      }
+      
+      // Command with echo; TypeEchoCommand;
+      if (Command.contains("echo")) {
+        this.TypeEchoCommand(UserCommand);
+      } 
+      //else {
+       // if (!Command.equals("exit")) {
+       //   System.out.println("Invalid command, please try again");
+        //}
+      //}
+      else{
+        return False;
+      }
+    }
+    
+  
+  private static Boolean TypeOneCommand(String Command) {
+    System.out.println(Command);
+    System.out.println();
+    return True;
+    
+  }
+
+  private static Boolean TypeTwoCommand(String Command) {
+    String NewModify = Command.replaceFirst(" ", "@");
+    String[] Whole = NewModify.split("@");
+    String result = Whole[1].trim();
+    if (result.contains(" ")) {
+      System.out.println("Invalid command, please try again");
+      return False;
+    } else {
+      return True;
+    }
+  }
+
+  public static Boolean TypeThreeCommand(String Command) {
+    String[] FirstTest = Command.split(" ");
+    if (FirstTest.length < 3) {
+      System.out.println("Invalid command, please try again");
+      // System.out.print("/# ");
+      
+    }
+    String[] Whole = Command.split(" ", 2);
+    String Test = Whole[1].trim();
+
+    String Test_two = Test.replaceFirst(" ", "@");
+    String[] Second = Test_two.split("@");
+    String SecondPart = Second[1].trim();
+
+    if (SecondPart.contains(" ")) {
+      System.out.println("Invalid command, please try again");
+      return False;
+    } else {
+      System.out.println(Whole[0]);
+      System.out.println(Second[0] + " " + SecondPart);
+      return True;
+    }
+  }
+
+  public static Boolean TypeEchoCommand(String Command) {
+    String NewModify = Command.replaceFirst(" ", "@");
+    String[] Whole = NewModify.split("@");
+    if (!Whole[1].contains(" >> ") && !Whole[1].contains(" > ")) {
+      System.out.println("Invalid command, please try again");
+      return False;
+    }
+    for (String element : Whole) {
+      String result = element.trim();
+      System.out.println(result);
+      return True;
+    }
+  }
+}
+
+

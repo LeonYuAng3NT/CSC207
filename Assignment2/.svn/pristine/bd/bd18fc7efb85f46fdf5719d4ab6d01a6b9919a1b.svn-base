@@ -1,0 +1,9 @@
+What did I do last time?
+	- Work on the FileReader and improvement of URLRetriever class.
+	
+What do I plan to do now?
+    - Start and Finish the FileReader and implement JUnit test.
+
+Am I blocked on anything?
+    - Implement unit tests for corner cases. 
+ 

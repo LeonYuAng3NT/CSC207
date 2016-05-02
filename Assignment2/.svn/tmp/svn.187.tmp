@@ -1,0 +1,88 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import a2a.foundation.FileSystem;
+import a2a.operator.NetworkProtocol;
+import a2a.operator.PathNavigator;
+
+/**
+ * A network protocol test, uses to test if the methods are working as expected.
+ * 
+ * @author Yiming Huang
+ */
+public class NetworkProtocolTest {
+
+  private FileSystem fileSystem;
+  private String[][] passed;
+  private String[][] failed;
+  private String[] command;
+
+  /**
+   * Set up NetworkProtocol test.
+   */
+  @Before
+  public void setUp() {
+    fileSystem = new FileSystem();
+    passed = new String[][] {};
+    failed = new String[][] {};
+    command = new String[] {"", "",""};
+
+  }
+
+
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test
+  public void testNetworkProtocol() {
+    try {
+      new PathNavigator();
+    } catch (Exception e) {
+      fail("Failed to create an instance of network protocol.");
+    }
+  }
+
+  /**
+   * Test if the method successfully set up or throw exception in suitable
+   * cases.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testSetUp() throws Exception {
+
+    try {
+      NetworkProtocol networkProtocol = new NetworkProtocol();
+        networkProtocol.setUp(command[0], fileSystem);
+
+    } catch (Exception e) {
+      fail("Unhandled exception have been thrown.");
+    }
+
+    // Test cases that should be failed
+    try {
+      NetworkProtocol networkProtocol = new NetworkProtocol();
+      
+        networkProtocol.setUp(command[1], fileSystem);
+
+     // fail("Exception should be thrown.");
+    } catch (Exception e) {
+      // Empty catch statement
+    }
+  }
+
+  /**
+   * Test if the execute method for NetworkProtocol is working as expected.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testExecute() throws Exception {
+
+  }
+}

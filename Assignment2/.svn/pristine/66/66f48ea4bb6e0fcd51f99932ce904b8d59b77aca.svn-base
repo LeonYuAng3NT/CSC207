@@ -1,0 +1,113 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.operator;
+
+import a2a.foundation.Directory;
+import a2a.foundation.FileSystem;
+
+import java.util.ArrayList;
+
+public class DirectoryCreator implements Command {
+
+  String[] command;
+
+  /**
+   * Construct a DirectoryCreator
+   */
+  public DirectoryCreator() {
+
+  }
+
+  /**
+   * Check the validity of an user command.
+   *
+   * @param userInput An userInput which indicate to an action
+   * @return True if userInput indicates to an valid action
+   */
+  @Override
+  public boolean isValid(String userInput) {
+
+    InputCommandChecker checker = new InputCommandChecker(userInput);
+    if (checker.isValid()) {
+      Searcher searcher = new Searcher();
+
+      String[] command = userInput.split("\\s+");
+      for (int i = 1; i < command.length; i++) {
+        String dirName = command[i];
+        if (dirName.contains("/")) {
+
+        } else {
+          //
+        }
+      }
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Execute this command.
+   *
+   * @param fileSystem The file system which is used to execute on.
+   */
+  @Override
+  public void execute(FileSystem fileSystem) {
+
+    Searcher searcher = new Searcher();
+
+    // TODO: wait for merge the create() method
+  }
+
+  /**
+   * Make a new directory into the content of the target directory.
+   *
+   * @param name            The name of the new directory
+   * @param targetDirectory The directory use to store the new directory
+   */
+  public void create(String name, Directory targetDirectory) {
+
+    // address of new directory
+    String newAddress = targetDirectory.getAddress() + "/" + name + "/";
+
+    // original content of target directory
+    ArrayList<Object> content = targetDirectory.getContent();
+
+    Directory newDirectory = new Directory(name, newAddress, targetDirectory);
+    content.add(newDirectory);
+
+    // update the content
+    targetDirectory.setContent(content);
+  }
+
+}

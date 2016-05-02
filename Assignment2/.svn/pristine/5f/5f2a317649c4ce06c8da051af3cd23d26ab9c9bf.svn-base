@@ -1,0 +1,20 @@
+Class name: CommandManual
+
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Produce the result of the documentation for queried command
+*Display the result or redirect the output to a file
+
+Collaborators:
+*FileSystem
+*FileEditor
+*ArgumentDeclareException
+*DirectoryStackEmptyException
+*InvalidCommandException
+*InvalidTargetNameException
+*NameConflictException
+*NoEnoughHistoryException
+*PathDoesNotExistException
+*QueriedCommandNotExistException

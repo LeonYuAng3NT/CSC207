@@ -1,0 +1,158 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: Yi Jian Wang
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package test;
+
+import a2a.foundation.Directory;
+import a2a.foundation.File;
+import a2a.foundation.FileSystem;
+import a2a.operator.FileCreator;
+import a2a.operator.Searcher;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
+/**
+ * The Searcher test uses to test if the all methods are working
+ * as expected.
+ *
+ * @author Yu Ang Zhang
+ * @author Yi Jian Wang
+ * @author Yiming Huang
+ * @author Yu Wang
+ */
+public class SearcherTest {
+
+  private Searcher searcher;
+  private FileSystem fileSystem;
+
+  private Directory root;
+  private Directory jeep;
+  private Directory company;
+  private Directory office;
+
+  /**
+   * Set up the Searcher Test.
+   */
+  @Before public void setUp() {
+
+    this.fileSystem = new FileSystem();
+
+    this.root = fileSystem.getRoot();
+    this.jeep = new Directory("jeep", "/jeep/", root);
+    this.company = new Directory("company", "/jeep/company/", jeep);
+    this.office = new Directory("office", "/jeep/", company);
+
+    // Create directories in FileSystem
+    company.getContent().add(office);
+    jeep.getContent().add(company);
+    fileSystem.getCurrDir().getContent().add(jeep);
+
+    FileCreator creator = new FileCreator();
+    creator.create("first.txt", "contents", jeep);
+    creator.create("second.txt", "contents", company);
+    creator.create("index.txt", "01234567", fileSystem.getRoot());
+  }
+
+  /**
+   * Test if the instance can be successfully created.
+   */
+  @Test public void testSearcher() {
+    try {
+      searcher = new Searcher(new String[] {"/"}, fileSystem);
+    } catch (Exception e) {
+      fail("Failed to create an instance of Searcher");
+    }
+  }
+
+  /**
+   * Test if method can successfully found the location.
+   */
+  @Test public void testSearchLocation() {
+
+    searcher = new Searcher(new String[] {"/", "jeep", "company"}, fileSystem);
+    assertSame(jeep, searcher.searchLocation());
+
+    searcher = new Searcher(new String[] {"..", "jeep"}, fileSystem);
+    assertSame(root, searcher.searchLocation());
+
+    searcher = new Searcher(new String[] {"jeep", "company", ".."}, fileSystem);
+    assertSame(company, searcher.searchLocation());
+
+    searcher = new Searcher(new String[] {"jeep", "..", ".."}, fileSystem);
+    assertSame(root, searcher.searchLocation());
+
+    searcher = new Searcher(new String[] {"/", ".."}, fileSystem);
+    assertSame(root, searcher.searchLocation());
+
+    searcher =
+        new Searcher(new String[] {"jeep", "company", "..s"}, fileSystem);
+    assertNull(searcher.searchTarget(true));
+
+    searcher =
+        new Searcher(new String[] {"jeep", "company", ".s."}, fileSystem);
+    assertNull(searcher.searchTarget(true));
+  }
+
+  /**
+   * Test if method can successfully found the location.
+   */
+  @Test public void testSearchTarget() {
+
+    searcher = new Searcher(new String[] {"/", "jeep", "company"}, fileSystem);
+    assertSame(company, searcher.searchTarget(false));
+
+    searcher = new Searcher(new String[] {"..", "jeep"}, fileSystem);
+    assertSame(jeep, searcher.searchTarget(false));
+
+    String[] path = new String[] {"jeep", "company", "office"};
+    searcher = new Searcher(path, fileSystem);
+    assertSame(office, searcher.searchTarget(false));
+
+    searcher = new Searcher(new String[] {"index.txt"}, fileSystem);
+    assertEquals("index.txt", ((File) searcher.searchTarget(true)).getName());
+
+    searcher = new Searcher(new String[] {"jeep"}, fileSystem);
+    assertNull(searcher.searchTarget(true));
+
+    String[] p = new String[] {"jeep", "company", "..", ".", "first.txt"};
+    searcher = new Searcher(p, fileSystem);
+    assertEquals("first.txt", ((File) searcher.searchTarget(true)).getName());
+
+    String[] q = new String[] {"jeep", "company", "second.txt"};
+    searcher = new Searcher(q, fileSystem);
+    assertEquals("second.txt", ((File) searcher.searchTarget(true)).getName());
+  }
+}

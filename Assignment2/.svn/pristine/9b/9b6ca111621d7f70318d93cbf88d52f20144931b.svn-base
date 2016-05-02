@@ -1,0 +1,16 @@
+What did I do last time?
+    - Use Stack module from Java JDK to implement directory stack
+      in FileSystem instead of using DirectoryStack
+    - Start implement JUnit test cases
+    - Demonstrate a new way to implement the JShell with the forName method
+      and instance method in Class.
+    - Enhanced the readability and javadoc of completed class
+
+What do I plan to do now?
+    - Finish the JUnit test cases
+
+Am I blocked on anything?
+    - Analyze and discover the test cases that is able to cover
+      all the possibilities of mistake
+
+

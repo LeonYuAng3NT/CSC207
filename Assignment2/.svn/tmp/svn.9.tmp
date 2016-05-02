@@ -1,0 +1,38 @@
+package a2a.operator;
+
+import a2a.foundation.Directory;
+
+import java.util.ArrayList;
+
+
+public final class DirectoryNavigator {
+
+  /**
+   * Default Constructor
+   */
+  private DirectoryNavigator() {
+  }
+
+  /**
+   * Navigate from current directory to target directory in current directory.
+   *
+   * @param name          The name of target directory
+   * @param currDirectory The current working directory
+   * @return The target directory.
+   */
+  public static Directory goTo(String name, Directory currDirectory) {
+
+    ArrayList<Object> content = currDirectory.getContent();
+
+    for (Object item : content) {
+      if (item instanceof Directory) {
+        Directory curr = (Directory) item;
+        if (curr.getName().equals(name)) {
+          return curr;
+        }
+      }
+    }
+    return null;
+  }
+
+}

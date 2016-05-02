@@ -1,0 +1,8 @@
+Class name: ErrorMessage
+Parent class (if any): None
+Subclasses (if any): None
+separated by a comma.
+Responsibilities:
+*Print out the error message.
+Collaborators:
+*None

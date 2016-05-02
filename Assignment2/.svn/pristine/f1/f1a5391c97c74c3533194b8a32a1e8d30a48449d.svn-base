@@ -1,0 +1,75 @@
+// **********************************************************
+// Assignment2:
+
+// Student1:
+// CDF user_name: c5zhanim
+// UT Student #: 1001322847
+// Author: Yu Ang Zhang
+//
+// Student2:
+// CDF user_name: c4huanhf
+// UT Student #: 1000076927
+// Author: Yiming Huang
+//
+
+// Student3:
+// CDF user_name: c4wangyk
+// UT Student #: 999980579
+// Author: YI JIAN WANG
+//
+// Student4:
+// CDF user_name: c4wangzd
+// UT Student #: 1001282319
+// Author: Yu Wang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a2a.foundation;
+
+import java.util.ArrayList;
+
+public class DirectoryStack {
+
+  private ArrayList<Directory> directoryStack = new ArrayList<>();
+
+  /**
+   * Construct a directory stack.
+   */
+  public DirectoryStack() {
+  }
+
+  /**
+   * Detect the directory stack is empty or not.
+   *
+   * @return True if the directory stack is empty
+   */
+  public Boolean isEmpty() {
+
+    return directoryStack.size() == 0;
+  }
+
+  /**
+   * Getter of Directory stack.
+   *
+   * @return The directory stack
+   */
+  public ArrayList<Directory> getDirectoryStack() {
+
+    return directoryStack;
+  }
+
+  /**
+   * Setter of Directory stack.
+   *
+   * @param directoryStack The new Directory stack
+   */
+  public void setDirectoryStack(ArrayList<Directory> directoryStack) {
+
+    this.directoryStack = directoryStack;
+  }
+}
