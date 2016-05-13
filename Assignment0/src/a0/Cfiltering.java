@@ -150,7 +150,6 @@ public class Cfiltering {
 
   }
 
-
   /**
    * This function finds and prints the most similar pair of users in the
    * userUserMatrix.
@@ -211,6 +210,7 @@ public class Cfiltering {
         }
       }
     }
+    // Summary
     System.out.printf("with the score of %.4f", init);
     System.out.println("\n ");
   }

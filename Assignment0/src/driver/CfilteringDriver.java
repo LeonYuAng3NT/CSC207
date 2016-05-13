@@ -40,18 +40,9 @@ public class CfilteringDriver {
       // Read dimensions: number of users and number of movies
       int numberOfUsers = Integer.parseInt(br.readLine());
       int numberOfMovies = Integer.parseInt(br.readLine());
-      // System.out.println("For debugging:#Users = " + numberOfUsers);
-      // System.out.println("For debugging:#Movies= " + numberOfMovies);
-      /*
-       * create a new Cfiltering object that contains: a) 2d matrix
-       * i.e.userMovieMatrix (#users*#movies) b) 2d matrix i.e. userUserMatrix
-       * (#users*#users)
-       */
       Cfiltering cfObject = new Cfiltering(numberOfUsers, numberOfMovies);
-      // this is a blank line being read
       br.readLine();
-      // read each line of movie ratings and populate the
-      // userMovieMatrix
+      // read each line of movie ratings and populate the userMovieMatrix
       String row;
       int i = 0, j = 0;
       while ((row = br.readLine()) != null) {
@@ -61,7 +52,6 @@ public class CfilteringDriver {
           // make the String number into an integer
           int rate = Integer.parseInt(singleRating);
           // populate userMovieMatrix
-          // TODO: COMPLETE THIS I.E. POPULATE THE USER_MOVIE MATRIX
           if (j < numberOfMovies) {
             cfObject.populateUserMovieMatrix(i, j, rate);
             j++;
@@ -72,13 +62,10 @@ public class CfilteringDriver {
               i++;
             }
           }
-          // System.out.println("For debugging:Rating is :"
-          // + singleRating);
         }
       }
-      // close the file
-      // System.out.println("For debugging:Finished reading file");
       fStream.close();
+      in.close();
       cfObject.calculateSimilarityScore();
       cfObject.printUserUserMatrix();
       cfObject.findAndprintMostSimilarPairOfUsers();
