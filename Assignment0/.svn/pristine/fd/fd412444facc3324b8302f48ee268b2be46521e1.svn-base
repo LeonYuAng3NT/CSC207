@@ -1,0 +1,236 @@
+// **********************************************************
+// Assignment0:
+// CDF user_name:c5zhanim
+// UT Student #: 1001322847
+// Author: YuAng Zhang
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC 207 and understand the consequences.
+// *********************************************************
+package a0;
+
+public class Cfiltering {
+  // this is a 2d matrix i.e. user*movie
+  private int userMovieMatrix[][];
+  // this is a 2d matrix i.e. user*movie
+  private float userUserMatrix[][];
+  private int numberOfUsers;
+  private int numberOfMovies;
+
+  /**
+   * Default Constructor.
+   */
+  public Cfiltering() {
+    // this is 2d matrix of size 1*1
+    userMovieMatrix = new int[1][1];
+    // this is 2d matrix of size 1*1
+    userUserMatrix = new float[1][1];
+  }
+
+  /*
+   * TODO:COMPLETE THIS I.E. APPROPRIATELY CREATE THE userMovieMatrix AND
+   * userUserMatrix WITH CORRECT DIMENSIONS.
+   */
+  /**
+   * Constructs an object which contains two 2d matrices, one of size
+   * users*movies which will store integer movie ratings and one of size
+   * users*users which will store float similarity scores between pairs of
+   * users.
+   * 
+   * @param numberOfUsers Determines size of matrix variables.
+   * @param numberOfMovies Determines size of matrix variables.
+   */
+  public Cfiltering(int numberOfUsers, int numberOfMovies) {
+         userMovieMatrix = new int[numberOfUsers][numberOfMovies];
+         userUserMatrix = new float[numberOfUsers][numberOfUsers];
+         this.numberOfMovies = numberOfMovies;
+         this.numberOfUsers = numberOfUsers;
+  }
+
+
+  /**
+   * The purpose of this method is to populate the UserMovieMatrix. As input
+   * parameters it takes in a rowNumber, columnNumber and a rating value. The
+   * rating value is then inserted in the UserMovieMatrix at the specified
+   * rowNumber and the columnNumber.
+   * 
+   * @param rowNumber The row number of the userMovieMatrix.
+   * @param columnNumber The column number of the userMovieMatrix.
+   * @param ratingValue The ratingValue to be inserted in the userMovieMatrix
+   */
+  public void populateUserMovieMatrix(int rowNumber, int columnNumber,
+      int ratingValue) {
+
+       userMovieMatrix[rowNumber][columnNumber] = ratingValue;
+  }
+  /**
+   * The purpose of this method is to detect inherent errors of userMovieMatrix.
+   * In case the rating value might be stored in different location of the 
+   * matrix. It prints the ratings of different movies for all users. 
+   * 
+   */
+  public void printUserMovieMatrix() {
+    for(int i = 0; i < numberOfUsers  ; i++){
+        for(int j = 0;  j < numberOfMovies ; j++ ){
+            System.out.println(i+"and" + j + "has " + userMovieMatrix[i][j]);
+        }
+    }
+
+}
+  /*
+   * TODO:COMPLETE THIS YOU ARE FREE TO CHANGE THE FUNCTION SIGNATURE BUT DO NOT
+   * CHANGE THE FUNCTION NAME AND DO NOT MAKE THIS FUNCTION STATIC. Add/remove
+   * 
+   * @param AND
+   * 
+   * @return as required below.
+   */
+  /**
+   * Determines how similar each pair of users is based on their ratings. This
+   * similarity value is represented with with a float value between 0 and 1,
+   * where 1 is perfect/identical similarity. Stores these values in the
+   * userUserMatrix.
+   * 
+   * @param  None
+   * @return None
+   */
+  public void calculateSimilarityScore(){
+	   for(int i = 0; i < numberOfUsers  ; i++){
+	    	  for(int j = 0;  j < numberOfUsers ; j++ ){
+	    	
+	    	    userUserMatrix[i][j] = (float)( 1.0d/  
+	    	                        (1.0d+ Math.sqrt
+	    	                        (this.calculateDistance(i, j))));
+	    	  }
+	   }
+  }
+  /**
+   *  This is a helper method that specifically helps the 
+   *  calculateSimilarityScore method to determine the distance between two 
+   *  users. It returns a double value that will be further used in the 
+   *  calculation of similarity score.
+   *   
+   * @param firstUser The row number of the first user in userMovieMatrix
+   * @param secondUser The row number of the second user in userMovieMatrix
+   * @return double
+   */
+  public double calculateDistance(int firstUser,int secondUser){
+    double distance = 0.0;
+    for(int j = 0;  j < numberOfMovies ; j++ ){
+                distance = distance 
+                              + Math.pow((double)(userMovieMatrix[firstUser][j] 
+                              -userMovieMatrix[secondUser][j]),2);
+    }
+    return distance;
+  }
+  /*
+   * TODO:COMPLETE THIS YOU ARE FREE TO CHANGE THE FUNCTION SIGNATURE BUT DO NOT
+   * CHANGE THE FUNCTION NAME AND DO NOT MAKE THIS FUNCTION STATIC
+   */
+  /**
+   * Prints out the similarity scores of the userUserMatrix, with each row and
+   * column representing each/single user and the cell position (i,j)
+   * representing the similarity score between user i and user j.
+   * 
+   * @param firstRating The score given by the first user
+   * @param secondRating The score given by the second user
+   * @return None
+   */
+
+  public void printUserUserMatrix() {
+      System.out.println("\n");
+      System.out.println("userUserMatrix is");
+	  for(int i = 0; i < numberOfUsers ; i++){
+	      System.out.print("[");
+    	  for(int j = 0;  j < numberOfUsers ; j++ ){
+    	      if(j == numberOfUsers-1){
+	            System.out.printf("%.4f",userUserMatrix[i][j]);
+	            break;
+    	      }
+	          System.out.printf("%.4f, ", userUserMatrix[i][j]);       
+    	  }
+    	  System.out.print("]");
+    	  System.out.println(""); 	  
+	  }
+	  System.out.println("\n ");
+
+  }
+
+  /*
+   * TODO:COMPLETE THIS YOU ARE FREE TO CHANGE THE FUNCTION SIGNATURE BUT DO NOT
+   * CHANGE THE FUNCTION NAME AND DO NOT MAKE THIS FUNCTION STATIC
+   */
+  /**
+   * This function finds and prints the most similar pair of users in the
+   * userUserMatrix.
+   * 
+   * @param COMPLETE THIS IF NEEDED
+   * @param COMPLETE THIS IF NEEDED
+   * @return COMPLETE THIS IF NEEDED
+   */
+
+  public void findAndprintMostSimilarPairOfUsers() {
+    float init = userUserMatrix[0][1];
+    System.out.println("The most similar pair of Users are: ");
+    for(int i = 0; i < numberOfUsers ; i++){
+      for(int j = i;  j < numberOfUsers ; j++ ){
+        // for debugging
+        // System.out.println("we are now at " + userUserMatrix[i][j]
+        //    + " with " + i + " and " + j); 
+         if(i!=j){
+            init = Math.max(userUserMatrix[i][j],init);
+         }  
+      }
+    }
+    for(int i = 0; i < numberOfUsers ; i++){
+      for(int j = i;  j < numberOfUsers ; j++ ){
+         if(userUserMatrix[i][j] == init && i!= j){
+           System.out.println( " user"+ (i+1) + " and user" + (j+1) );
+         }
+      }
+    }
+    System.out.printf("with the score of %.4f" , init);
+    System.out.println("\n \n");
+ }
+  
+  /*
+   * TODO:COMPLETE THIS YOU ARE FREE TO CHANGE THE FUNCTION SIGNATURE BUT DO NOT
+   * CHANGE THE FUNCTION NAME AND DO NOT MAKE THIS FUNCTION STATIC
+   */
+  /**
+   * This function finds and prints the most dissimilar pair of users in the
+   * userUserMatrix.
+   * 
+   * @param COMPLETE THIS IF NEEDED
+   * @param COMPLETE THIS IF NEEDED
+   * @return COMPLETE THIS IF NEEDED
+   */
+  public void findAndprintMostDissimilarPairOfUsers() {
+    float init = userUserMatrix[0][1];  
+    System.out.println("The most disimilar pair of Users are: ");
+    for(int i = 0; i < numberOfUsers ; i++){
+      for(int j = i;  j < numberOfUsers ; j++ ){
+        // for debugging
+        // System.out.println("we are now at " + userUserMatrix[i][j]
+        //   + " with " + i + " and " + j); 
+         if(i!=j){
+            init = Math.min(userUserMatrix[i][j],init);
+         }  
+      }
+    }
+    for(int i = 0; i < numberOfUsers ; i++){
+      for(int j = i;  j < numberOfUsers ; j++ ){
+         if(userUserMatrix[i][j] == init && i!= j){
+           System.out.println( " user"+ (i+1) + " and user" + (j+1) );
+         }
+      }
+    }
+    System.out.printf("with the score of %.4f",init);
+    System.out.println("\n ");
+ }
+    
+}
